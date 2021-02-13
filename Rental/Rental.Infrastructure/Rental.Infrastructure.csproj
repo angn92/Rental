@@ -8,4 +8,13 @@
     <ProjectReference Include="..\Rental.Core\Rental.Core.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Autofac" Version="6.1.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="5.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Handlers\User\" />
+  </ItemGroup>
+
 </Project>
