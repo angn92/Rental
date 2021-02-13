@@ -18,14 +18,16 @@ namespace Rental.Core.Domain
 
         [NotNull]
         public string Email { get; protected set; }
+
+        [NotNull]
         public AccountStatus Status { get; protected set; }
 
         [NotNull]
         public string Phone { get; protected set; }
         public DateTime CreatedAt { get; protected set; }
         public DateTime UpdatedAt { get; protected set; }
-        public ISet<Password> Passwords { get; protected set; }
-        public ISet<Product> Products { get; protected set; }
+        //public ISet<Password> Passwords { get; protected set; }
+        //public ISet<Product> Products { get; protected set; }
 
         protected User()
         {
