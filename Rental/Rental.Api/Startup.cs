@@ -1,12 +1,16 @@
+using Autofac;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using Rental.Infrastructure.EF;
+using Rental.Infrastructure.IoC;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,12 +30,18 @@ namespace Rental.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
+            services.AddDbContext<RentalContext>(ctx => ctx.UseInMemoryDatabase("RentalDB"));
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Rental.Api", Version = "v1" });
             });
+        }
+        
+        //This method register all things.
+        public void ConfigureContainer(ContainerBuilder builder)
+        {
+            builder.RegisterModule(new ModuleApplication());
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
