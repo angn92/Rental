@@ -13,14 +13,14 @@ namespace Rental.Infrastructure.Commands
             _context = context;
         }
 
-        public async Task DispatchAsync<T>(T command) where T : ICommand
+        public async Task DispatchAsync<TCommand>(TCommand command) where TCommand : ICommand
         {
             if(command == null)
             {
                 throw new Exception($"Command {command} can not be null.");
             }
 
-            var handler = _context.Resolve<ICommandHandler<T>>();
+            var handler = _context.Resolve<ICommandHandler<TCommand>>();
             await handler.HandleAsync(command);
         }
     }

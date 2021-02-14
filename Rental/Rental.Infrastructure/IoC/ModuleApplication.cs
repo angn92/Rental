@@ -1,8 +1,7 @@
 ﻿using Autofac;
 using Rental.Core.Repository;
 using Rental.Infrastructure.Commands;
-using Rental.Infrastructure.Repositories;
-using Rental.Infrastructure.Services.UserService;
+using Rental.Infrastructure.Services;
 
 namespace Rental.Infrastructure.IoC
 {
@@ -10,25 +9,25 @@ namespace Rental.Infrastructure.IoC
     {
         protected override void Load(ContainerBuilder builder)
         {
-            var assembly = typeof(ModuleApplication)
-                .GetType()
-                .Assembly;
-
+            // Register ICommandHandler
             builder.RegisterAssemblyTypes(ThisAssembly)
                 .AsClosedTypesOf(typeof(ICommandHandler<>))
                 .AsImplementedInterfaces();
 
+            // Register component CommandDispatcher
             builder.RegisterType<CommandDispatcher>()
                 .As<ICommandDispatcher>()
                 .InstancePerLifetimeScope();
 
+            // Register component which use IRepository
             builder.RegisterAssemblyTypes(ThisAssembly)
                 .Where(x => x.IsAssignableTo<IRepository>())
                 .AsImplementedInterfaces()
                 .InstancePerLifetimeScope();
 
+            // Register component which use IService
             builder.RegisterAssemblyTypes(ThisAssembly)
-                .Where(x => x.IsAssignableTo<IUserService>())
+                .Where(x => x.IsAssignableTo<IService>())
                 .AsImplementedInterfaces()
                 .InstancePerLifetimeScope();
         }

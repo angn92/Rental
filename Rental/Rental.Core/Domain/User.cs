@@ -26,8 +26,8 @@ namespace Rental.Core.Domain
         public string Phone { get; protected set; }
         public DateTime CreatedAt { get; protected set; }
         public DateTime UpdatedAt { get; protected set; }
-        //public ISet<Password> Passwords { get; protected set; }
-        //public ISet<Product> Products { get; protected set; }
+        public ISet<Password> Passwords { get; protected set; }
+        public ISet<Product> Products { get; protected set; }
 
         protected User()
         {

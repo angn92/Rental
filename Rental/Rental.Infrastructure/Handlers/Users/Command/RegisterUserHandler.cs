@@ -1,9 +1,9 @@
 ﻿using Rental.Infrastructure.Commands;
-using Rental.Infrastructure.Commands.Users;
+using Rental.Infrastructure.Commands.Users.Command;
 using Rental.Infrastructure.Services.UserService;
 using System.Threading.Tasks;
 
-namespace Rental.Infrastructure.Handlers.Users
+namespace Rental.Infrastructure.Handlers.Users.Command
 {
     public class RegisterUserHandler : ICommandHandler<RegisterUser>
     {
