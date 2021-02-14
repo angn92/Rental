@@ -5,11 +5,11 @@ using System.Threading.Tasks;
 
 namespace Rental.Infrastructure.Handlers.Users
 {
-    public class CreateUserHandler : ICommandHandler<RegisterUser>
+    public class RegisterUserHandler : ICommandHandler<RegisterUser>
     {
         private readonly IUserService _userService;
 
-        public CreateUserHandler(IUserService userService)
+        public RegisterUserHandler(IUserService userService)
         {
             _userService = userService;
         }

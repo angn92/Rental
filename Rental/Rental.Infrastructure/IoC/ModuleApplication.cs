@@ -22,13 +22,15 @@ namespace Rental.Infrastructure.IoC
                 .As<ICommandDispatcher>()
                 .InstancePerLifetimeScope();
 
-            builder.RegisterType<UserRepository>()
-                .As<IUserRepository>()
+            builder.RegisterAssemblyTypes(ThisAssembly)
+                .Where(x => x.IsAssignableTo<IRepository>())
+                .AsImplementedInterfaces()
                 .InstancePerLifetimeScope();
 
-            builder.RegisterType<UserService>()
-                .As<IUserService>()
-                .AsImplementedInterfaces();
+            builder.RegisterAssemblyTypes(ThisAssembly)
+                .Where(x => x.IsAssignableTo<IUserService>())
+                .AsImplementedInterfaces()
+                .InstancePerLifetimeScope();
         }
     }
 }
