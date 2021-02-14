@@ -1,7 +1,7 @@
 ﻿using JetBrains.Annotations;
 using Microsoft.AspNetCore.Mvc;
-using Rental.Infrastructure.Commands;
-using Rental.Infrastructure.Commands.Users.Command;
+using Rental.Infrastructure.Command;
+using Rental.Infrastructure.Command.Users.Command;
 using System.Threading.Tasks;
 
 namespace Rental.Api.Controllers

@@ -1,6 +1,6 @@
 ﻿using Autofac;
 using Rental.Core.Repository;
-using Rental.Infrastructure.Commands;
+using Rental.Infrastructure.Command;
 using Rental.Infrastructure.Services;
 
 namespace Rental.Infrastructure.IoC

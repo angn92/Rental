@@ -14,7 +14,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Commands\Users\" />
     <Folder Include="Handlers\Users\Query\" />
   </ItemGroup>
 

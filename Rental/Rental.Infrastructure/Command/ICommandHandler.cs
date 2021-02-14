@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace Rental.Infrastructure.Commands
+namespace Rental.Infrastructure.Command
 {
     public interface ICommandHandler<TCommand> where TCommand : ICommand
     {

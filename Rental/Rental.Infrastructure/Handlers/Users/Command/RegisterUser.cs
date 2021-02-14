@@ -1,4 +1,4 @@
-﻿namespace Rental.Infrastructure.Commands.Users.Command
+﻿namespace Rental.Infrastructure.Command.Users.Command
 {
     public class RegisterUser : ICommand
     {
