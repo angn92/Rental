@@ -18,9 +18,10 @@ namespace Rental.Api.Controllers
         }
 
         [HttpPost]
-        public async Task RegisterAccount([NotNull] RegisterUser command)
+        public async Task<string> RegisterAccount([NotNull] RegisterUser command)
         {
             await _commandDispatcher.DispatchAsync(command);
+            return "ddd";
         }
 
       
