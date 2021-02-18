@@ -29,7 +29,7 @@ namespace Rental.Infrastructure.Services.UserService
                 throw new Exception($"User {username} already exist. Please select another username.");
             }
 
-            user = new User(firstName, lastName, username, email, phoneNumber);
+            user = new Account(firstName, lastName, username, email, phoneNumber);
             await _userRepository.AddAsync(user);
         }
     }
