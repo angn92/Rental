@@ -19,7 +19,7 @@ namespace Rental.Core.Domain
         public string Description { get; protected set; }
         public ProductStatus Status { get; protected set; }
         public Category Category { get; protected set; }
-        public User User { get; protected set; }
+        public Account Account { get; protected set; }
         public DateTime CreatedAt { get; protected set; }
         public DateTime UpdatedAt { get; protected set; }
 
