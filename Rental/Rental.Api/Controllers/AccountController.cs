@@ -21,7 +21,6 @@ namespace Rental.Api.Controllers
         public async Task<string> RegisterAccount([NotNull] RegisterUser command)
         {
             await _commandDispatcher.DispatchAsync(command);
-            return "ddd";
         }
 
       

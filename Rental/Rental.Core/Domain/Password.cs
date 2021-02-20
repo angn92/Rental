@@ -11,6 +11,8 @@ namespace Rental.Core.Domain
 
         [NotNull]
         public string Salt { get; protected set; }
+
+        [NotNull]
         public PasswordStatus Status { get; protected set; }
         public DateTime CreatedAt { get; protected set; }
         public DateTime UpdatedAt { get; protected set; }
