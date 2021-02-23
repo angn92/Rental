@@ -16,6 +16,24 @@ namespace Rental.Infrastructure.Services.UserService
             _userRepository = userRepository;
         }
 
+        public async Task<UserDto> GetUserAsync(string nick)
+        {
+            var user = await _userRepository.GetAsync(nick);
+
+            if (user is null)
+                throw new CoreException(ErrorCode.UserNotExist, $"This user: {nick} does not exist.");
+
+            var userDetails = new UserDto
+            {
+                FullName = user.FirstName + " " + user.LastName,
+                Emial = user.Email,
+                Username = user.Username,
+                Status = user.Status
+            };
+
+            return userDetails;
+        }
+
         public Task<UserDto> LoginAsync(string username, string password)
         {
             throw new NotImplementedException();
