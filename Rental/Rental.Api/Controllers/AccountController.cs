@@ -27,7 +27,7 @@ namespace Rental.Api.Controllers
         [HttpGet("user")]
         public async Task<GetUserDetailsRs> GetUserDetails([FromQuery][NotNull] GetUserDetailsRq query)
         {
-            return await _commandDispatcher.DispatchAsync<GetUserDetailsRq, GetUserDetailsRs>(query); 
+            return await _commandDispatcher.DispatchAsync<GetUserDetailsRq, GetUserDetailsRs>(query);
         }
     }
 }

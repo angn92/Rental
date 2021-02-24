@@ -7,10 +7,10 @@ namespace Rental.Infrastructure.Command
         Task HandleAsync(TCommand command); 
     }
 
-    public interface ICommandHandler<TCommad, TResult> 
-        where TCommad : ICommand 
+    public interface ICommandHandler<TQuery, TResult> 
+        where TQuery : ICommand 
         where TResult : class
     {
-        Task<TResult> HandleAsync(TCommad commad);
+        Task<TResult> HandleAsync(TQuery commad);
     }
 }
