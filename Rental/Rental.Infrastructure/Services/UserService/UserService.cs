@@ -1,6 +1,7 @@
 ﻿using Rental.Core.Domain;
 using Rental.Core.Repository;
 using Rental.Infrastructure.DTO;
+using Rental.Infrastructure.Exceptions;
 using System;
 using System.Threading.Tasks;
 
@@ -15,6 +16,24 @@ namespace Rental.Infrastructure.Services.UserService
             _userRepository = userRepository;
         }
 
+        public async Task<UserDto> GetUserAsync(string nick)
+        {
+            var user = await _userRepository.GetAsync(nick);
+
+            if (user is null)
+                throw new CoreException(ErrorCode.UserNotExist, $"This user: {nick} does not exist.");
+
+            var userDetails = new UserDto
+            {
+                FullName = user.FirstName + " " + user.LastName,
+                Emial = user.Email,
+                Username = user.Username,
+                Status = user.Status
+            };
+
+            return userDetails;
+        }
+
         public Task<UserDto> LoginAsync(string username, string password)
         {
             throw new NotImplementedException();
@@ -26,7 +45,7 @@ namespace Rental.Infrastructure.Services.UserService
 
             if (user != null)
             {
-                throw new Exception($"User {username} already exist. Please select another username.");
+                throw new CoreException(ErrorCode.UsernameExist, $"Username {user.Username} already exist.");
             }
 
             user = new Account(firstName, lastName, username, email, phoneNumber);

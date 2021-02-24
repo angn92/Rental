@@ -1,6 +1,7 @@
 ﻿using Autofac;
 using Rental.Core.Repository;
 using Rental.Infrastructure.Command;
+using Rental.Infrastructure.Query;
 using Rental.Infrastructure.Services;
 
 namespace Rental.Infrastructure.IoC
@@ -13,6 +14,19 @@ namespace Rental.Infrastructure.IoC
             builder.RegisterAssemblyTypes(ThisAssembly)
                 .AsClosedTypesOf(typeof(ICommandHandler<>))
                 .AsImplementedInterfaces();
+
+            builder.RegisterAssemblyTypes(ThisAssembly)
+                .AsClosedTypesOf(typeof(ICommandHandler<,>))
+                .AsImplementedInterfaces();
+
+            //builder.RegisterAssemblyTypes(ThisAssembly)
+            //    .AsClosedTypesOf(typeof(IQueryHandler<,>))
+            //    .AsImplementedInterfaces();
+
+            //builder.RegisterType<QueryDispatcher>()
+            //    .As<IQueryDispatcher>()
+            //    .InstancePerLifetimeScope();
+
 
             // Register component CommandDispatcher
             builder.RegisterType<CommandDispatcher>()
