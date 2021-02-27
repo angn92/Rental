@@ -16,10 +16,9 @@ namespace Rental.Infrastructure.Query
         public async Task<TResult> DispatchAsync<TQuery, TResult>(TQuery query) where TQuery : IQuery
         {
             if (query == null)
-                throw new Exception("Error");
+                throw new Exception($"Query {query} can not be null.");
 
-            var handler = await _context.Resolve<IQueryHandler<TQuery, TResult>>().HandleAsync(query);
-            return handler;
+            return await _context.Resolve<IQueryHandler<TQuery, TResult>>().HandleAsync(query);
         }
     }
 }

@@ -23,18 +23,5 @@ namespace Rental.Infrastructure.Command
             var handler = _context.Resolve<ICommandHandler<TCommand>>();
             await handler.HandleAsync(command);
         }
-
-        public async Task<TResult> DispatchAsync<TQuery, TResult>(TQuery query)
-            where TQuery : ICommand
-            where TResult : class
-        {
-            if (query == null)
-            {
-                throw new Exception($"Query {query} can not be null.");
-            }
-
-            var handler = _context.Resolve<ICommandHandler<TQuery, TResult>>();
-            return await handler.HandleAsync(query);
-        }
     }
 }

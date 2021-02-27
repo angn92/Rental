@@ -1,8 +1,8 @@
-﻿using Rental.Infrastructure.Command;
+﻿using Rental.Infrastructure.Query;
 
 namespace Rental.Infrastructure.Handlers.Users.Queries
 {
-    public class GetUserDetailsRq : ICommand
+    public class GetUserDetailsRq : IQuery
     {
         public string Nick { get; set; }
     }

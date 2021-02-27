@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Rental.Infrastructure.Command;
 using Rental.Infrastructure.Command.Users.Command;
 using Rental.Infrastructure.Handlers.Users.Queries;
+using Rental.Infrastructure.Query;
 using System.Threading.Tasks;
 
 namespace Rental.Api.Controllers
@@ -12,10 +13,12 @@ namespace Rental.Api.Controllers
     public class AccountController : ControllerBase
     {
         private readonly ICommandDispatcher _commandDispatcher;
+        private readonly IQueryDispatcher _queryDispatcher;
 
-        public AccountController(ICommandDispatcher commandDispatcher)
+        public AccountController(ICommandDispatcher commandDispatcher, IQueryDispatcher queryDispatcher)
         {
             _commandDispatcher = commandDispatcher;
+            _queryDispatcher = queryDispatcher;
         }
 
         [HttpPost("register/user")]
@@ -27,7 +30,7 @@ namespace Rental.Api.Controllers
         [HttpGet("user")]
         public async Task<GetUserDetailsRs> GetUserDetails([FromQuery][NotNull] GetUserDetailsRq query)
         {
-            return await _commandDispatcher.DispatchAsync<GetUserDetailsRq, GetUserDetailsRs>(query);
+            return await _queryDispatcher.DispatchAsync<GetUserDetailsRq, GetUserDetailsRs>(query);
         }
     }
 }

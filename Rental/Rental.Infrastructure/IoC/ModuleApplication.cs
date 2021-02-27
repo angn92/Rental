@@ -15,22 +15,19 @@ namespace Rental.Infrastructure.IoC
                 .AsClosedTypesOf(typeof(ICommandHandler<>))
                 .AsImplementedInterfaces();
 
-            builder.RegisterAssemblyTypes(ThisAssembly)
-                .AsClosedTypesOf(typeof(ICommandHandler<,>))
-                .AsImplementedInterfaces();
-
-            //builder.RegisterAssemblyTypes(ThisAssembly)
-            //    .AsClosedTypesOf(typeof(IQueryHandler<,>))
-            //    .AsImplementedInterfaces();
-
-            //builder.RegisterType<QueryDispatcher>()
-            //    .As<IQueryDispatcher>()
-            //    .InstancePerLifetimeScope();
-
-
-            // Register component CommandDispatcher
+            // Register CommandDispatcher
             builder.RegisterType<CommandDispatcher>()
                 .As<ICommandDispatcher>()
+                .InstancePerLifetimeScope();
+
+            // Register IQueryHandler
+            builder.RegisterAssemblyTypes(ThisAssembly)
+                .AsClosedTypesOf(typeof(IQueryHandler<,>))
+                .AsImplementedInterfaces();
+
+            // Register QueryDispatcher
+            builder.RegisterType<QueryDispatcher>()
+                .As<IQueryDispatcher>()
                 .InstancePerLifetimeScope();
 
             // Register component which use IRepository

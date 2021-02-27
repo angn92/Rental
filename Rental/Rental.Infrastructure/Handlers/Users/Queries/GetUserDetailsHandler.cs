@@ -1,11 +1,11 @@
 ﻿using JetBrains.Annotations;
-using Rental.Infrastructure.Command;
+using Rental.Infrastructure.Query;
 using Rental.Infrastructure.Services.UserService;
 using System.Threading.Tasks;
 
 namespace Rental.Infrastructure.Handlers.Users.Queries
 {
-    public class GetUserDetailsHandler : ICommandHandler<GetUserDetailsRq, GetUserDetailsRs>
+    public class GetUserDetailsHandler : IQueryHandler<GetUserDetailsRq, GetUserDetailsRs>
     {
         private readonly IUserService _userService;
 
