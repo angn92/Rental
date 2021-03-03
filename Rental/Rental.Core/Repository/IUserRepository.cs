@@ -6,8 +6,8 @@ namespace Rental.Core.Repository
 {
     public interface IUserRepository : IRepository
     {
-        Task<Account> GetAsync(string username);
-        Task AddAsync(Account user);
-        Task EditAsync(Account user);
+        Task<User> GetAsync(string username);
+        Task AddAsync(User user);
+        Task EditAsync(User user);
     }
 }

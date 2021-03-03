@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Rental.UnitTest.Accounts
+namespace Rental.UnitTest
 {
-    class GetUserDetailsTest
+    class TestContext
     {
     }
 }
