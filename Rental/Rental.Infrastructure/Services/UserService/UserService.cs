@@ -48,7 +48,7 @@ namespace Rental.Infrastructure.Services.UserService
                 throw new CoreException(ErrorCode.UsernameExist, $"Username {user.Username} already exist.");
             }
 
-            user = new Account(firstName, lastName, username, email, phoneNumber);
+            user = new User(firstName, lastName, username, email, phoneNumber);
             await _userRepository.AddAsync(user);
         }
     }

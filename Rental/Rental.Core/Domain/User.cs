@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace Rental.Core.Domain
 {
-    public class Account : Entity
+    public class User : Entity
     {
         [NotNull]
         public string FirstName { get; protected set; }
@@ -29,11 +29,11 @@ namespace Rental.Core.Domain
         public ISet<Password> Passwords { get; protected set; }
         public ISet<Product> Products { get; protected set; }
 
-        protected Account()
+        protected User()
         {
         }
 
-        public Account([NotNull] string firstName, [NotNull] string lastName, [NotNull] string username, [NotNull] string email, [NotNull] string phone)
+        public User([NotNull] string firstName, [NotNull] string lastName, [NotNull] string username, [NotNull] string email, [NotNull] string phone)
         {
             SetFirstName(firstName);
             SetLastName(lastName);
@@ -89,7 +89,7 @@ namespace Rental.Core.Domain
             UpdateDate();
         }
 
-        public void SetActiveAccount(Account user)
+        public void SetActiveAccount(User user)
         {
             if (user == null)
                 throw new ArgumentNullException(nameof(user), "Argument can not be null.");
@@ -98,7 +98,7 @@ namespace Rental.Core.Domain
             UpdateDate();
         }
 
-        public void SetBlockade(Account user)
+        public void SetBlockade(User user)
         {
             if (user == null)
                 throw new ArgumentNullException(nameof(user), "Argument can not be null.");

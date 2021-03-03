@@ -5,7 +5,7 @@ namespace Rental.Infrastructure.EF
 {
     public class RentalContext : DbContext
     {
-        public DbSet<Account> Accounts { get; set; }
+        public DbSet<User> Users { get; set; }
         public DbSet<Password> Passwords { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<Product> Products { get; set; }
@@ -18,16 +18,16 @@ namespace Rental.Infrastructure.EF
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Password>()
-                    .HasOne<Account>(u => u.Account)
+                    .HasOne<User>(u => u.User)
                     .WithMany(p => p.Passwords);
 
-            modelBuilder.Entity<Account>()
+            modelBuilder.Entity<User>()
                     .HasMany<Password>(u => u.Passwords)
-                    .WithOne(p => p.Account);
+                    .WithOne(p => p.User);
 
-            modelBuilder.Entity<Account>()
+            modelBuilder.Entity<User>()
                     .HasMany<Product>(u => u.Products)
-                    .WithOne(p => p.Account);
+                    .WithOne(p => p.User);
 
             modelBuilder.Entity<Category>()
                     .HasMany<Product>(c => c.Products)
