@@ -3,11 +3,14 @@ using Moq;
 using NUnit.Framework;
 using Rental.Core.Domain;
 using Rental.Core.Repository;
+using Rental.Infrastructure.DTO;
 using Rental.Infrastructure.EF;
 using Rental.Infrastructure.Exceptions;
 using Rental.Infrastructure.Services.UserService;
 using System;
 using System.Threading.Tasks;
+using FluentAssertions;
+using Rental.Core.Enum;
 
 namespace Rental.UnitTest.Services.Users
 {
@@ -33,13 +36,40 @@ namespace Rental.UnitTest.Services.Users
             var mockUserRepository = new Mock<IUserRepository>();
 
             var userService = new UserService(mockUserRepository.Object);
-            var user = new User("test1", "test2", "username", "email@example.com", "13456788");
+            var user = new User("Adam", "Nowak", "adam123", "adam@example.com", "123456789");
 
             mockUserRepository.Setup(x => x.GetAsync(It.IsAny<string>()))
                               .ReturnsAsync(() => user);
 
             var exception = Assert.ThrowsAsync<CoreException>(() => userService.RegisterAsync("user", "userLastName", "fakeuser", "user@example.com", "123456789"));
             Assert.That(exception.Code, Is.EqualTo(ErrorCode.UsernameExist));
+        }
+
+        [Test]
+        public async Task should_be_able_get_user_details()
+        {
+            var mockUserRepository = new Mock<IUserRepository>();
+            var userService = new UserService(mockUserRepository.Object);
+
+            var user = new User("Adam", "Nowak", "adam123", "adam@example.com", "123456789");
+
+            mockUserRepository.Setup(x => x.GetAsync(It.IsAny<string>()))
+                              .ReturnsAsync(() => user);
+
+            var result = await userService.GetUserAsync("adam123");
+
+            result.FullName.Should().Be(user.FirstName + " " + user.LastName);
+            result.Status.Should().Be(AccountStatus.Active);
+        }
+
+        [Test]
+        public void should_throw_exception_user_not_exist_when_given_username_not_exist_in_database()
+        {
+            var mockUserRepository = new Mock<IUserRepository>();
+            var userService = new UserService(mockUserRepository.Object);
+
+            var exception = Assert.ThrowsAsync<CoreException>(() => userService.GetUserAsync("adam123"));
+            Assert.That(exception.Code, Is.EqualTo(ErrorCode.UserNotExist));
         }
     }
 }

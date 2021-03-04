@@ -16,17 +16,17 @@ namespace Rental.Infrastructure.Repositories
         }
 
         public async Task<User> GetAsync(string username)
-            => await _context.Accounts.SingleOrDefaultAsync(x => x.Username == username);
+            => await _context.Users.SingleOrDefaultAsync(x => x.Username == username);
 
         public async Task AddAsync(User user)
         {
-            await _context.Accounts.AddAsync(user);
+            await _context.Users.AddAsync(user);
             await _context.SaveChangesAsync();
         }
 
         public async Task EditAsync(User user)
         {
-            _context.Accounts.Update(user);
+            _context.Users.Update(user);
             await _context.SaveChangesAsync();
         }
     }
