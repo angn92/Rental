@@ -1,13 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Moq;
+﻿using Moq;
 using NUnit.Framework;
 using Rental.Core.Domain;
 using Rental.Core.Repository;
-using Rental.Infrastructure.DTO;
-using Rental.Infrastructure.EF;
 using Rental.Infrastructure.Exceptions;
 using Rental.Infrastructure.Services.UserService;
-using System;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Rental.Core.Enum;

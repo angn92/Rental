@@ -3,7 +3,7 @@
     public  class ErrorCode
     {
         public static string UsernameExist => "username_exist";
-        public static string EmailInUse => "email_in_user";
+        public static string EmailInUse => "email_in_use";
         public static string InvalidEmail => "invalid_email";
         public static string InvalidPhoneNumber => "invalid_phone_number";
         public static string AccountBlocked => "account_is_blocked";

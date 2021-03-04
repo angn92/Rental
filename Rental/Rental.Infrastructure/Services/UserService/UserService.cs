@@ -1,7 +1,9 @@
 ﻿using Rental.Core.Domain;
 using Rental.Core.Repository;
 using Rental.Infrastructure.DTO;
+using Rental.Infrastructure.EF;
 using Rental.Infrastructure.Exceptions;
+using Rental.Infrastructure.Helpers;
 using System;
 using System.Threading.Tasks;
 
@@ -10,10 +12,21 @@ namespace Rental.Infrastructure.Services.UserService
     public class UserService : IUserService
     {
         private readonly IUserRepository _userRepository;
+        private readonly IEmailValidator _emailValidator;
+        private readonly RentalContext _context;
 
-        public UserService(IUserRepository userRepository)
+        public UserService(IUserRepository userRepository, IEmailValidator emailValidator, RentalContext context)
         {
             _userRepository = userRepository;
+            _emailValidator = emailValidator;
+            _context = context;
+        }
+
+        public Task EditEmailAsync(string email)
+        {
+            _emailValidator.ValidateEmail(email);
+            _emailValidator.IsEmailInUse(_context, email);
+
         }
 
         public async Task<UserDto> GetUserAsync(string nick)
