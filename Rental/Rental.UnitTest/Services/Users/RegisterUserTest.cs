@@ -21,11 +21,12 @@ namespace Rental.UnitTest.Services.Users
             //Arrange
             var mockUserRepository = new Mock<IUserRepository>();
             var mockEmailValidator = new Mock<IEmailValidator>();
+            var mockPasswordHelper = new Mock<IPasswordHelper>();
             
-            var userService = new UserService(mockUserRepository.Object, mockEmailValidator.Object);
+            var userService = new UserService(mockUserRepository.Object, mockEmailValidator.Object, mockPasswordHelper.Object);
 
             //Act
-            await userService.RegisterAsync("user", "userLastName", "fakeuser", "user@example.com", "123456789");
+            await userService.RegisterAsync("user", "userLastName", "fakeuser", "user@example.com", "123456789", "pass");
 
             //Assert
             mockUserRepository.Verify(x => x.AddAsync(It.IsAny<User>()), Times.Once);
@@ -37,16 +38,17 @@ namespace Rental.UnitTest.Services.Users
             //Arrange
             var mockUserRepository = new Mock<IUserRepository>();
             var mockEmailValidator = new Mock<IEmailValidator>();
+            var mockPasswordHelper = new Mock<IPasswordHelper>();
 
             var user = new User("Adam", "Nowak", "adam123", "adam@example.com", "123456789");
 
             mockUserRepository.Setup(x => x.GetAsync(user.Username))
                               .ReturnsAsync(() => user);
 
-            var userService = new UserService(mockUserRepository.Object, mockEmailValidator.Object);
+            var userService = new UserService(mockUserRepository.Object, mockEmailValidator.Object, mockPasswordHelper.Object);
             
             //Act
-            var exception = Assert.ThrowsAsync<CoreException>(() => userService.RegisterAsync("Adam", "Nowak", "adam123", "adam@example.com", "123456789"));
+            var exception = Assert.ThrowsAsync<CoreException>(() => userService.RegisterAsync("Adam", "Nowak", "adam123", "adam@example.com", "123456789", "pass"));
 
             //Assert
             Assert.That(exception.Code, Is.EqualTo(ErrorCode.UsernameExist));
@@ -58,8 +60,9 @@ namespace Rental.UnitTest.Services.Users
             //Arrange
             var mockUserRepository = new Mock<IUserRepository>();
             var mockEmailValidator = new Mock<IEmailValidator>();
+            var mockPasswordHelper = new Mock<IPasswordHelper>();
 
-            var userService = new UserService(mockUserRepository.Object, mockEmailValidator.Object);
+            var userService = new UserService(mockUserRepository.Object, mockEmailValidator.Object, mockPasswordHelper.Object);
 
             var user = new User("Adam", "Nowak", "adam123", "adam@example.com", "123456789");
 
@@ -80,8 +83,9 @@ namespace Rental.UnitTest.Services.Users
             //Arrange
             var mockUserRepository = new Mock<IUserRepository>();
             var mockEmailValidator = new Mock<IEmailValidator>();
+            var mockPasswordHelper = new Mock<IPasswordHelper>();
 
-            var userService = new UserService(mockUserRepository.Object, mockEmailValidator.Object);
+            var userService = new UserService(mockUserRepository.Object, mockEmailValidator.Object, mockPasswordHelper.Object);
 
             //Act
             var exception = Assert.ThrowsAsync<CoreException>(() => userService.GetUserAsync("adam123"));
