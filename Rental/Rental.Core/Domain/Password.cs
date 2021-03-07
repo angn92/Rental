@@ -22,12 +22,13 @@ namespace Rental.Core.Domain
         {
         }
 
-        public Password([NotNull] string hash, [NotNull] string salt)
+        public Password([NotNull] string hash, [NotNull] string salt, [NotNull] User user)
         {
             Hash = hash;
             Salt = salt;
             Activate();
             CreatedAt = DateTime.UtcNow;
+            User = user;
         }
 
         /// <summary>

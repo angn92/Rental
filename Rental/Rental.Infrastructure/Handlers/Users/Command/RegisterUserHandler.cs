@@ -16,7 +16,7 @@ namespace Rental.Infrastructure.Handlers.Users.Command
 
         public async Task HandleAsync(RegisterUser command)
         {
-            await _userService.RegisterAsync(command.FirstName, command.LastName, command.Username, command.Email, command.PhoneNumber);
+            await _userService.RegisterAsync(command.FirstName, command.LastName, command.Username, command.Email, command.PhoneNumber, command.Password);
         }
     }
 }

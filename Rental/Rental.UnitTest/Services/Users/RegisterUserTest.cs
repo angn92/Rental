@@ -7,10 +7,7 @@ using Rental.Infrastructure.Services.UserService;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Rental.Core.Enum;
-using Rental.Infrastructure.EF;
 using Rental.Infrastructure.Helpers;
-using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
 
 namespace Rental.UnitTest.Services.Users
 {
