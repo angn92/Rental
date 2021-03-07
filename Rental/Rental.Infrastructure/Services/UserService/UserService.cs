@@ -1,7 +1,6 @@
 ﻿using Rental.Core.Domain;
 using Rental.Core.Repository;
 using Rental.Infrastructure.DTO;
-using Rental.Infrastructure.EF;
 using Rental.Infrastructure.Exceptions;
 using Rental.Infrastructure.Helpers;
 using System;
@@ -13,11 +12,13 @@ namespace Rental.Infrastructure.Services.UserService
     {
         private readonly IUserRepository _userRepository;
         private readonly IEmailValidator _emailValidator;
+        private readonly IPasswordHelper _passwordHelper;
 
-        public UserService(IUserRepository userRepository, IEmailValidator emailValidator)
+        public UserService(IUserRepository userRepository, IEmailValidator emailValidator, IPasswordHelper passwordHelper)
         {
             _userRepository = userRepository;
             _emailValidator = emailValidator;
+            _passwordHelper = passwordHelper;
         }
 
         public async Task<UserDto> GetUserAsync(string nick)
@@ -43,7 +44,7 @@ namespace Rental.Infrastructure.Services.UserService
             throw new NotImplementedException();
         }
 
-        public async Task RegisterAsync(string firstName, string lastName, string username, string email, string phoneNumber)
+        public async Task RegisterAsync(string firstName, string lastName, string username, string email, string phoneNumber, string password)
         {
             var user = await _userRepository.GetAsync(username);
 
@@ -57,6 +58,8 @@ namespace Rental.Infrastructure.Services.UserService
                 _emailValidator.ValidateEmail(email);
                 user = new User(firstName, lastName, username, email, phoneNumber);
                 await _userRepository.AddAsync(user);
+
+                _passwordHelper.SetPassword(password, user);
             }
             catch (Exception ex)
             {

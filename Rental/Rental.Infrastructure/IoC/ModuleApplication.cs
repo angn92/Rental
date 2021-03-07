@@ -4,6 +4,7 @@ using Rental.Infrastructure.Command;
 using Rental.Infrastructure.Helpers;
 using Rental.Infrastructure.Query;
 using Rental.Infrastructure.Services;
+using Rental.Infrastructure.Services.EncryptService;
 
 namespace Rental.Infrastructure.IoC
 {
@@ -46,6 +47,14 @@ namespace Rental.Infrastructure.IoC
             builder.RegisterAssemblyTypes(ThisAssembly)
                 .Where(x => x.IsAssignableTo<IEmailValidator>())
                 .AsImplementedInterfaces()
+                .InstancePerLifetimeScope();
+
+            builder.RegisterType<PasswordHelper>()
+                .As<IPasswordHelper>()
+                .InstancePerLifetimeScope();
+
+            builder.RegisterType<EncryptService>()
+                .As<IEncrypt>()
                 .InstancePerLifetimeScope();
         }
     }
