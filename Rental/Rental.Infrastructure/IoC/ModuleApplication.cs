@@ -1,6 +1,7 @@
 ﻿using Autofac;
 using Rental.Core.Repository;
 using Rental.Infrastructure.Command;
+using Rental.Infrastructure.Helpers;
 using Rental.Infrastructure.Query;
 using Rental.Infrastructure.Services;
 
@@ -39,6 +40,11 @@ namespace Rental.Infrastructure.IoC
             // Register component which use IService
             builder.RegisterAssemblyTypes(ThisAssembly)
                 .Where(x => x.IsAssignableTo<IService>())
+                .AsImplementedInterfaces()
+                .InstancePerLifetimeScope();
+
+            builder.RegisterAssemblyTypes(ThisAssembly)
+                .Where(x => x.IsAssignableTo<IEmailValidator>())
                 .AsImplementedInterfaces()
                 .InstancePerLifetimeScope();
         }

@@ -16,7 +16,9 @@ namespace Rental.Infrastructure.Repositories
         }
 
         public async Task<User> GetAsync(string username)
-            => await _context.Users.SingleOrDefaultAsync(x => x.Username == username);
+        {
+            return await _context.Users.SingleOrDefaultAsync(x => x.Username == username);
+        }
 
         public async Task AddAsync(User user)
         {

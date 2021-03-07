@@ -1,7 +1,9 @@
 ﻿using Rental.Core.Domain;
 using Rental.Core.Repository;
 using Rental.Infrastructure.DTO;
+using Rental.Infrastructure.EF;
 using Rental.Infrastructure.Exceptions;
+using Rental.Infrastructure.Helpers;
 using System;
 using System.Threading.Tasks;
 
@@ -10,10 +12,12 @@ namespace Rental.Infrastructure.Services.UserService
     public class UserService : IUserService
     {
         private readonly IUserRepository _userRepository;
+        private readonly IEmailValidator _emailValidator;
 
-        public UserService(IUserRepository userRepository)
+        public UserService(IUserRepository userRepository, IEmailValidator emailValidator)
         {
             _userRepository = userRepository;
+            _emailValidator = emailValidator;
         }
 
         public async Task<UserDto> GetUserAsync(string nick)
@@ -48,8 +52,16 @@ namespace Rental.Infrastructure.Services.UserService
                 throw new CoreException(ErrorCode.UsernameExist, $"Username {user.Username} already exist.");
             }
 
-            user = new User(firstName, lastName, username, email, phoneNumber);
-            await _userRepository.AddAsync(user);
+            try
+            {
+                _emailValidator.ValidateEmail(email);
+                user = new User(firstName, lastName, username, email, phoneNumber);
+                await _userRepository.AddAsync(user);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Registration is failed. " + ex.Message);
+            }
         }
     }
 }

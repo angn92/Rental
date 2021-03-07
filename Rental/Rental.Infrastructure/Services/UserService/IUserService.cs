@@ -1,5 +1,4 @@
 ﻿using Rental.Infrastructure.DTO;
-using System;
 using System.Threading.Tasks;
 
 namespace Rental.Infrastructure.Services.UserService
