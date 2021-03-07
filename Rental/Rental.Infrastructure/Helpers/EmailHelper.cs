@@ -8,12 +8,19 @@ namespace Rental.Infrastructure.Helpers
 {
     public interface IEmailValidator
     {
-        void ValidateEmail(RentalContext context, string email);
+        void ValidateEmail(string email);
     }
 
     public class EmailHelper : IEmailValidator
     {
-        public void ValidateEmail(RentalContext context, string email)
+        private readonly RentalContext _context;
+
+        public EmailHelper(RentalContext context)
+        {
+            _context = context;
+        }
+
+        public void ValidateEmail(string email)
         {
             if (String.IsNullOrWhiteSpace(email))
                 throw new Exception($"Argument {nameof(email)} can not be null or empty.");
@@ -24,7 +31,7 @@ namespace Rental.Infrastructure.Helpers
             if (!match.Success)
                 throw new CoreException(ErrorCode.InvalidEmail, $"Address email {email} is incorrect");
 
-            IsEmailInUse(context, email);
+            IsEmailInUse(_context, email);
         }
 
         private void IsEmailInUse(RentalContext context, string email)

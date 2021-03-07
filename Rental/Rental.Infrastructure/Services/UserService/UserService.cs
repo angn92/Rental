@@ -13,13 +13,11 @@ namespace Rental.Infrastructure.Services.UserService
     {
         private readonly IUserRepository _userRepository;
         private readonly IEmailValidator _emailValidator;
-        private readonly RentalContext _context;
 
-        public UserService(IUserRepository userRepository, IEmailValidator emailValidator, RentalContext context)
+        public UserService(IUserRepository userRepository, IEmailValidator emailValidator)
         {
             _userRepository = userRepository;
             _emailValidator = emailValidator;
-            _context = context;
         }
 
         public async Task<UserDto> GetUserAsync(string nick)
@@ -56,7 +54,7 @@ namespace Rental.Infrastructure.Services.UserService
 
             try
             {
-                _emailValidator.ValidateEmail(_context, email);
+                _emailValidator.ValidateEmail(email);
                 user = new User(firstName, lastName, username, email, phoneNumber);
                 await _userRepository.AddAsync(user);
             }
