@@ -22,13 +22,6 @@ namespace Rental.Infrastructure.Services.UserService
             _context = context;
         }
 
-        public Task EditEmailAsync(string email)
-        {
-            _emailValidator.ValidateEmail(email);
-            _emailValidator.IsEmailInUse(_context, email);
-
-        }
-
         public async Task<UserDto> GetUserAsync(string nick)
         {
             var user = await _userRepository.GetAsync(nick);
@@ -61,8 +54,16 @@ namespace Rental.Infrastructure.Services.UserService
                 throw new CoreException(ErrorCode.UsernameExist, $"Username {user.Username} already exist.");
             }
 
-            user = new User(firstName, lastName, username, email, phoneNumber);
-            await _userRepository.AddAsync(user);
+            try
+            {
+                _emailValidator.ValidateEmail(_context, email);
+                user = new User(firstName, lastName, username, email, phoneNumber);
+                await _userRepository.AddAsync(user);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Registration is failed. " + ex.Message);
+            }
         }
     }
 }
