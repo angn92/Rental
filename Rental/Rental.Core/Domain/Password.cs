@@ -6,16 +6,11 @@ namespace Rental.Core.Domain
 {
     public class Password : Entity
     {
-        [NotNull]
         public string Hash { get; protected set; }
 
-        [NotNull]
         public string Salt { get; protected set; }
 
-        [NotNull]
         public PasswordStatus Status { get; protected set; }
-        public DateTime CreatedAt { get; protected set; }
-        public DateTime UpdatedAt { get; protected set; }
         public User User { get; protected set; }
 
         protected Password()
@@ -27,7 +22,6 @@ namespace Rental.Core.Domain
             Hash = hash;
             Salt = salt;
             Activate();
-            CreatedAt = DateTime.UtcNow;
             User = user;
         }
 
@@ -41,7 +35,6 @@ namespace Rental.Core.Domain
                 throw new Exception($"Argument {hash} can not be null or empty.");
 
             Hash = hash;
-            UpdatedDate();
         }
 
         /// <summary>
@@ -54,24 +47,16 @@ namespace Rental.Core.Domain
                 throw new Exception($"Argument {salt} can not be null or empty.");
 
             Salt = salt;
-            UpdatedDate();
         }
 
         public void Activate()
         {
             Status = PasswordStatus.Active;
-            UpdatedDate();
         }
 
         public void SetBlockade()
         {
             Status = PasswordStatus.Blocked;
-            UpdatedDate();
-        }
-
-        private void UpdatedDate()
-        {
-            UpdatedAt = DateTime.UtcNow;
         }
     }
 }
