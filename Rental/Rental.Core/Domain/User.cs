@@ -15,7 +15,7 @@ namespace Rental.Core.Domain
         public string Phone { get; protected set; }
         public ISet<Password> Passwords { get; protected set; }
         public ISet<Product> Products { get; protected set; }
-        public Session SessionId { get; protected set; }
+        public Session IdSession { get; protected set; }
 
         protected User()
         {

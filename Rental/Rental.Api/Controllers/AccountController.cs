@@ -32,5 +32,11 @@ namespace Rental.Api.Controllers
         {
             return await _queryDispatcher.DispatchAsync<GetUserDetailsRq, GetUserDetailsRs>(query);
         }
+
+        //[HttpPost("session")]
+        //public async Task CreateSession([FromBody] [NotNull] CreateSessionCommand command)
+        //{
+        //    await _commandDispatcher.DispatchAsync(command);
+        //}
     }
 }

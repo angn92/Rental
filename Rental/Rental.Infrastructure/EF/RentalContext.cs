@@ -34,10 +34,14 @@ namespace Rental.Infrastructure.EF
                     .HasMany<Product>(u => u.Products)
                     .WithOne(p => p.User);
 
-            modelBuilder.Entity<Category>()
-                    .HasMany<Product>(c => c.Products)
-                    .WithOne(p => p.Category);
+            modelBuilder.Entity<User>()
+                    .HasOne<Session>(u => u.IdSession)
+                    .WithOne(x => x.User)
+                    .HasForeignKey<Session>(x => x.UserId);
 
+            modelBuilder.Entity<Product>()
+                    .HasOne<Category>(p => p.Category)
+                    .WithMany(c => c.Products);
         }
 
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)

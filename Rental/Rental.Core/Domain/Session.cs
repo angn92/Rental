@@ -7,14 +7,19 @@ namespace Rental.Core.Domain
     {
         public string SessionId { get; protected set; }
         public string State { get; protected set; }
-        public User UserIdentifier { get; protected set; }
         public DateTime LastAccessDate { get; protected set; }
+        public User User { get; protected set; }
+        public Guid UserId { get; set; }
+
+        protected Session()
+        {
+        }
 
         public Session(string sessionId, string state, User userSession)
         {
             SessionId = sessionId;
             State = state;
-            UserIdentifier = userSession;
+            User = userSession;
             UpdateLastAccessDate();
         }
 
