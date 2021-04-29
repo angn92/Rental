@@ -7,6 +7,7 @@ namespace Rental.Infrastructure.Helpers
     public interface IPasswordHelper
     {
         void SetPassword(string password, User user);
+        Password GetActivePassword();
     }
 
     public class PasswordHelper : IPasswordHelper
@@ -18,6 +19,11 @@ namespace Rental.Infrastructure.Helpers
         {
             _context = context;
             _encrypt = encrypt;
+        }
+
+        public Password GetActivePassword()
+        {
+            throw new System.NotImplementedException();
         }
 
         public void SetPassword(string password, User user)

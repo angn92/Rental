@@ -1,24 +1,17 @@
+# Define base image for our image
+FROM mcr.microsoft.com/dotnet/sdk:5.0 AS build-env
 
-
-FROM mcr.microsoft.com/dotnet/aspnet:5.0-buster-slim AS base
 WORKDIR /app
-EXPOSE 80
-EXPOSE 443
 
-FROM mcr.microsoft.com/dotnet/sdk:5.0-buster-slim AS build
-WORKDIR /src
-COPY ["Rental.Api/Rental.Api.csproj", "Rental.Api/"]
-COPY ["Rental.Infrastructure/Rental.Infrastructure.csproj", "Rental.Infrastructure/"]
-COPY ["Rental.Core/Rental.Core.csproj", "Rental.Core/"]
-RUN dotnet restore "Rental.Api/Rental.Api.csproj"
-COPY . .
-WORKDIR "/src/Rental.Api"
-RUN dotnet build "Rental.Api.csproj" -c Release -o /app/build
+# Copy csproj and restore 
+COPY *.csproj ./
+RUN dotnet restore "../Rental.Api.csproj"
 
-FROM build AS publish
-RUN dotnet publish "Rental.Api.csproj" -c Release -o /app/publish
+COPY . ./
+RUN dotnet publish -c Release -o out
 
-FROM base AS final
+# Build runtime image 
+FROM mcr.microsoft.com/dotnet/aspnet:5.0
 WORKDIR /app
-COPY --from=publish /app/publish .
+COPY --from=build-env /app/out .
 ENTRYPOINT ["dotnet", "Rental.Api.dll"]

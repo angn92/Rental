@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Rental.Infrastructure.Command;
 using Rental.Infrastructure.Command.Users.Command;
+using Rental.Infrastructure.Handlers.Sessions;
 using Rental.Infrastructure.Handlers.Users.Queries;
 using Rental.Infrastructure.Query;
 using System.Threading.Tasks;
@@ -33,8 +34,21 @@ namespace Rental.Api.Controllers
             return await _queryDispatcher.DispatchAsync<GetUserDetailsRq, GetUserDetailsRs>(query);
         }
 
-        //[HttpPost("session")]
-        //public async Task CreateSession([FromBody] [NotNull] CreateSessionCommand command)
+        [HttpPost("session")]
+        public async Task<CreateSessionResponse> CreateSeesion([FromBody] [NotNull] string username)
+        {
+            var command = new CreateSessionCommand
+            {
+                Username = username
+            };
+
+            return await _commandDispatcher.DispatchAsync(command);
+        }
+
+
+
+        //[HttpPut("change/password")]
+        //public async Task ChangePassword([FromBody] [NotNull] ChangePasswordCommand command)
         //{
         //    await _commandDispatcher.DispatchAsync(command);
         //}

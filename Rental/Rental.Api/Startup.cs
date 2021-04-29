@@ -23,8 +23,8 @@ namespace Rental.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<RentalContext>(ctx => ctx.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
-            //services.AddDbContext<RentalContext>(ctx => ctx.UseInMemoryDatabase(databaseName: "RentalDB"));
+            //services.AddDbContext<RentalContext>(ctx => ctx.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
+            services.AddDbContext<RentalContext>(ctx => ctx.UseInMemoryDatabase(databaseName: "RentalDB"));
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {

@@ -59,7 +59,7 @@ namespace Rental.Infrastructure.Services.UserService
                 user = new User(firstName, lastName, username, email, phoneNumber);
                 await _userRepository.AddAsync(user);
 
-                _passwordHelper.SetPassword(password, user);
+                //_passwordHelper.SetPassword(password, user);
             }
             catch (Exception ex)
             {
