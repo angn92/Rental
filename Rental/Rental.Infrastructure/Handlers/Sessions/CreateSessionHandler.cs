@@ -1,5 +1,5 @@
-﻿using Rental.Infrastructure.Command;
-using Rental.Infrastructure.EF;
+﻿using Rental.Core.Enum;
+using Rental.Infrastructure.Command;
 using Rental.Infrastructure.Exceptions;
 using Rental.Infrastructure.Services.UserService;
 using System.Threading.Tasks;
@@ -18,13 +18,13 @@ namespace Rental.Infrastructure.Handlers.Sessions
         public Task<CreateSessionResponse> HandleAsync(CreateSessionCommand command)
         {
             var user = _userService.GetUserAsync(command.Username);
-            
-            if(user == null)
+
+            if(user.Result.Status != AccountStatus.Active)
             {
-                throw new CoreException(ErrorCode.UserNotExist, $"User {command.Username} does not exist.");
+                throw new CoreException(ErrorCode.AccountNotActive, "User is not active");
             }
 
-            
+
         }
     }
 }

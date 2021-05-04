@@ -6,7 +6,7 @@ namespace Rental.Core.Domain
     public class Session : Entity
     {
         public string SessionId { get; protected set; }
-        public string State { get; protected set; }
+        public SessionState State { get; protected set; }
         public DateTime LastAccessDate { get; protected set; }
         public User User { get; protected set; }
         public Guid UserId { get; set; }
@@ -15,7 +15,7 @@ namespace Rental.Core.Domain
         {
         }
 
-        public Session(string sessionId, string state, User userSession)
+        public Session(string sessionId, SessionState state, User userSession)
         {
             SessionId = sessionId;
             State = state;
@@ -30,7 +30,7 @@ namespace Rental.Core.Domain
 
         public void SetSessionActive()
         {
-            State = SessionState.NotActive.ToString();
+            State = SessionState.NotActive;
         }
     }
 }
