@@ -12,5 +12,6 @@
         public static string InvalidCredential => "invalid_credential";
         public static string UserNotExist => "user_not_exist";
         public static string IncorrectArgument => "incorrect_argument";
+        public static string SessionDoesNotExist => "session_not_exist";
     }
 }

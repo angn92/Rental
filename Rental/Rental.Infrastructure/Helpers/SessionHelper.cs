@@ -2,7 +2,9 @@
 using Rental.Core.Domain;
 using Rental.Core.Enum;
 using Rental.Infrastructure.EF;
+using Rental.Infrastructure.Exceptions;
 using System;
+using System.Linq;
 using System.Security.Cryptography;
 using System.Threading.Tasks;
 
@@ -24,7 +26,6 @@ namespace Rental.Infrastructure.Helpers
             _context = context;
         }
 
-
         public async Task<Session> CreateSession(User user)
         {
             var sessionId = GenerateNewSession();
@@ -44,7 +45,15 @@ namespace Rental.Infrastructure.Helpers
 
         public void RemoveSession(string idSession)
         {
-            throw new NotImplementedException();
+            var sessionToRemove = _context.Sessions.FirstOrDefault(x => x.SessionId == idSession);
+            
+            if(sessionToRemove == null)
+            {
+                throw new CoreException(ErrorCode.SessionDoesNotExist, $"Session {idSession} does not exist.");
+            }
+
+            _context.Sessions.Remove(sessionToRemove);
+            _context.SaveChanges();
         }
 
         private static string GenerateNewSession()

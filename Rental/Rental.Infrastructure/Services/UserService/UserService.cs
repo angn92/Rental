@@ -1,6 +1,5 @@
 ﻿using Rental.Core.Domain;
 using Rental.Core.Repository;
-using Rental.Infrastructure.DTO;
 using Rental.Infrastructure.Exceptions;
 using Rental.Infrastructure.Helpers;
 using System;
@@ -21,25 +20,17 @@ namespace Rental.Infrastructure.Services.UserService
             _passwordHelper = passwordHelper;
         }
 
-        public async Task<UserDto> GetUserAsync(string nick)
+        public async Task<User> GetUserAsync(string nick)
         {
             var user = await _userRepository.GetAsync(nick);
 
             if (user is null)
                 throw new CoreException(ErrorCode.UserNotExist, $"This user: {nick} does not exist.");
 
-            var userDetails = new UserDto
-            {
-                FullName = user.FirstName + " " + user.LastName,
-                Emial = user.Email,
-                Username = user.Username,
-                Status = user.Status
-            };
-
-            return userDetails;
+            return user;
         }
 
-        public Task<UserDto> LoginAsync(string username, string password)
+        public Task<User> LoginAsync(string username, string password)
         {
             throw new NotImplementedException();
         }

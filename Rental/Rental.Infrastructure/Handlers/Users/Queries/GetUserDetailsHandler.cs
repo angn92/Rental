@@ -20,9 +20,9 @@ namespace Rental.Infrastructure.Handlers.Users.Queries
 
             return new GetUserDetailsRs
             {
-                Fullname = userAccount.FullName,
+                Fullname = userAccount.FirstName + " " + userAccount.LastName,
                 Username = userAccount.Username,
-                Email = userAccount.Emial,
+                Email = userAccount.Email,
                 Status = userAccount.Status
             };
         }
