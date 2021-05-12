@@ -25,7 +25,7 @@ namespace Rental.Api.Controllers
         [HttpPost("register/user")]
         public async Task RegisterAccount([FromBody][NotNull] RegisterUser command)
         {
-            await _commandDispatcher.DispatchAsync(command);
+            await _commandDispatcher.DispatchAsync<RegisterUser>(command);
         }
 
         [HttpGet("user")]
@@ -42,7 +42,7 @@ namespace Rental.Api.Controllers
                 Username = username
             };
 
-            return await _commandDispatcher.DispatchAsync(command);
+            return await _commandDispatcher.DispatchAsync<CreateSessionCommand, CreateSessionResponse>(command);
         }
 
 
