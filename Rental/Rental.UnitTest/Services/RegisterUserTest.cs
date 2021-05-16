@@ -73,7 +73,6 @@ namespace Rental.UnitTest.Services.Users
             var result = await userService.GetUserAsync("adam123");
 
             //Assert
-            result.FullName.Should().Be(user.FirstName + " " + user.LastName);
             result.Status.Should().Be(AccountStatus.Active);
         }
 
