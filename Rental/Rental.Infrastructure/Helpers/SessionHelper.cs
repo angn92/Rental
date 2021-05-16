@@ -10,12 +10,9 @@ using System.Threading.Tasks;
 
 namespace Rental.Infrastructure.Helpers
 {
-    public interface ISessionHelper
-    {
-     
-    }
+    
 
-    public class SessionHelper : ISessionHelper
+    public class SessionHelper 
     {
         
     }

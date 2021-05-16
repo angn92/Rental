@@ -3,11 +3,11 @@ using Rental.Core.Domain;
 using Rental.Core.Enum;
 using Rental.Infrastructure.EF;
 using Rental.Infrastructure.Exceptions;
+using Rental.Infrastructure.Helpers;
+using Rental.Infrastructure.Services.UserService;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Rental.Infrastructure.Services.SessionService
@@ -15,14 +15,37 @@ namespace Rental.Infrastructure.Services.SessionService
     public class SessionService : ISessionService
     {
         private readonly RentalContext _context;
+        private readonly IUserService _userService;
+        private readonly IUserHelper _userHelper;
 
-        public SessionService(RentalContext context)
+        public SessionService(RentalContext context, IUserService userService, IUserHelper userHelper)
         {
             _context = context;
+            _userService = userService;
+            _userHelper = userHelper;
         }
 
         public async Task<Session> CreateSessionAsync(User user)
         {
+            var isUserExist = await _userService.GetUserAsync(user.Username);
+
+            if(isUserExist == null)
+            {
+                throw new CoreException(ErrorCode.UserNotExist, $"User {user.Username} does not exist.");
+            }
+
+            var accountStatus = _userHelper.CheckAccountStatus(user);
+
+            if(accountStatus == AccountStatus.Blocked.ToString())
+            {
+                throw new CoreException(ErrorCode.AccountBlocked, "Account is blocked.");
+            }
+
+            if(accountStatus == AccountStatus.NotActive.ToString())
+            {
+                throw new CoreException(ErrorCode.AccountNotActive, "Account is not active.");
+            }
+
             var sessionId = GenerateNewSession();
 
             var session = new Session(sessionId, SessionState.Active, user);

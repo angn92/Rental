@@ -1,7 +1,7 @@
 ﻿using Rental.Core.Enum;
 using Rental.Infrastructure.Command;
 using Rental.Infrastructure.Exceptions;
-using Rental.Infrastructure.Helpers;
+using Rental.Infrastructure.Services.SessionService;
 using Rental.Infrastructure.Services.UserService;
 using System.Threading.Tasks;
 
@@ -10,12 +10,12 @@ namespace Rental.Infrastructure.Handlers.Sessions
     public class CreateSessionHandler : ICommandHandler<CreateSessionCommand, CreateSessionResponse>
     {
         private readonly IUserService _userService;
-        private readonly ISessionHelper _sessionHelper;
+        private readonly ISessionService _sessionService;
 
-        public CreateSessionHandler(IUserService userService, ISessionHelper sessionHelper)
+        public CreateSessionHandler(IUserService userService, ISessionService sessionService)
         {
             _userService = userService;
-            _sessionHelper = sessionHelper;
+            _sessionService = sessionService;
         }
 
         public async Task<CreateSessionResponse> HandleAsync(CreateSessionCommand command)
@@ -27,7 +27,7 @@ namespace Rental.Infrastructure.Handlers.Sessions
                 throw new CoreException(ErrorCode.AccountNotActive, "User is not active");
             }
 
-            var session = await _sessionHelper.CreateSession(user);
+            var session = await _sessionService.CreateSessionAsync(user);
 
             return new CreateSessionResponse
             {

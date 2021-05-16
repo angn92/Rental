@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace Rental.Infrastructure.Services.SessionService
 {
-    interface ISessionService
+    public interface ISessionService
     {
         Task<Session> CreateSessionAsync(User user);
         Task<Session> GetSessionAsync(string idSession);

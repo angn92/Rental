@@ -22,8 +22,4 @@
     <ProjectReference Include="..\Rental.Infrastructure\Rental.Infrastructure.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Services\Users\" />
-  </ItemGroup>
-
 </Project>
