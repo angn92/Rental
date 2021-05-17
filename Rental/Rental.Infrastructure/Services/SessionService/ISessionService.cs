@@ -8,6 +8,6 @@ namespace Rental.Infrastructure.Services.SessionService
     {
         Task<Session> CreateSessionAsync(User user);
         Task<Session> GetSessionAsync(string idSession);
-        void RemoveSession(string idSession);
+        Task RemoveSession(string idSession);
     }
 }

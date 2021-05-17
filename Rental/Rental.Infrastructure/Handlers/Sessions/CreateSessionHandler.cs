@@ -22,6 +22,11 @@ namespace Rental.Infrastructure.Handlers.Sessions
         {
             var user = await _userService.GetUserAsync(command.Username);
 
+            if(user is null)
+            {
+                throw new CoreException(ErrorCode.UserNotExist, $"User {command.Username} does not exist.");
+            }
+
             if (user.Status != AccountStatus.Active)
             {
                 throw new CoreException(ErrorCode.AccountNotActive, "User is not active");

@@ -35,7 +35,8 @@ namespace Rental.Infrastructure.Services.UserService
             throw new NotImplementedException();
         }
 
-        public async Task RegisterAsync(string firstName, string lastName, string username, string email, string phoneNumber, string password)
+        public async Task RegisterAsync(string firstName, string lastName, string username, string email, 
+                                        string phoneNumber, string password)
         {
             var user = await _userRepository.GetAsync(username);
 

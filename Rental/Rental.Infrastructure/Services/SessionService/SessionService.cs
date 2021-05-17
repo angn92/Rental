@@ -6,7 +6,6 @@ using Rental.Infrastructure.Exceptions;
 using Rental.Infrastructure.Helpers;
 using Rental.Infrastructure.Services.UserService;
 using System;
-using System.Linq;
 using System.Security.Cryptography;
 using System.Threading.Tasks;
 
@@ -27,9 +26,9 @@ namespace Rental.Infrastructure.Services.SessionService
 
         public async Task<Session> CreateSessionAsync(User user)
         {
-            var isUserExist = await _userService.GetUserAsync(user.Username);
+            var userAccount = await _userService.GetUserAsync(user.Username);
 
-            if(isUserExist == null)
+            if(userAccount == null)
             {
                 throw new CoreException(ErrorCode.UserNotExist, $"User {user.Username} does not exist.");
             }
@@ -61,9 +60,9 @@ namespace Rental.Infrastructure.Services.SessionService
             return await _context.Sessions.FirstOrDefaultAsync(x => x.SessionId == idSession);
         }
 
-        public void RemoveSession(string idSession)
+        public async Task RemoveSession(string idSession)
         {
-            var sessionToRemove = _context.Sessions.FirstOrDefault(x => x.SessionId == idSession);
+            var sessionToRemove = await _context.Sessions.FirstOrDefaultAsync(x => x.SessionId == idSession);
 
             if (sessionToRemove == null)
             {
@@ -71,7 +70,7 @@ namespace Rental.Infrastructure.Services.SessionService
             }
 
             _context.Sessions.Remove(sessionToRemove);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
 
         private static string GenerateNewSession()
