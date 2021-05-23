@@ -1,19 +1,29 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Rental.Core.Domain;
+﻿using Rental.Core.Domain;
 using Rental.Core.Enum;
-using Rental.Infrastructure.EF;
 using Rental.Infrastructure.Exceptions;
 using System;
-using System.Linq;
-using System.Security.Cryptography;
-using System.Threading.Tasks;
 
 namespace Rental.Infrastructure.Helpers
 {
-    
-
-    public class SessionHelper 
+    public interface ISessionHelper
     {
-        
+        void CheckSessionStatus(Session session);
+        bool SessionExpired(string session);
+    }
+
+    public class SessionHelper : ISessionHelper
+    {
+        public void CheckSessionStatus(Session session)
+        {
+            if(session.State == SessionState.NotActive)
+            {
+                throw new CoreException(ErrorCode.SessioNotActive, $"Given session {session.SessionId} is not active.");
+            }
+        }
+
+        public bool SessionExpired(string session)
+        {
+            return true;
+        }
     }
 }

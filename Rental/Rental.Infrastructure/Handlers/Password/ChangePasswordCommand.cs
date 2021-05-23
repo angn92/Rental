@@ -2,9 +2,9 @@
 
 namespace Rental.Infrastructure.Handlers.Password
 {
-    public class ChangePassword : ICommand
+    public class ChangePasswordCommand : ICommand
     {
-        public string OldPassword { get; set; }
+        public string Session { get; set; }
         public string NewPassword { get; set; }
     }
 }
