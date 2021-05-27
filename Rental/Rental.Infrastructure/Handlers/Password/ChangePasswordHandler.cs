@@ -15,14 +15,16 @@ namespace Rental.Infrastructure.Handlers.Password
         private readonly IUserService _userService;
         private readonly ISessionService _sessionService;
         private readonly ISessionHelper _sessionHelper;
+        private readonly IPasswordHelper _passwordHelper;
 
         public ChangePasswordHandler(RentalContext rentalContext, IUserService userService, ISessionService sessionService,
-                                     ISessionHelper sessionHelper)
+                                     ISessionHelper sessionHelper, IPasswordHelper passwordHelper)
         {
             _rentalContext = rentalContext;
             _userService = userService;
             _sessionService = sessionService;
             _sessionHelper = sessionHelper;
+            _passwordHelper = passwordHelper;
         }
 
         public async Task HandleAsync(ChangePasswordCommand command)
@@ -43,11 +45,20 @@ namespace Rental.Infrastructure.Handlers.Password
                 throw new CoreException(ErrorCode.AccountNotActive, "Only active user can change password.");
             }
 
-            
-            //check session for user, session should not be expire
-            //validate new password
-            //save password 
-            //return 200 if is ok 
+            if (_sessionHelper.SessionExpired(session))
+            {
+                throw new CoreException(ErrorCode.SessionExpired, $"Session {session.SessionId} is expired.");
+            }
+
+            //Remove old password form DB
+            var oldPassword = await _passwordHelper.GetActivePassword(user);
+
+            _rentalContext.Remove(oldPassword);
+            await _rentalContext.SaveChangesAsync();
+
+            //Set new password and save to DB
+
+            await _passwordHelper.SetPassword(command.NewPassword, user);
         }
     }
 }

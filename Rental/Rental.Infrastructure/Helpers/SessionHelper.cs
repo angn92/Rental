@@ -8,7 +8,7 @@ namespace Rental.Infrastructure.Helpers
     public interface ISessionHelper
     {
         void CheckSessionStatus(Session session);
-        bool SessionExpired(string session);
+        bool SessionExpired(Session session);
     }
 
     public class SessionHelper : ISessionHelper
@@ -21,9 +21,9 @@ namespace Rental.Infrastructure.Helpers
             }
         }
 
-        public bool SessionExpired(string session)
+        public bool SessionExpired(Session session)
         {
-            return true;
+            return session.LastAccessDate.AddMinutes(5) < DateTime.UtcNow;
         }
     }
 }

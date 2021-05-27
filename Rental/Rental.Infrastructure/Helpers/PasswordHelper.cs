@@ -1,13 +1,17 @@
-﻿using Rental.Core.Domain;
+﻿using Microsoft.EntityFrameworkCore;
+using Rental.Core.Domain;
+using Rental.Core.Enum;
 using Rental.Infrastructure.EF;
+using Rental.Infrastructure.Exceptions;
 using Rental.Infrastructure.Services.EncryptService;
+using System.Threading.Tasks;
 
 namespace Rental.Infrastructure.Helpers
 {
     public interface IPasswordHelper
     {
-        void SetPassword(string password, User user);
-        Password GetActivePassword();
+        Task SetPassword(string password, User user);
+        Task<Password> GetActivePassword(User user);
     }
 
     public class PasswordHelper : IPasswordHelper
@@ -21,20 +25,28 @@ namespace Rental.Infrastructure.Helpers
             _encrypt = encrypt;
         }
 
-        public Password GetActivePassword()
+        public async Task<Password> GetActivePassword(User user)
         {
-            throw new System.NotImplementedException();
+            var password = await _context.Passwords.SingleOrDefaultAsync(x => x.User.Username == user.Username && 
+                                                              x.Status == PasswordStatus.Active);
+
+            if(password == null)
+            {
+                throw new CoreException(ErrorCode.PasswordNotExist, $"User {user.Username} does not have active password.");
+            }
+
+            return password;
         }
 
-        public void SetPassword(string password, User user)
+        public async Task SetPassword(string password, User user)
         {
             var salt = _encrypt.GetSalt(password);
             var hash = _encrypt.GetHash(password, salt);
 
             var newPassword = new Password(hash, salt, user);
 
-            _context.AddAsync(newPassword);
-            _context.SaveChangesAsync();
+            await _context.AddAsync(newPassword);
+            await _context.SaveChangesAsync();
         }
     }
 }

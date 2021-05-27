@@ -14,5 +14,7 @@
         public static string IncorrectArgument => "incorrect_argument";
         public static string SessionDoesNotExist => "session_not_exist";
         public static string SessioNotActive => "session_not_active";
+        public static string SessionExpired => "session_expired";
+        public static string PasswordNotExist => "password_not_exist";
     }
 }
