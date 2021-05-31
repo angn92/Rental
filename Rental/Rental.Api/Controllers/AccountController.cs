@@ -4,6 +4,7 @@ using Rental.Infrastructure.Command;
 using Rental.Infrastructure.Command.Users.Command;
 using Rental.Infrastructure.Handlers.Password;
 using Rental.Infrastructure.Handlers.Sessions;
+using Rental.Infrastructure.Handlers.Users.Command.AccountStatus;
 using Rental.Infrastructure.Handlers.Users.Queries;
 using Rental.Infrastructure.Query;
 using System.Threading.Tasks;
@@ -70,6 +71,17 @@ namespace Rental.Api.Controllers
         public async Task ChangePassword([FromBody][NotNull] ChangePasswordCommand command)
         {
             await _commandDispatcher.DispatchAsync(command);
+        }
+
+        [HttpPut("account/status")]
+        public async Task ChangeAccountStatus([FromQuery] string username)
+        {
+            var command = new ChangeAccountStatus
+            {
+                Username = username
+            };
+
+            await _commandDispatcher.DispatchAsync<ChangeAccountStatus, ChangeAccountStatusResponse>(command);
         }
     }
 }
