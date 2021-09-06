@@ -4,11 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Rental.Infrastructure.Handlers.Users.Queries.AccountStatus
+namespace Rental.Infrastructure.Handlers.Users.Command.AccountInfo
 {
-    public class GetAccountStatusRs
+    public class ChangeAccountStatusResponse
     {
         public string AccountStatus { get; set; }
-        public string Username { get; set; }
     }
 }

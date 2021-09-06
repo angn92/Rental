@@ -9,7 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Rental.Infrastructure.Handlers.Users.Queries.AccountStatus
+namespace Rental.Infrastructure.Handlers.Users.Queries.AccountInfo
 {
     public class GetAccountStatusHandler : IQueryHandler<GetAccountStatusRq, GetAccountStatusRs>
     {
