@@ -6,8 +6,8 @@ namespace Rental.Core.Domain
 {
     public class Category : Entity
     {
-        public string Name { get; protected set; }
-        public ISet<Product> Products { get; protected set; }
+        public virtual string Name { get; set; }
+        public virtual ISet<Product> Products { get; set; }
        
         protected Category()
         {
@@ -15,14 +15,6 @@ namespace Rental.Core.Domain
 
         public Category([NotNull] string name)
         {
-            Setname(name);
-        }
-
-        private void Setname(string name)
-        {
-            if (string.IsNullOrWhiteSpace(name))
-                throw new Exception($"Argument {name} is incorrect.");
-
             Name = name;
         }
     }

@@ -6,47 +6,21 @@ namespace Rental.Core.Domain
 {
     public class Password : Entity
     {
-        public string Hash { get; protected set; }
-
-        public string Salt { get; protected set; }
-
-        public PasswordStatus Status { get; protected set; }
-        public User User { get; protected set; }
+        public virtual string Hash { get; set; }
+        public virtual string Salt { get; set; }
+        public virtual PasswordStatus Status { get; set; }
+        public virtual Customer User { get; set; }
 
         protected Password()
         {
         }
 
-        public Password([NotNull] string hash, [NotNull] string salt, [NotNull] User user)
+        public Password([NotNull] string hash, [NotNull] string salt, [NotNull] Customer user)
         {
             Hash = hash;
             Salt = salt;
-            Activate();
+            Status = PasswordStatus.Active;
             User = user;
-        }
-
-        /// <summary>
-        /// Set first password after created account or change password for next time.
-        /// </summary>
-        /// <param name="hash">Password hash</param>
-        public void SetHash(string hash)
-        {
-            if (String.IsNullOrWhiteSpace(hash))
-                throw new Exception($"Argument {hash} can not be null or empty.");
-
-            Hash = hash;
-        }
-
-        /// <summary>
-        /// Sets the salt for current password.
-        /// </summary>
-        /// <param name="salt"></param>
-        public void SetSalt(string salt)
-        {
-            if (String.IsNullOrWhiteSpace(salt))
-                throw new Exception($"Argument {salt} can not be null or empty.");
-
-            Salt = salt;
         }
 
         public void Activate()

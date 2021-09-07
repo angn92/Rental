@@ -15,18 +15,18 @@ namespace Rental.Infrastructure.Repositories
             _context = rentalContext;
         }
 
-        public async Task<User> GetAsync(string username)
+        public async Task<Customer> GetAsync(string username)
         {
             return await _context.Users.SingleOrDefaultAsync(x => x.Username == username);
         }
 
-        public async Task AddAsync(User user)
+        public async Task AddAsync(Customer user)
         {
             await _context.Users.AddAsync(user);
             await _context.SaveChangesAsync();
         }
 
-        public async Task EditAsync(User user)
+        public async Task EditAsync(Customer user)
         {
             _context.Users.Update(user);
             await _context.SaveChangesAsync();

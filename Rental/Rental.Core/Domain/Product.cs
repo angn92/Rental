@@ -6,49 +6,31 @@ namespace Rental.Core.Domain
 {
     public class Product : Entity
     {
-        public string Name { get; protected set; }
-        public int Amount { get; protected set; }
-        public int QuantityAvailable { get; protected set; }
-        public string Description { get; protected set; }
-        public ProductStatus Status { get; protected set; }
-        public Category Category { get; protected set; }
-        public User User { get; protected set; }
+        public virtual string Name { get; set; }
+        public virtual int Amount { get; set; }
+        public virtual int QuantityAvailable { get; set; }
+        public virtual string Description { get; set; }
+        public virtual ProductStatus Status { get; set; }
+        public virtual Category Category { get; set; }
+        public virtual Customer User { get; set; }
 
         protected Product()
         {
-
         }
 
         public Product([NotNull] string name, [NotNull] int amount, [NotNull] Category category)
         {
             Id = Guid.NewGuid();
-            SetName(name);
+            Name = name;
             Amount = amount;
             QuantityAvailable = Amount;
             SetAvailableStatus();
             Category = category;
         }
 
-        public void SetName(string name)
-        {
-            if (string.IsNullOrWhiteSpace(name))
-                throw new Exception($"Argument {name} is incorrect.");
-
-            Name = name;
-        }
-
-        public void SetDescription(string description)
-        {
-            if (string.IsNullOrEmpty(description))
-                throw new Exception($"Argument {description} is incorrect.");
-
-            Description = description;
-        }
-
         public void SetAvailableStatus()
         {
             Status = ProductStatus.Available;
-
         }
 
         public void SetReservedStatus()

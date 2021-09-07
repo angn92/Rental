@@ -6,7 +6,7 @@ namespace Rental.Infrastructure.Services.SessionService
 {
     public interface ISessionService
     {
-        Task<Session> CreateSessionAsync(User user);
+        Task<Session> CreateSessionAsync(Customer user);
         Task<Session> GetSessionAsync(string idSession);
         Task RemoveSession(string idSession);
     }

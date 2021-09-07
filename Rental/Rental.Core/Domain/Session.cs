@@ -1,26 +1,29 @@
-﻿using Rental.Core.Enum;
+﻿using JetBrains.Annotations;
+using Rental.Core.Enum;
 using System;
 
 namespace Rental.Core.Domain
 {
     public class Session : Entity
     {
-        public string SessionId { get; protected set; }
-        public SessionState State { get; protected set; }
-        public DateTime LastAccessDate { get; protected set; }
-        public User User { get; protected set; }
-        public Guid UserId { get; set; }
+        public virtual string SessionId { get; set; }
+        public virtual SessionState State { get; set; }
+        public virtual DateTime GenerationDate { get; set; }
+        public virtual DateTime LastAccessDate { get; set; }
+        public virtual Customer Customer { get; set; }
 
         protected Session()
         {
         }
 
-        public Session(string sessionId, SessionState state, User userSession)
+        public Session([NotNull] string sessionId, [NotNull] Customer customer)
         {
+            Id = Guid.NewGuid();
             SessionId = sessionId;
-            State = state;
-            User = userSession;
+            State = SessionState.NotAuthorized;
+            Customer = customer;
             UpdateLastAccessDate();
+            GenerationDate = DateTime.UtcNow;
         }
 
         public void UpdateLastAccessDate()

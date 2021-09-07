@@ -21,7 +21,7 @@ namespace Rental.UnitTest.Services
             var sessionServiceMock = new Mock<ISessionService>();  //Mock object
             var sessionMock = new Mock<Session>();
 
-            var result = sessionServiceMock.Setup(x => x.CreateSessionAsync(It.IsAny<User>()))
+            var result = sessionServiceMock.Setup(x => x.CreateSessionAsync(It.IsAny<Customer>()))
                                     .Returns(Task.FromResult<Session>(sessionMock.Object));
           
             result.Should().NotBeNull();
@@ -36,7 +36,7 @@ namespace Rental.UnitTest.Services
             var userServiceMock = new Mock<IUserService>();
 
             //var sessionMock = new Mock<Session>();
-            var user = new User("test", "test1", "userTest", "test@email.com", "123456789");
+            var user = new Customer("test", "test1", "userTest", "test@email.com", "123456789");
             //var session = new Session("1234567", SessionState.Active, user);
 
             contextMock.Setup(x => x.Sessions.Add(It.IsAny<Session>())).Returns();

@@ -10,8 +10,8 @@ namespace Rental.Infrastructure.Helpers
 {
     public interface IPasswordHelper
     {
-        Task SetPassword(string password, User user);
-        Task<Password> GetActivePassword(User user);
+        Task SetPassword(string password, Customer user);
+        Task<Password> GetActivePassword(Customer user);
     }
 
     public class PasswordHelper : IPasswordHelper
@@ -25,7 +25,7 @@ namespace Rental.Infrastructure.Helpers
             _encrypt = encrypt;
         }
 
-        public async Task<Password> GetActivePassword(User user)
+        public async Task<Password> GetActivePassword(Customer user)
         {
             var password = await _context.Passwords.SingleOrDefaultAsync(x => x.User.Username == user.Username && 
                                                               x.Status == PasswordStatus.Active);
@@ -38,7 +38,7 @@ namespace Rental.Infrastructure.Helpers
             return password;
         }
 
-        public async Task SetPassword(string password, User user)
+        public async Task SetPassword(string password, Customer user)
         {
             var salt = _encrypt.GetSalt(password);
             var hash = _encrypt.GetHash(password, salt);

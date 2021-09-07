@@ -24,7 +24,7 @@ namespace Rental.Infrastructure.Services.SessionService
             _userHelper = userHelper;
         }
 
-        public async Task<Session> CreateSessionAsync(User user)
+        public async Task<Session> CreateSessionAsync(Customer user)
         {
             var userAccount = await _userService.GetUserAsync(user.Username);
 

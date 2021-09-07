@@ -3,6 +3,7 @@
     public enum SessionState
     {
         NotActive = 0,
-        Active
+        Active,
+        NotAuthorized
     }
 }

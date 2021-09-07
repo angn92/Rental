@@ -20,7 +20,7 @@ namespace Rental.Infrastructure.Services.UserService
             _passwordHelper = passwordHelper;
         }
 
-        public async Task<User> GetUserAsync(string nick)
+        public async Task<Customer> GetUserAsync(string nick)
         {
             var user = await _userRepository.GetAsync(nick);
 
@@ -30,7 +30,7 @@ namespace Rental.Infrastructure.Services.UserService
             return user;
         }
 
-        public Task<User> LoginAsync(string username, string password)
+        public Task<Customer> LoginAsync(string username, string password)
         {
             throw new NotImplementedException();
         }
@@ -48,7 +48,7 @@ namespace Rental.Infrastructure.Services.UserService
             try
             {
                 _emailValidator.ValidateEmail(email);
-                user = new User(firstName, lastName, username, email, phoneNumber);
+                user = new Customer(firstName, lastName, username, email, phoneNumber);
                 await _userRepository.AddAsync(user);
 
                 //_passwordHelper.SetPassword(password, user);

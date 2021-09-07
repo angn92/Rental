@@ -6,12 +6,12 @@ namespace Rental.Infrastructure.Helpers
 {
     public interface IUserHelper
     {
-        string CheckAccountStatus(User user);
+        string CheckAccountStatus(Customer user);
     }
 
     public class UserHelper : IUserHelper
     {
-        public string CheckAccountStatus(User user)
+        public string CheckAccountStatus(Customer user)
         {
             string status = null;
 

@@ -3,10 +3,6 @@ using Rental.Infrastructure.Helpers;
 using Rental.Infrastructure.Query;
 using Rental.Infrastructure.Services.SessionService;
 using Rental.Infrastructure.Services.UserService;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Rental.Infrastructure.Handlers.Users.Queries.AccountInfo
