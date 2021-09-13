@@ -11,6 +11,7 @@ namespace Rental.Core.Domain
         public virtual DateTime GenerationDate { get; set; }
         public virtual DateTime LastAccessDate { get; set; }
         public virtual Customer Customer { get; set; }
+        public virtual int CustomerId { get; set; }
 
         protected Session()
         {
@@ -18,7 +19,6 @@ namespace Rental.Core.Domain
 
         public Session([NotNull] string sessionId, [NotNull] Customer customer)
         {
-            Id = Guid.NewGuid();
             SessionId = sessionId;
             State = SessionState.NotAuthorized;
             Customer = customer;

@@ -7,6 +7,7 @@ namespace Rental.Core.Domain
 {
     public class Customer : Entity
     {
+        public virtual int CustomerId { get; set; }
         public virtual string FirstName { get; set; }
         public virtual string LastName { get; set; }
         public virtual string Username { get; set; }
@@ -15,6 +16,7 @@ namespace Rental.Core.Domain
         public virtual string Phone { get; set; }
         public virtual ISet<Password> Passwords { get; set; }
         public virtual ISet<Product> Products { get; set; }
+        public virtual Session Session { get; set; }
 
         protected Customer()
         {

@@ -23,21 +23,21 @@ namespace Rental.Infrastructure.EF
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Password>()
-                    .HasOne<Customer>(u => u.User)
-                    .WithMany(p => p.Passwords);
+                    .HasOne<Customer>(p => p.Customer)
+                    .WithMany(c => c.Passwords);
 
             modelBuilder.Entity<Customer>()
                     .HasMany<Password>(u => u.Passwords)
-                    .WithOne(p => p.User);
+                    .WithOne(p => p.Customer);
 
             modelBuilder.Entity<Customer>()
                     .HasMany<Product>(u => u.Products)
                     .WithOne(p => p.User);
 
             modelBuilder.Entity<Customer>()
-                    .HasOne<Session>(u => u.IdSession)
-                    .WithOne(x => x.User)
-                    .HasForeignKey<Session>(x => x.UserId);
+                    .HasOne<Session>(u => u.Session)
+                    .WithOne(x => x.Customer)
+                    .HasForeignKey<Session>(x => x.CustomerId);
 
             modelBuilder.Entity<Product>()
                     .HasOne<Category>(p => p.Category)
