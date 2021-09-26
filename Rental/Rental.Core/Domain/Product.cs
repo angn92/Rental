@@ -6,7 +6,7 @@ namespace Rental.Core.Domain
 {
     public class Product : Entity
     {
-        public virtual int ProductId { get; set; }
+        public virtual string ProductId { get; set; }
         public virtual string Name { get; set; }
         public virtual int Amount { get; set; }
         public virtual int QuantityAvailable { get; set; }
@@ -21,7 +21,7 @@ namespace Rental.Core.Domain
 
         public Product([NotNull] string name, [NotNull] int amount, [NotNull] Category category)
         {
-            Id = Guid.NewGuid();
+            ProductId = Guid.NewGuid().ToString();
             Name = name;
             Amount = amount;
             QuantityAvailable = Amount;

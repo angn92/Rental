@@ -6,7 +6,6 @@ namespace Rental.Core.Domain
 {
     public class Category : Entity
     {
-        public virtual int CategoryId { get; set; }
         public virtual string Name { get; set; }
         public virtual ISet<Product> Products { get; set; }
        

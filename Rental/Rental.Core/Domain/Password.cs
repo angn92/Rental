@@ -6,7 +6,7 @@ namespace Rental.Core.Domain
 {
     public class Password : Entity
     {
-        public virtual int PasswordId { get; set; }
+        public virtual string PasswordId { get; set; }
         public virtual string Hash { get; set; }
         public virtual string Salt { get; set; }
         public virtual PasswordStatus Status { get; set; }
@@ -18,6 +18,7 @@ namespace Rental.Core.Domain
 
         public Password([NotNull] string hash, [NotNull] string salt, [NotNull] Customer customer)
         {
+            PasswordId = Guid.NewGuid().ToString();
             Hash = hash;
             Salt = salt;
             Status = PasswordStatus.Active;

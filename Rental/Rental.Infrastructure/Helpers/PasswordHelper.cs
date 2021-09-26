@@ -27,7 +27,7 @@ namespace Rental.Infrastructure.Helpers
 
         public async Task<Password> GetActivePassword(Customer user)
         {
-            var password = await _context.Passwords.SingleOrDefaultAsync(x => x.User.Username == user.Username && 
+            var password = await _context.Passwords.SingleOrDefaultAsync(x => x.Customer.Username == user.Username && 
                                                               x.Status == PasswordStatus.Active);
 
             if(password == null)

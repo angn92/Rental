@@ -7,7 +7,7 @@ namespace Rental.Core.Domain
 {
     public class Customer : Entity
     {
-        public virtual int CustomerId { get; set; }
+        public virtual string CustomerId { get; set; }
         public virtual string FirstName { get; set; }
         public virtual string LastName { get; set; }
         public virtual string Username { get; set; }
@@ -25,7 +25,7 @@ namespace Rental.Core.Domain
         public Customer([NotNull] string firstName, [NotNull] string lastName, [NotNull] string username, 
                     [NotNull] string email, [NotNull] string phone)
         {
-            Id = Guid.NewGuid();
+            CustomerId = Guid.NewGuid().ToString();
             FirstName = firstName;
             LastName = lastName;
             Username = username;
