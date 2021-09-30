@@ -1,4 +1,5 @@
 ﻿using JetBrains.Annotations;
+using Rental.Core.Base;
 using System;
 using System.Collections.Generic;
 

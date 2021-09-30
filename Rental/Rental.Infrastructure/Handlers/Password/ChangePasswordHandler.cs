@@ -11,13 +11,13 @@ namespace Rental.Infrastructure.Handlers.Password
 {
     public class ChangePasswordHandler : ICommandHandler<ChangePasswordCommand>
     {
-        private readonly RentalContext _rentalContext;
+        private readonly ApplicationDbContext _rentalContext;
         private readonly IUserService _userService;
         private readonly ISessionService _sessionService;
         private readonly ISessionHelper _sessionHelper;
         private readonly IPasswordHelper _passwordHelper;
 
-        public ChangePasswordHandler(RentalContext rentalContext, IUserService userService, ISessionService sessionService,
+        public ChangePasswordHandler(ApplicationDbContext rentalContext, IUserService userService, ISessionService sessionService,
                                      ISessionHelper sessionHelper, IPasswordHelper passwordHelper)
         {
             _rentalContext = rentalContext;

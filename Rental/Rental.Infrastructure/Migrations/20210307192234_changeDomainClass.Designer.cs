@@ -9,7 +9,7 @@ using Rental.Infrastructure.EF;
 
 namespace Rental.Infrastructure.Migrations
 {
-    [DbContext(typeof(RentalContext))]
+    [DbContext(typeof(ApplicationDbContext))]
     [Migration("20210307192234_changeDomainClass")]
     partial class changeDomainClass
     {

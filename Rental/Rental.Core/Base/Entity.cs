@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Rental.Core.Domain
+namespace Rental.Core.Base
 {
     public abstract class Entity
     {

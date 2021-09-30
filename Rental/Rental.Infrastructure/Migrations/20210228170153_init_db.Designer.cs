@@ -8,7 +8,7 @@ using Rental.Infrastructure.EF;
 
 namespace Rental.Infrastructure.Migrations
 {
-    [DbContext(typeof(RentalContext))]
+    [DbContext(typeof(ApplicationDbContext))]
     [Migration("20210228170153_init_db")]
     partial class init_db
     {

@@ -31,7 +31,7 @@ namespace Rental.UnitTest.Services
         public void ShouldBeReturnIdSession()
         {
             var sessionServiceMock = new Mock<ISessionService>();  //Mock object
-            var contextMock = new Mock<RentalContext>();
+            var contextMock = new Mock<ApplicationDbContext>();
             var userHelperMock = new Mock<IUserHelper>();
             var userServiceMock = new Mock<IUserService>();
 

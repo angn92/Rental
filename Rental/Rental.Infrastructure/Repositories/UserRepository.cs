@@ -8,9 +8,9 @@ namespace Rental.Infrastructure.Repositories
 {
     public class UserRepository : IUserRepository
     {
-        private readonly RentalContext _context;
+        private readonly ApplicationDbContext _context;
 
-        public UserRepository(RentalContext rentalContext)
+        public UserRepository(ApplicationDbContext rentalContext)
         {
             _context = rentalContext;
         }

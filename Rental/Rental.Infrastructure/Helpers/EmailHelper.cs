@@ -13,9 +13,9 @@ namespace Rental.Infrastructure.Helpers
 
     public class EmailHelper : IEmailValidator
     {
-        private readonly RentalContext _context;
+        private readonly ApplicationDbContext _context;
 
-        public EmailHelper(RentalContext context)
+        public EmailHelper(ApplicationDbContext context)
         {
             _context = context;
         }
@@ -34,7 +34,7 @@ namespace Rental.Infrastructure.Helpers
             IsEmailInUse(_context, email);
         }
 
-        private void IsEmailInUse(RentalContext context, string email)
+        private void IsEmailInUse(ApplicationDbContext context, string email)
         {
             var emailExist = context.Users.SingleOrDefault(x => x.Email == email);
 

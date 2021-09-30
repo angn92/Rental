@@ -13,11 +13,11 @@ namespace Rental.Infrastructure.Services.SessionService
 {
     public class SessionService : ISessionService
     {
-        private readonly RentalContext _context;
+        private readonly ApplicationDbContext _context;
         private readonly IUserService _userService;
         private readonly IUserHelper _userHelper;
 
-        public SessionService(RentalContext context, IUserService userService, IUserHelper userHelper)
+        public SessionService(ApplicationDbContext context, IUserService userService, IUserHelper userHelper)
         {
             _context = context;
             _userService = userService;

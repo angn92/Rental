@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Rental.Infrastructure.EF
 {
-    public class RentalContext : DbContext
+    public class ApplicationDbContext : DbContext
     {
         public DbSet<Customer> Users { get; set; }
         public DbSet<Password> Passwords { get; set; }
@@ -15,7 +15,7 @@ namespace Rental.Infrastructure.EF
         public DbSet<Product> Products { get; set; }
         public DbSet<Session> Sessions { get; set; }
 
-        public RentalContext(DbContextOptions<RentalContext> options) : base(options)
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
 
         }

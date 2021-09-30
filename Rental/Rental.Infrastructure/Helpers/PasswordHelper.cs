@@ -17,9 +17,9 @@ namespace Rental.Infrastructure.Helpers
     public class PasswordHelper : IPasswordHelper
     {
         private readonly IEncrypt _encrypt;
-        private readonly RentalContext _context;
+        private readonly ApplicationDbContext _context;
 
-        public PasswordHelper(RentalContext context, IEncrypt encrypt)
+        public PasswordHelper(ApplicationDbContext context, IEncrypt encrypt)
         {
             _context = context;
             _encrypt = encrypt;

@@ -8,7 +8,7 @@ using Rental.Infrastructure.EF;
 
 namespace Rental.Infrastructure.Migrations
 {
-    [DbContext(typeof(RentalContext))]
+    [DbContext(typeof(ApplicationDbContext))]
     partial class RentalContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
