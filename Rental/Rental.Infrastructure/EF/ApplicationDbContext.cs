@@ -9,7 +9,7 @@ namespace Rental.Infrastructure.EF
 {
     public class ApplicationDbContext : DbContext
     {
-        public DbSet<Customer> Users { get; set; }
+        public DbSet<Customer> Customers { get; set; }
         public DbSet<Password> Passwords { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<Product> Products { get; set; }

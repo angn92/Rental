@@ -7,27 +7,31 @@ namespace Rental.Core.Domain
 {
     public class Product : Entity
     {
-        public virtual string ProductId { get; set; }
-        public virtual string Name { get; set; }
-        public virtual int Amount { get; set; }
-        public virtual int QuantityAvailable { get; set; }
-        public virtual string Description { get; set; }
-        public virtual ProductStatus Status { get; set; }
-        public virtual Category Category { get; set; }
-        public virtual Customer User { get; set; }
+        public virtual string ProductId { get; protected set; }
+        public virtual string Name { get; protected set; }
+        public virtual int Amount { get; protected set; }
+        public virtual int QuantityAvailable { get; protected set; }
+        public virtual string Description { get; protected set; }
+        public virtual ProductStatus Status { get; protected set; }
+        public virtual Category Category { get; protected set; }
+        public virtual Customer User { get; protected set; }
 
         protected Product()
-        {
-        }
+        {}
 
         public Product([NotNull] string name, [NotNull] int amount, [NotNull] Category category)
         {
             ProductId = Guid.NewGuid().ToString();
-            Name = name;
-            Amount = amount;
-            QuantityAvailable = Amount;
+            SetName(name);
+            SetAmoutProducts(amount);
+            QuantityAvailable = amount;
             SetAvailableStatus();
             Category = category;
+        }
+
+        public void SetName(string name)
+        {
+            Name = name;
         }
 
         public void SetAvailableStatus()
@@ -38,6 +42,11 @@ namespace Rental.Core.Domain
         public void SetReservedStatus()
         {
             Status = ProductStatus.Reserved;
+        }
+
+        public void SetAmoutProducts(int amount)
+        {
+            Amount = amount;
         }
     }
 }

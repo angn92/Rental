@@ -7,6 +7,7 @@ namespace Rental.Infrastructure.Services.UserService
     {
         Task RegisterAsync(string firstName, string lastName, string username, string email, string phoneNumber, string password);
         Task<Customer> LoginAsync(string username, string password);
-        Task<Customer> GetUserAsync(string nick);
+        Task<Customer> GetCustomerAsync(string nick);
+        Task<bool> CheckIfExist(string username);
     }
 }

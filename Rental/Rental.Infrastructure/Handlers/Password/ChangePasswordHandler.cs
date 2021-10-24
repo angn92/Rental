@@ -38,7 +38,7 @@ namespace Rental.Infrastructure.Handlers.Password
 
             _sessionHelper.CheckSessionStatus(session);
 
-            var customer = await _userService.GetUserAsync(session.Customer.Username);
+            var customer = await _userService.GetCustomerAsync(session.Customer.Username);
 
             if(customer.Status != AccountStatus.Active)
             {

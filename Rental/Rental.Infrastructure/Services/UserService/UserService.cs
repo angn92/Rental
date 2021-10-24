@@ -1,5 +1,6 @@
-﻿using Rental.Core.Domain;
-using Rental.Core.Repository;
+﻿using Microsoft.EntityFrameworkCore;
+using Rental.Core.Domain;
+using Rental.Infrastructure.EF;
 using Rental.Infrastructure.Exceptions;
 using Rental.Infrastructure.Helpers;
 using System;
@@ -9,25 +10,30 @@ namespace Rental.Infrastructure.Services.UserService
 {
     public class UserService : IUserService
     {
-        private readonly IUserRepository _userRepository;
+        private readonly ApplicationDbContext _context;
         private readonly IEmailValidator _emailValidator;
         private readonly IPasswordHelper _passwordHelper;
 
-        public UserService(IUserRepository userRepository, IEmailValidator emailValidator, IPasswordHelper passwordHelper)
+        public UserService(ApplicationDbContext context, IEmailValidator emailValidator, IPasswordHelper passwordHelper)
         {
-            _userRepository = userRepository;
+            _context = context;
             _emailValidator = emailValidator;
             _passwordHelper = passwordHelper;
         }
 
-        public async Task<Customer> GetUserAsync(string nick)
+        /// <summary>
+        /// Get customer from database with given nick like in argument 
+        /// </summary>
+        /// <param name="nick"></param>
+        /// <returns></returns>
+        public async Task<Customer> GetCustomerAsync(string nick)
         {
-            var user = await _userRepository.GetAsync(nick);
+            var customer = await _context.Customers.SingleOrDefaultAsync(x => x.Username == nick);
 
-            if (user is null)
+            if (customer is null)
                 throw new CoreException(ErrorCode.UserNotExist, $"This user: {nick} does not exist.");
 
-            return user;
+            return customer;
         }
 
         public Task<Customer> LoginAsync(string username, string password)
@@ -35,21 +41,31 @@ namespace Rental.Infrastructure.Services.UserService
             throw new NotImplementedException();
         }
 
+        /// <summary>
+        /// Register new customer
+        /// </summary>
+        /// <param name="firstName"></param>
+        /// <param name="lastName"></param>
+        /// <param name="username"></param>
+        /// <param name="email"></param>
+        /// <param name="phoneNumber"></param>
+        /// <param name="password"></param>
+        /// <returns></returns>
         public async Task RegisterAsync(string firstName, string lastName, string username, string email, 
                                         string phoneNumber, string password)
         {
-            var user = await _userRepository.GetAsync(username);
+            var customer = await _context.Customers.SingleOrDefaultAsync(x => x.Username == username);
 
-            if (user != null)
+            if (customer != null)
             {
-                throw new CoreException(ErrorCode.UsernameExist, $"Username {user.Username} already exist.");
+                throw new CoreException(ErrorCode.UsernameExist, $"Username {customer.Username} already exist.");
             }
 
             try
             {
                 _emailValidator.ValidateEmail(email);
-                user = new Customer(firstName, lastName, username, email, phoneNumber);
-                await _userRepository.AddAsync(user);
+                customer = new Customer(firstName, lastName, username, email, phoneNumber);
+                await _context.AddAsync(customer);
 
                 //_passwordHelper.SetPassword(password, user);
             }
@@ -57,6 +73,18 @@ namespace Rental.Infrastructure.Services.UserService
             {
                 throw new Exception("Registration is failed. " + ex.Message);
             }
+
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task<bool> CheckIfExist(string username)
+        {
+            var customer = await _context.Customers.SingleOrDefaultAsync(x => x.Username == username);
+
+            if (customer is null)
+                return false;
+
+            return true;
         }
     }
 }

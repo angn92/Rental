@@ -36,7 +36,7 @@ namespace Rental.Infrastructure.Helpers
 
         private void IsEmailInUse(ApplicationDbContext context, string email)
         {
-            var emailExist = context.Users.SingleOrDefault(x => x.Email == email);
+            var emailExist = context.Customers.SingleOrDefault(x => x.Email == email);
 
             if (emailExist != null)
                 throw new CoreException(ErrorCode.EmailInUse, $"Given address email {email} is in use.");

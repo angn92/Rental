@@ -70,7 +70,7 @@ namespace Rental.UnitTest.Services.Users
                               .ReturnsAsync(() => user);
 
             //Act
-            var result = await userService.GetUserAsync("adam123");
+            var result = await userService.GetCustomerAsync("adam123");
 
             //Assert
             result.Status.Should().Be(AccountStatus.Active);
@@ -87,7 +87,7 @@ namespace Rental.UnitTest.Services.Users
             var userService = new UserService(mockUserRepository.Object, mockEmailValidator.Object, mockPasswordHelper.Object);
 
             //Act
-            var exception = Assert.ThrowsAsync<CoreException>(() => userService.GetUserAsync("adam123"));
+            var exception = Assert.ThrowsAsync<CoreException>(() => userService.GetCustomerAsync("adam123"));
 
             //Assert
             Assert.That(exception.Code, Is.EqualTo(ErrorCode.UserNotExist));

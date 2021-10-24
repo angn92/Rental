@@ -16,7 +16,7 @@ namespace Rental.Infrastructure.Handlers.Users.Queries
 
         public async Task<GetUserDetailsRs> HandleAsync([NotNull] GetUserDetailsRq command)
         {
-            var userAccount = await _userService.GetUserAsync(command.Nick);
+            var userAccount = await _userService.GetCustomerAsync(command.Nick);
 
             return new GetUserDetailsRs
             {

@@ -20,7 +20,7 @@ namespace Rental.Infrastructure.Handlers.Sessions
 
         public async Task<CreateSessionResponse> HandleAsync(CreateSessionCommand command)
         {
-            var user = await _userService.GetUserAsync(command.Username);
+            var user = await _userService.GetCustomerAsync(command.Username);
 
             if(user is null)
             {

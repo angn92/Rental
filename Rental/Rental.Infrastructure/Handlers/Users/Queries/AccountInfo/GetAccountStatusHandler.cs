@@ -33,7 +33,7 @@ namespace Rental.Infrastructure.Handlers.Users.Queries.AccountInfo
             _sessionHelper.CheckSessionStatus(session);
             _sessionHelper.SessionExpired(session);
 
-            var userAccount = await _userService.GetUserAsync(query.Username);
+            var userAccount = await _userService.GetCustomerAsync(query.Username);
 
             return new GetAccountStatusRs
             {
