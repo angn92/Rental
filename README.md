@@ -4,4 +4,4 @@
 >EF Core  
 >PostgreSQL  
 >CQRS pattern  
->Onion Architecture  
+ 
