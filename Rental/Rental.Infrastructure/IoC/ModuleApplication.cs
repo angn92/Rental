@@ -1,6 +1,6 @@
 ﻿using Autofac;
-using Rental.Core.Repository;
 using Rental.Infrastructure.Command;
+using Rental.Infrastructure.EF;
 using Rental.Infrastructure.Helpers;
 using Rental.Infrastructure.Query;
 using Rental.Infrastructure.Services;
@@ -32,12 +32,6 @@ namespace Rental.Infrastructure.IoC
                 .As<IQueryDispatcher>()
                 .InstancePerLifetimeScope();
 
-            // Register component which use IRepository
-            builder.RegisterAssemblyTypes(ThisAssembly)
-                .Where(x => x.IsAssignableTo<IRepository>())
-                .AsImplementedInterfaces()
-                .InstancePerLifetimeScope();
-
             // Register component which use IService
             builder.RegisterAssemblyTypes(ThisAssembly)
                 .Where(x => x.IsAssignableTo<IService>())
@@ -55,6 +49,9 @@ namespace Rental.Infrastructure.IoC
 
             builder.RegisterType<EncryptService>()
                 .As<IEncrypt>()
+                .InstancePerLifetimeScope();
+
+            builder.RegisterType<ApplicationDbContext>()
                 .InstancePerLifetimeScope();
         }
     }

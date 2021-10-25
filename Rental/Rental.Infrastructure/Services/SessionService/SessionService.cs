@@ -47,7 +47,7 @@ namespace Rental.Infrastructure.Services.SessionService
 
             var sessionId = GenerateNewSession();
 
-            var session = new Session(sessionId, SessionState.Active, user);
+            var session = new Session(sessionId, user);
 
             await _context.AddAsync(session);
             await _context.SaveChangesAsync();
