@@ -2,7 +2,7 @@
 
 namespace Rental.Infrastructure.Handlers.Users.Queries
 {
-    public class GetUserDetailsRs
+    public class GetCustomerDetailsRs
     {
         public string Fullname { get; set; }
         public string Email { get; set; }

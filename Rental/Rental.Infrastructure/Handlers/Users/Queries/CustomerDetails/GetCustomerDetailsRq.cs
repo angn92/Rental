@@ -2,7 +2,7 @@
 
 namespace Rental.Infrastructure.Handlers.Users.Queries
 {
-    public class GetUserDetailsRq : IQuery
+    public class GetCustomerDetailsRq : IQuery
     {
         public string Nick { get; set; }
     }

@@ -1,7 +1,7 @@
 ﻿using JetBrains.Annotations;
 using Microsoft.AspNetCore.Mvc;
 using Rental.Infrastructure.Command;
-using Rental.Infrastructure.Command.Users.Command;
+using Rental.Infrastructure.Command.Users.Command.Register;
 using Rental.Infrastructure.Handlers.Password;
 using Rental.Infrastructure.Handlers.Sessions;
 using Rental.Infrastructure.Handlers.Users.Command.AccountInfo;
@@ -25,7 +25,7 @@ namespace Rental.Api.Controllers
         }
 
         /// <summary>
-        /// Create new user account.
+        /// Create new customer account.
         /// </summary>
         /// <param name="command">Base information about user account.</param>
         /// <returns></returns>
@@ -36,18 +36,18 @@ namespace Rental.Api.Controllers
         }
 
         /// <summary>
-        /// Return user details.
+        /// Return customer details.
         /// </summary>
         /// <param name="query">Give a nick for user.</param>
         /// <returns></returns>
         [HttpGet("user/details")]
-        public async Task<GetUserDetailsRs> GetUserDetails([FromQuery][NotNull] GetUserDetailsRq query)
+        public async Task<GetCustomerDetailsRs> GetUserDetails([FromQuery][NotNull] GetCustomerDetailsRq query)
         {
-            return await _queryDispatcher.DispatchAsync<GetUserDetailsRq, GetUserDetailsRs>(query);
+            return await _queryDispatcher.DispatchAsync<GetCustomerDetailsRq, GetCustomerDetailsRs>(query);
         }
 
         /// <summary>
-        /// Create new session for user.
+        /// Create new session for customer.
         /// </summary>
         /// <param name="username">Username parameter.</param>
         /// <returns></returns>
@@ -63,7 +63,7 @@ namespace Rental.Api.Controllers
         }
 
         /// <summary>
-        /// Change password for account.
+        /// Change password for customer account.
         /// </summary>
         /// <param name="command"></param>
         /// <returns></returns>
@@ -73,6 +73,11 @@ namespace Rental.Api.Controllers
             await _commandDispatcher.DispatchAsync(command);
         }
 
+        /// <summary>
+        /// Change account status.
+        /// </summary>
+        /// <param name="username"></param>
+        /// <returns></returns>
         [HttpPut("account/status")]
         public async Task ChangeAccountStatus([FromQuery] string username)
         {
@@ -84,10 +89,10 @@ namespace Rental.Api.Controllers
             await _commandDispatcher.DispatchAsync<ChangeAccountStatus, ChangeAccountStatusResponse>(command);
         }
 
-        [HttpGet("account/status")]
-        public async Task GetAccountStatus([FromQuery] string username)
-        {
+        //[HttpGet("account/status")]
+        //public async Task GetAccountStatus([FromQuery] string username)
+        //{
 
-        }
+        //}
     }
 }
