@@ -14,7 +14,7 @@ namespace Rental.Core.Domain
         public virtual string Description { get; protected set; }
         public virtual ProductStatus Status { get; protected set; }
         public virtual Category Category { get; protected set; }
-        public virtual Customer User { get; protected set; }
+        public virtual Customer Customer { get; protected set; }
 
         protected Product()
         {}

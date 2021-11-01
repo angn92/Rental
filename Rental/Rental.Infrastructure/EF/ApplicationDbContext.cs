@@ -22,26 +22,39 @@ namespace Rental.Infrastructure.EF
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            //Relationships for Customer entity
+            modelBuilder.Entity<Customer>()
+                    .HasMany<Password>(p => p.Passwords)
+                    .WithOne(c => c.Customer);
+
+            modelBuilder.Entity<Customer>()
+                    .HasMany<Product>(p => p.Products)
+                    .WithOne(c => c.Customer);
+
+            modelBuilder.Entity<Customer>()
+                    .HasOne<Session>(s => s.Session)
+                    .WithOne(c => c.Customer);
+
+            //Relationships for Session entity
+            modelBuilder.Entity<Session>()
+                    .HasOne<Customer>(c => c.Customer)
+                    .WithOne(s => s.Session)
+                    .HasForeignKey("CustomerId");
+
+            //Relationships for Password entity
             modelBuilder.Entity<Password>()
                     .HasOne<Customer>(p => p.Customer)
                     .WithMany(c => c.Passwords);
 
-            modelBuilder.Entity<Customer>()
-                    .HasMany<Password>(u => u.Passwords)
-                    .WithOne(p => p.Customer);
+            //Relationships for Category entity
+            modelBuilder.Entity<Category>()
+                    .HasMany<Product>(p => p.Products)
+                    .WithOne(c => c.Category);
 
-            modelBuilder.Entity<Customer>()
-                    .HasMany<Product>(u => u.Products)
-                    .WithOne(p => p.User);
-
-            modelBuilder.Entity<Customer>()
-                    .HasOne<Session>(u => u.Session)
-                    .WithOne(x => x.Customer)
-                    .HasForeignKey<Session>(x => x.CustomerId);
-
+            //Relationships for Product entuty
             modelBuilder.Entity<Product>()
-                    .HasOne<Category>(p => p.Category)
-                    .WithMany(c => c.Products);
+                    .HasOne<Category>(c => c.Category)
+                    .WithMany(p => p.Products);
         }
 
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
