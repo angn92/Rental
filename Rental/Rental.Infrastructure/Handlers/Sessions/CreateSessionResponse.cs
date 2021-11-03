@@ -2,6 +2,6 @@
 {
     public class CreateSessionResponse
     {
-        public string IdSession { get; set; }
+        public int IdSession { get; set; }
     }
 }

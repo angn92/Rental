@@ -47,7 +47,7 @@ namespace Rental.Infrastructure.Services.SessionService
 
             var sessionId = GenerateNewSession();
 
-            var session = new Session(sessionId, user);
+            var session = new Session(sessionId);
 
             await _context.AddAsync(session);
             await _context.SaveChangesAsync();
@@ -55,12 +55,12 @@ namespace Rental.Infrastructure.Services.SessionService
             return session;
         }
 
-        public async Task<Session> GetSessionAsync(string idSession)
+        public async Task<Session> GetSessionAsync(int idSession)
         {
             return await _context.Sessions.FirstOrDefaultAsync(x => x.SessionId == idSession);
         }
 
-        public async Task RemoveSession(string idSession)
+        public async Task RemoveSession(int idSession)
         {
             var sessionToRemove = await _context.Sessions.FirstOrDefaultAsync(x => x.SessionId == idSession);
 
@@ -73,14 +73,14 @@ namespace Rental.Infrastructure.Services.SessionService
             await _context.SaveChangesAsync();
         }
 
-        private static string GenerateNewSession()
+        private static int GenerateNewSession()
         {
             var rng = new RNGCryptoServiceProvider();
             var byteArray = new byte[4];
 
             rng.GetBytes(byteArray);
 
-            return BitConverter.ToInt32(byteArray, 0).ToString();
+            return BitConverter.ToInt32(byteArray, 0);
         }
     }
 }

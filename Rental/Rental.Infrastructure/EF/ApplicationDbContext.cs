@@ -32,14 +32,9 @@ namespace Rental.Infrastructure.EF
                     .WithOne(c => c.Customer);
 
             modelBuilder.Entity<Customer>()
-                    .HasOne<Session>(s => s.Session)
-                    .WithOne(c => c.Customer);
-
-            //Relationships for Session entity
-            modelBuilder.Entity<Session>()
-                    .HasOne<Customer>(c => c.Customer)
-                    .WithOne(s => s.Session)
-                    .HasForeignKey("CustomerId");
+                    .HasOne<Session>(c => c.Session)
+                    .WithOne(s => s.Customer)
+                    .HasForeignKey<Session>(s => s.IdCustomer);
 
             //Relationships for Password entity
             modelBuilder.Entity<Password>()

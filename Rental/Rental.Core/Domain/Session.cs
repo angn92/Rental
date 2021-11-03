@@ -7,22 +7,21 @@ namespace Rental.Core.Domain
 {
     public class Session : Entity
     {
-        public virtual string SessionId { get; protected set; }
+        public virtual int SessionId { get; protected set; }
         public virtual SessionState State { get; protected set; }
         public virtual DateTime GenerationDate { get; protected set; }
         public virtual DateTime LastAccessDate { get; protected set; }
+        public virtual int IdCustomer { get; protected set; }
         public virtual Customer Customer { get; protected set; }
-        public virtual int CustomerId { get; protected set; }
 
         protected Session()
         {
         }
 
-        public Session([NotNull] string sessionId, [NotNull] Customer customer)
+        public Session([NotNull] int sessionId)
         {
             SessionId = sessionId;
             State = SessionState.NotAuthorized;
-            Customer = customer;
             UpdateLastAccessDate();
             GenerationDate = DateTime.UtcNow;
         }

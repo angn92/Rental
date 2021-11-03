@@ -38,12 +38,12 @@ namespace Rental.Infrastructure.Handlers.Password
 
             _sessionHelper.CheckSessionStatus(session);
 
-            var customer = await _userService.GetCustomerAsync(session.Customer.Username);
+            //var customer = await _userService.GetCustomerAsync(session.Customer.Username);
 
-            if(customer.Status != AccountStatus.Active)
-            {
-                throw new CoreException(ErrorCode.AccountNotActive, "Only active user can change password.");
-            }
+            //if(customer.Status != AccountStatus.Active)
+            //{
+            //    throw new CoreException(ErrorCode.AccountNotActive, "Only active user can change password.");
+            //}
 
             if (_sessionHelper.SessionExpired(session))
             {
@@ -51,14 +51,14 @@ namespace Rental.Infrastructure.Handlers.Password
             }
 
             //Remove old password form DB
-            var oldPassword = await _passwordHelper.GetActivePassword(customer);
+            //var oldPassword = await _passwordHelper.GetActivePassword(customer);
 
-            _rentalContext.Remove(oldPassword);
+            //_rentalContext.Remove(oldPassword);
             await _rentalContext.SaveChangesAsync();
 
             //Set new password and save to DB
 
-            await _passwordHelper.SetPassword(command.NewPassword, customer);
+            //await _passwordHelper.SetPassword(command.NewPassword, customer);
         }
     }
 }
