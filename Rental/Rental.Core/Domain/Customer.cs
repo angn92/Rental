@@ -27,7 +27,6 @@ namespace Rental.Core.Domain
         public Customer([NotNull] string firstName, [NotNull] string lastName, [NotNull] string username, 
                     [NotNull] string email, [NotNull] string phone)
         {
-            CustomerId = 11;
             SetFirstName(firstName);
             SetLastName(lastName);
             SetUsername(username);

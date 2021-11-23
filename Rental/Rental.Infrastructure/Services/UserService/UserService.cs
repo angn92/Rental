@@ -31,7 +31,7 @@ namespace Rental.Infrastructure.Services.UserService
             var customer = await _context.Customers.SingleOrDefaultAsync(x => x.Username == nick);
 
             if (customer is null)
-                throw new CoreException(ErrorCode.UserNotExist, $"This user: {nick} does not exist.");
+                throw new CoreException(ErrorCode.UserNotExist, $"This user {nick} does not exist.");
 
             return customer;
         }
