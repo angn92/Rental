@@ -13,7 +13,7 @@ namespace Rental.UnitTest.User
     public class UserServicesTest
     {
         [Test]
-        public async Task ShouldBeAbleCheckThatGivenUserExist()
+        public async Task ShouldBeAbleCheckThatGivenUsernameExist()
         {
             // Arrange
             var option = new DbContextOptionsBuilder<ApplicationDbContext>()
