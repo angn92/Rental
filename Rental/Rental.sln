@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Rental.Core", "Rental.Core\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Rental.Infrastructure", "Rental.Infrastructure\Rental.Infrastructure.csproj", "{C1DCA22D-63C0-48F0-ADAB-167091671484}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Rental.UnitTest", "Rental.UnitTest\Rental.UnitTest.csproj", "{B77ABF20-F0D7-47E1-B24A-06C366815B22}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Rental.Test", "Rental.UnitTest\Rental.Test.csproj", "{B77ABF20-F0D7-47E1-B24A-06C366815B22}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

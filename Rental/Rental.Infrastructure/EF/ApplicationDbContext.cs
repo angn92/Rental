@@ -9,11 +9,11 @@ namespace Rental.Infrastructure.EF
 {
     public class ApplicationDbContext : DbContext
     {
-        public DbSet<Customer> Customers { get; set; }
-        public DbSet<Password> Passwords { get; set; }
-        public DbSet<Category> Categories { get; set; }
-        public DbSet<Product> Products { get; set; }
-        public DbSet<Session> Sessions { get; set; }
+        public virtual DbSet<Customer> Customers { get; set; }
+        public virtual DbSet<Password> Passwords { get; set; }
+        public virtual DbSet<Category> Categories { get; set; }
+        public virtual DbSet<Product> Products { get; set; }
+        public virtual DbSet<Session> Sessions { get; set; }
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
