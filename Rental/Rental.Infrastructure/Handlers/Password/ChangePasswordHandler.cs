@@ -4,7 +4,7 @@ using Rental.Infrastructure.EF;
 using Rental.Infrastructure.Exceptions;
 using Rental.Infrastructure.Helpers;
 using Rental.Infrastructure.Services.SessionService;
-using Rental.Infrastructure.Services.UserService;
+using Rental.Infrastructure.Services.CustomerService;
 using System.Threading.Tasks;
 
 namespace Rental.Infrastructure.Handlers.Password
@@ -12,12 +12,12 @@ namespace Rental.Infrastructure.Handlers.Password
     public class ChangePasswordHandler : ICommandHandler<ChangePasswordCommand>
     {
         private readonly ApplicationDbContext _rentalContext;
-        private readonly IUserService _userService;
+        private readonly ICustomerService _userService;
         private readonly ISessionService _sessionService;
         private readonly ISessionHelper _sessionHelper;
         private readonly IPasswordHelper _passwordHelper;
 
-        public ChangePasswordHandler(ApplicationDbContext rentalContext, IUserService userService, ISessionService sessionService,
+        public ChangePasswordHandler(ApplicationDbContext rentalContext, ICustomerService userService, ISessionService sessionService,
                                      ISessionHelper sessionHelper, IPasswordHelper passwordHelper)
         {
             _rentalContext = rentalContext;
@@ -38,7 +38,7 @@ namespace Rental.Infrastructure.Handlers.Password
 
             _sessionHelper.CheckSessionStatus(session);
 
-            //var customer = await _userService.GetCustomerAsync(session.Customer.Username);
+            //var customer = await _customerService.GetCustomerAsync(session.Customer.Username);
 
             //if(customer.Status != AccountStatus.Active)
             //{

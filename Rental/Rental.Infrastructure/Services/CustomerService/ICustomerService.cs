@@ -1,9 +1,9 @@
 ﻿using Rental.Core.Domain;
 using System.Threading.Tasks;
 
-namespace Rental.Infrastructure.Services.UserService
+namespace Rental.Infrastructure.Services.CustomerService
 {
-    public interface IUserService : IService
+    public interface ICustomerService : IService
     {
         Task RegisterAsync(string firstName, string lastName, string username, string email, string phoneNumber, string password);
         Task<Customer> LoginAsync(string username, string password);

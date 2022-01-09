@@ -6,15 +6,15 @@ using Rental.Infrastructure.Helpers;
 using System;
 using System.Threading.Tasks;
 
-namespace Rental.Infrastructure.Services.UserService
+namespace Rental.Infrastructure.Services.CustomerService
 {
-    public class UserService : IUserService
+    public class CustomerService : ICustomerService
     {
         private readonly ApplicationDbContext _context;
         private readonly IEmailValidator _emailValidator;
         private readonly IPasswordHelper _passwordHelper;
 
-        public UserService(ApplicationDbContext context, IEmailValidator emailValidator, IPasswordHelper passwordHelper)
+        public CustomerService(ApplicationDbContext context, IEmailValidator emailValidator, IPasswordHelper passwordHelper)
         {
             _context = context;
             _emailValidator = emailValidator;

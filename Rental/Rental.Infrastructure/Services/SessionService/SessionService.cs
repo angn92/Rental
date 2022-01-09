@@ -4,7 +4,7 @@ using Rental.Core.Enum;
 using Rental.Infrastructure.EF;
 using Rental.Infrastructure.Exceptions;
 using Rental.Infrastructure.Helpers;
-using Rental.Infrastructure.Services.UserService;
+using Rental.Infrastructure.Services.CustomerService;
 using System;
 using System.Security.Cryptography;
 using System.Threading.Tasks;
@@ -14,19 +14,19 @@ namespace Rental.Infrastructure.Services.SessionService
     public class SessionService : ISessionService
     {
         private readonly ApplicationDbContext _context;
-        private readonly IUserService _userService;
+        private readonly ICustomerService _customerService;
         private readonly IUserHelper _userHelper;
 
-        public SessionService(ApplicationDbContext context, IUserService userService, IUserHelper userHelper)
+        public SessionService(ApplicationDbContext context, ICustomerService customerService, IUserHelper userHelper)
         {
             _context = context;
-            _userService = userService;
+            _customerService = customerService;
             _userHelper = userHelper;
         }
 
         public async Task<Session> CreateSessionAsync(Customer user)
         {
-            var userAccount = await _userService.GetCustomerAsync(user.Username);
+            var userAccount = await _customerService.GetCustomerAsync(user.Username);
 
             if(userAccount == null)
             {

@@ -5,7 +5,7 @@ using Rental.Core.Domain;
 using Rental.Infrastructure.EF;
 using Rental.Infrastructure.Exceptions;
 using Rental.Infrastructure.Helpers;
-using Rental.Infrastructure.Services.UserService;
+using Rental.Infrastructure.Services.CustomerService;
 using System;
 using System.Threading.Tasks;
 
@@ -47,7 +47,7 @@ namespace Rental.UnitTest.User
 
             using (var context = new ApplicationDbContext(_options))
             {
-                var userService = new UserService(context, email.Object, password.Object);
+                var userService = new CustomerService(context, email.Object, password.Object);
 
                 var exist = await userService.CheckIfExist(_userName);
 
@@ -70,7 +70,7 @@ namespace Rental.UnitTest.User
 
             using (var context = new ApplicationDbContext(_options))
             {
-                var userService = new UserService(context, email.Object, password.Object);
+                var userService = new CustomerService(context, email.Object, password.Object);
 
                 var user = await userService.GetCustomerAsync(_userName);
 
@@ -94,7 +94,7 @@ namespace Rental.UnitTest.User
 
             using (var context = new ApplicationDbContext(_options))
             {
-                var userService = new UserService(context, email.Object, password.Object);
+                var userService = new CustomerService(context, email.Object, password.Object);
 
                 var exception = Assert.ThrowsAsync<CoreException>(() => userService.GetCustomerAsync("Nickname1"));
 
@@ -111,7 +111,7 @@ namespace Rental.UnitTest.User
 
             using (var context = new ApplicationDbContext(_options))
             {
-                var userService = new UserService(context, email.Object, password.Object);
+                var userService = new CustomerService(context, email.Object, password.Object);
                 await userService.RegisterAsync(_firstName, _lastName, _userName, _email, _phone, _password);
 
                 var registeredUser = context.Customers.FirstOrDefaultAsync(x => x.Username == _userName);
@@ -135,7 +135,7 @@ namespace Rental.UnitTest.User
 
             using (var context = new ApplicationDbContext(_options))
             {
-                var userService = new UserService(context, email.Object, password.Object);
+                var userService = new CustomerService(context, email.Object, password.Object);
                 var exception = Assert.ThrowsAsync<CoreException>(() => userService.RegisterAsync(_firstName, _lastName, _userName, _email, _phone, _password));
 
                 Assert.AreEqual(ErrorCode.UsernameExist, exception.Code);

@@ -2,30 +2,30 @@
 using Rental.Infrastructure.Command;
 using Rental.Infrastructure.Command.Users.Command.Register;
 using Rental.Infrastructure.Exceptions;
-using Rental.Infrastructure.Services.UserService;
+using Rental.Infrastructure.Services.CustomerService;
 using System.Threading.Tasks;
 
 namespace Rental.Infrastructure.Handlers.Users.Command.Register
 {
     public class RegisterUserHandler : ICommandHandler<RegisterUser>
     {
-        private readonly IUserService _userService;
+        private readonly ICustomerService _customerService;
 
-        public RegisterUserHandler(IUserService userService)
+        public RegisterUserHandler(ICustomerService customerService)
         {
-            _userService = userService;
+            _customerService = customerService;
         }
 
         public async Task HandleAsync(RegisterUser command)
         {
             ValidationParameter.FailIfNull(command);
 
-            var customerExist = await _userService.CheckIfExist(command.Username);
+            var customerExist = await _customerService.CheckIfExist(command.Username);
 
             if (customerExist)
                 throw new CoreException(ErrorCode.UsernameExist, $"Name of {command.Username} is in use.");
 
-            await _userService.RegisterAsync(command.FirstName, command.LastName, command.Username, 
+            await _customerService.RegisterAsync(command.FirstName, command.LastName, command.Username, 
                                             command.Email, command.PhoneNumber, command.Password);
         }
     }

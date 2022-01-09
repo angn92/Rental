@@ -7,14 +7,14 @@ namespace Rental.Core.Domain
 {
     public class Product : Entity
     {
-        public virtual string ProductId { get; protected set; }
-        public virtual string Name { get; protected set; }
-        public virtual int Amount { get; protected set; }
-        public virtual int QuantityAvailable { get; protected set; }
-        public virtual string Description { get; protected set; }
-        public virtual ProductStatus Status { get; protected set; }
-        public virtual Category Category { get; protected set; }
-        public virtual Customer Customer { get; protected set; }
+        public virtual string ProductId { get; set; }
+        public virtual string Name { get; set; }
+        public virtual int Amount { get; set; }
+        public virtual int QuantityAvailable { get; set; }
+        public virtual string Description { get; set; }
+        public virtual ProductStatus Status { get; set; }
+        public virtual Category Category { get; set; }
+        public virtual Customer Customer { get; set; }
 
         protected Product()
         {}

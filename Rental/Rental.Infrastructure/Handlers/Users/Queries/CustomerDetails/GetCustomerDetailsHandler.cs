@@ -1,25 +1,25 @@
 ﻿using JetBrains.Annotations;
 using Rental.Core.Validation;
 using Rental.Infrastructure.Query;
-using Rental.Infrastructure.Services.UserService;
+using Rental.Infrastructure.Services.CustomerService;
 using System.Threading.Tasks;
 
 namespace Rental.Infrastructure.Handlers.Users.Queries
 {
     public class GetCustomerDetailsHandler : IQueryHandler<GetCustomerDetailsRq, GetCustomerDetailsRs>
     {
-        private readonly IUserService _userService;
+        private readonly ICustomerService _customerService;
 
-        public GetCustomerDetailsHandler(IUserService userService)
+        public GetCustomerDetailsHandler(ICustomerService customerService)
         {
-            _userService = userService;
+            _customerService = customerService;
         }
 
         public async Task<GetCustomerDetailsRs> HandleAsync([NotNull] GetCustomerDetailsRq command)
         {
             ValidationParameter.FailIfNull(command);
 
-            var customerAccount = await _userService.GetCustomerAsync(command.Nick);
+            var customerAccount = await _customerService.GetCustomerAsync(command.Nick);
 
             return new GetCustomerDetailsRs
             {

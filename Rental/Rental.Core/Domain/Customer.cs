@@ -9,16 +9,16 @@ namespace Rental.Core.Domain
 {
     public class Customer : Entity
     {
-        public virtual int CustomerId { get; protected set; }
-        public virtual string FirstName { get; protected set; }
-        public virtual string LastName { get; protected set; }
-        public virtual string Username { get; protected set; }
-        public virtual string Email { get; protected set; }
-        public virtual AccountStatus Status { get; protected set; }
-        public virtual string Phone { get; protected set; }
-        public virtual ISet<Password> Passwords { get; protected set; }
-        public virtual ISet<Product> Products { get; protected set; }
-        public virtual Session Session { get; protected set; }
+        public virtual int CustomerId { get; set; }
+        public virtual string FirstName { get; set; }
+        public virtual string LastName { get; set; }
+        public virtual string Username { get; set; }
+        public virtual string Email { get; set; }
+        public virtual AccountStatus Status { get; set; }
+        public virtual string Phone { get; set; }
+        public virtual ISet<Password> Passwords { get; set; }
+        public virtual ISet<Product> Products { get; set; }
+        public virtual Session Session { get; set; }
 
         protected Customer()
         {
@@ -63,14 +63,14 @@ namespace Rental.Core.Domain
             Phone = phoneNumber;
         }
 
-        public void ActivateAccount(Customer user)
+        public void ActivateAccount(Customer customer)
         {
-            user.Status = AccountStatus.Active;
+            customer.Status = AccountStatus.Active;
         }
 
-        public void BlockadeAccount(Customer user)
+        public void BlockadeAccount(Customer customer)
         {
-            user.Status = AccountStatus.Blocked;
+            customer.Status = AccountStatus.Blocked;
         }
     }
 }

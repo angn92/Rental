@@ -2,25 +2,25 @@
 using Rental.Infrastructure.Command;
 using Rental.Infrastructure.Exceptions;
 using Rental.Infrastructure.Services.SessionService;
-using Rental.Infrastructure.Services.UserService;
+using Rental.Infrastructure.Services.CustomerService;
 using System.Threading.Tasks;
 
 namespace Rental.Infrastructure.Handlers.Sessions
 {
     public class CreateSessionHandler : ICommandHandler<CreateSessionCommand, CreateSessionResponse>
     {
-        private readonly IUserService _userService;
+        private readonly ICustomerService _customerService;
         private readonly ISessionService _sessionService;
 
-        public CreateSessionHandler(IUserService userService, ISessionService sessionService)
+        public CreateSessionHandler(ICustomerService userService, ISessionService sessionService)
         {
-            _userService = userService;
+            _customerService = userService;
             _sessionService = sessionService;
         }
 
         public async Task<CreateSessionResponse> HandleAsync(CreateSessionCommand command)
         {
-            var user = await _userService.GetCustomerAsync(command.Username);
+            var user = await _customerService.GetCustomerAsync(command.Username);
 
             if(user is null)
             {

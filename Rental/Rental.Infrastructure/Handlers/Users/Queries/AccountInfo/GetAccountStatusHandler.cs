@@ -2,7 +2,7 @@
 using Rental.Infrastructure.Helpers;
 using Rental.Infrastructure.Query;
 using Rental.Infrastructure.Services.SessionService;
-using Rental.Infrastructure.Services.UserService;
+using Rental.Infrastructure.Services.CustomerService;
 using System.Threading.Tasks;
 
 namespace Rental.Infrastructure.Handlers.Users.Queries.AccountInfo
@@ -11,14 +11,14 @@ namespace Rental.Infrastructure.Handlers.Users.Queries.AccountInfo
     {
         private readonly ISessionService _sessionService;
         private readonly ISessionHelper _sessionHelper;
-        private readonly IUserService _userService;
+        private readonly ICustomerService _customerService;
 
         public GetAccountStatusHandler(ISessionService sessionService, ISessionHelper sessionHelper,
-                                        IUserService userService)
+                                        ICustomerService customerService)
         {
             _sessionService = sessionService;
             _sessionHelper = sessionHelper;
-            _userService = userService;
+            _customerService = customerService;
         }
 
         public async Task<GetAccountStatusRs> HandleAsync(GetAccountStatusRq query)
@@ -33,7 +33,7 @@ namespace Rental.Infrastructure.Handlers.Users.Queries.AccountInfo
             _sessionHelper.CheckSessionStatus(session);
             _sessionHelper.SessionExpired(session);
 
-            var userAccount = await _userService.GetCustomerAsync(query.Username);
+            var userAccount = await _customerService.GetCustomerAsync(query.Username);
 
             return new GetAccountStatusRs
             {
