@@ -48,6 +48,8 @@ namespace Rental.Api
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Rental.Api v1"));
             }
 
+            app.UseHttpLogging();
+
             app.UseHttpsRedirection();
 
             app.UseRouting();

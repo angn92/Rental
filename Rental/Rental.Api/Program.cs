@@ -1,12 +1,8 @@
 using Autofac.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Rental.Api
 {
@@ -14,7 +10,12 @@ namespace Rental.Api
     {
         public static void Main(string[] args)
         {
-            CreateHostBuilder(args).Build().Run();
+            var host = CreateHostBuilder(args).Build();
+
+            var logger = host.Services.GetService<ILogger<Program>>();
+            logger.LogInformation("Application has started");
+
+            host.Run();
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
