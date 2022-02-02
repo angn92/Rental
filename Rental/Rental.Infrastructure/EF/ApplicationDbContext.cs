@@ -58,11 +58,11 @@ namespace Rental.Infrastructure.EF
 
             foreach (var item in entries)
             {
-                item.Property("UpdatedAt").CurrentValue = DateTime.Now;
+                item.Property("UpdatedAt").CurrentValue = DateTime.UtcNow;
                 
                 if(item.State == EntityState.Added)
                 {
-                    item.Property("CreatedAt").CurrentValue = DateTime.Now;
+                    item.Property("CreatedAt").CurrentValue = DateTime.UtcNow;
                 }
             }
 
