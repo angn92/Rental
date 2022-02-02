@@ -13,8 +13,9 @@ namespace Rental.Api
             var host = CreateHostBuilder(args).Build();
 
             var logger = host.Services.GetService<ILogger<Program>>();
+           
             logger.LogInformation("Application has started");
-
+            
             host.Run();
         }
 

@@ -1,6 +1,7 @@
 using Autofac;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.HttpLogging;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -23,6 +24,15 @@ namespace Rental.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddHttpLogging(logging =>
+            {
+                logging.LoggingFields = HttpLoggingFields.All;
+                logging.RequestHeaders.Add("Request-Header");
+                logging.ResponseHeaders.Add("Response-Header");
+                logging.MediaTypeOptions.AddText("application/javascript");
+                logging.RequestBodyLogLimit = 4096;
+                logging.ResponseBodyLogLimit = 4096;
+            });
             services.AddDbContext<ApplicationDbContext>(ctx => ctx.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
             //services.AddDbContext<RentalContext>(ctx => ctx.UseInMemoryDatabase(databaseName: "RentalDB"));
             services.AddControllers();
