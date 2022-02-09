@@ -9,6 +9,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using Rental.Infrastructure.EF;
 using Rental.Infrastructure.IoC;
+using Serilog;
 
 namespace Rental.Api
 {
@@ -20,6 +21,11 @@ namespace Rental.Api
         }
 
         public IConfiguration Configuration { get; }
+
+        public void ConfigureLogging(LoggerConfiguration loggerConfiguration)
+        {
+            
+        }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
