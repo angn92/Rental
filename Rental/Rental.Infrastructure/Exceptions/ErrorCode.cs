@@ -34,5 +34,10 @@
         /// Password error 
         /// </summary>
         public static string PasswordNotExist => "password_not_exist";
+
+        /// <summary>
+        /// Product exist 
+        /// </summary>
+        public static string ProductExist => "product_exist";
     }
 }
