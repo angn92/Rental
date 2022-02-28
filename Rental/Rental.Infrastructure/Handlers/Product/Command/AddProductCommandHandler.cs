@@ -34,7 +34,8 @@ namespace Rental.Infrastructure.Handlers.Product.Command
 
             var category = await _context.Categories.SingleOrDefaultAsync(x => x.Name == command.Request.CategoryName);
 
-            await _productHelper.AddProductAsync(_context, command.Request.Name, command.Request.Amount, command.Request.Description, category);
+            await _productHelper.AddProductAsync(_context, command.Request.Name, command.Request.Amount, command.Request.Description, 
+                                                category);
 
         }
 

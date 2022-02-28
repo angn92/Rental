@@ -3,6 +3,7 @@ using Rental.Infrastructure.Command;
 using Rental.Infrastructure.Command.Users.Command.Register;
 using Rental.Infrastructure.Exceptions;
 using Rental.Infrastructure.Services.CustomerService;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Rental.Infrastructure.Handlers.Users.Command.Register
@@ -16,7 +17,7 @@ namespace Rental.Infrastructure.Handlers.Users.Command.Register
             _customerService = customerService;
         }
 
-        public async Task HandleAsync(RegisterUser command)
+        public async Task HandleAsync(RegisterUser command, CancellationToken cancellationToken = default)
         {
             ValidationParameter.FailIfNull(command);
 
