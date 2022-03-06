@@ -2,6 +2,7 @@
 using Rental.Core.Validation;
 using Rental.Infrastructure.Query;
 using Rental.Infrastructure.Services.CustomerService;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Rental.Infrastructure.Handlers.Users.Queries
@@ -15,7 +16,7 @@ namespace Rental.Infrastructure.Handlers.Users.Queries
             _customerService = customerService;
         }
 
-        public async Task<GetCustomerDetailsRs> HandleAsync([NotNull] GetCustomerDetailsRq command)
+        public async Task<GetCustomerDetailsRs> HandleAsync([NotNull] GetCustomerDetailsRq command, CancellationToken cancellationToken = default)
         {
             ValidationParameter.FailIfNull(command);
 

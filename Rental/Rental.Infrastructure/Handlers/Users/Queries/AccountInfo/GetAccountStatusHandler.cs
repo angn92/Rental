@@ -4,6 +4,7 @@ using Rental.Infrastructure.Query;
 using Rental.Infrastructure.Services.SessionService;
 using Rental.Infrastructure.Services.CustomerService;
 using System.Threading.Tasks;
+using System.Threading;
 
 namespace Rental.Infrastructure.Handlers.Users.Queries.AccountInfo
 {
@@ -21,7 +22,7 @@ namespace Rental.Infrastructure.Handlers.Users.Queries.AccountInfo
             _customerService = customerService;
         }
 
-        public async Task<GetAccountStatusRs> HandleAsync(GetAccountStatusRq query)
+        public async Task<GetAccountStatusRs> HandleAsync(GetAccountStatusRq query, CancellationToken cancellationToken = default)
         {
             var session = await _sessionService.GetSessionAsync(query.IdSession);
 

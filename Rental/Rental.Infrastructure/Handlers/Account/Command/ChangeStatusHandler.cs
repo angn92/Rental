@@ -1,6 +1,7 @@
 ﻿using Rental.Infrastructure.Command;
 using Rental.Infrastructure.EF;
 using Rental.Infrastructure.Services.CustomerService;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Rental.Infrastructure.Handlers.Account.Command
@@ -16,7 +17,7 @@ namespace Rental.Infrastructure.Handlers.Account.Command
             _customerService = customerService;
         }
 
-        public async Task HandleAsync(ChangeStatusCommand command)
+        public async Task HandleAsync(ChangeStatusCommand command, CancellationToken cancellationToken = default)
         {
             var request = command.ChangeStatusRequest;
 

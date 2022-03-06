@@ -6,6 +6,7 @@ using Rental.Infrastructure.Helpers;
 using Rental.Infrastructure.Services.SessionService;
 using Rental.Infrastructure.Services.CustomerService;
 using System.Threading.Tasks;
+using System.Threading;
 
 namespace Rental.Infrastructure.Handlers.Password
 {
@@ -27,7 +28,7 @@ namespace Rental.Infrastructure.Handlers.Password
             _passwordHelper = passwordHelper;
         }
 
-        public async Task HandleAsync(ChangePasswordCommand command)
+        public async Task HandleAsync(ChangePasswordCommand command, CancellationToken cancellationToken = default)
         {
             var session = await _sessionService.GetSessionAsync(command.Session);
 
