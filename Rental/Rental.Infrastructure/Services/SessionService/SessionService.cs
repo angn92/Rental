@@ -45,9 +45,9 @@ namespace Rental.Infrastructure.Services.SessionService
                 throw new CoreException(ErrorCode.AccountNotActive, "Account is not active.");
             }
 
-            var sessionId = GenerateNewSession();
+            var sessionId = GenerateNewSession().ToString();
 
-            var session = new Session(sessionId);
+            var session = new Session(sessionId, userAccount);
 
             await _context.AddAsync(session);
             await _context.SaveChangesAsync();
@@ -55,12 +55,12 @@ namespace Rental.Infrastructure.Services.SessionService
             return session;
         }
 
-        public async Task<Session> GetSessionAsync(int idSession)
+        public async Task<Session> GetSessionAsync(string idSession)
         {
             return await _context.Sessions.FirstOrDefaultAsync(x => x.SessionId == idSession);
         }
 
-        public async Task RemoveSession(int idSession)
+        public async Task RemoveSession(string idSession)
         {
             var sessionToRemove = await _context.Sessions.FirstOrDefaultAsync(x => x.SessionId == idSession);
 

@@ -4,6 +4,7 @@ using Rental.Infrastructure.Exceptions;
 using Rental.Infrastructure.Services.SessionService;
 using Rental.Infrastructure.Services.CustomerService;
 using System.Threading.Tasks;
+using System.Threading;
 
 namespace Rental.Infrastructure.Handlers.Sessions
 {
@@ -18,7 +19,7 @@ namespace Rental.Infrastructure.Handlers.Sessions
             _sessionService = sessionService;
         }
 
-        public async Task<CreateSessionResponse> HandleAsync(CreateSessionCommand command)
+        public async Task<CreateSessionResponse> HandleAsync(CreateSessionCommand command, CancellationToken cancellationToken = default)
         {
             var user = await _customerService.GetCustomerAsync(command.Username);
 
