@@ -38,9 +38,9 @@ namespace Rental.Api.Controllers
             await commandDispacher.DispatchAsync(new AddProductCommand(command));
         }
 
-        public async Task<ProductDetailsResponse> GetProductDetailsAsync([FromBody][NotNull] ProductDetailRequest request, [CanBeNull] CancellationToken = default)
-        {
+        //public async Task<ProductDetailsResponse> GetProductDetailsAsync([FromBody][NotNull] ProductDetailRequest request, [CanBeNull] CancellationToken = default)
+        //{
 
-        }
+        //}
     }
 }

@@ -1,10 +1,10 @@
-﻿using Autofac;
+﻿using FluentAssertions;
 using Moq;
 using NUnit.Framework;
-using Rental.Core.Enum;
-using Rental.Infrastructure.Command;
-using Rental.Infrastructure.EF;
 using Rental.Infrastructure.Handlers.Sessions;
+using Rental.Infrastructure.Helpers;
+using Rental.Infrastructure.Services.CustomerService;
+using Rental.Infrastructure.Services.SessionService;
 using Rental.Test.Helpers;
 using System.Threading;
 using System.Threading.Tasks;
@@ -12,48 +12,31 @@ using System.Threading.Tasks;
 namespace Rental.Test.Invocation.Session
 {
     [TestFixture]
-    public class CreateSessionTest : BaseServiceTest
+    public class CreateSessionTest : TestBase
     {
-        private ApplicationDbContext context;
-        private string firstName, lastName, userName, email, phone, password;
-        private readonly ICommandHandler<CreateSessionCommand> commandHandler;
-
-        [SetUp]
-        public void InitDatabase()
-        {
-            context = GetContext();
-            firstName = "Jan";
-            lastName = "Nowak";
-            userName = "username";
-            email = "email@email.com";
-            phone = "123456789";
-            password = "pass";
-        }
-
         [Test]
         public async Task ShouldBeAbleCreateNewSession()
         {
-            //ASSERT
-            var sessioId = "123456";
-            var customer = CreateCustomerTestHelper.CreateActiveCustomer(context, firstName, lastName, userName, email, password);
-            var session = CreateSessionTestHelper.CreateActiveSession(context, sessioId, customer);
+            // ARRANGE
+            var customer = CreateCustomerTestHelper.CreateActiveCustomer(GetContext(), firstName, lastName, userName, email, password);
 
-            var command = new CreateSessionCommand
-            {
-                Username = customer.Username
-            };
+            var emailMock = new Mock<IEmailValidator>();
+            var passwordMock = new Mock<IPasswordHelper>();
 
-            
-            
-            var dispatcher = new CommandDispatcher(context);
+            var customerService = new CustomerService(GetContext(), emailMock.Object, passwordMock.Object);
+            var userHelper = new UserHelper();
+            var sessionService = new SessionService(GetContext(), customerService, userHelper);
+            var handler = new CreateSessionHandler(customerService, sessionService);
 
+            // ACT
+            var result = await handler.HandleAsync(new CreateSessionCommand 
+            { 
+                Username = userName 
+            },
+            CancellationToken.None);
 
-            await dispatcher.DispatchAsync<CreateSessionCommand, CreateSessionResponse>(command);
-            
-            //ACT
-            //await _commandDispatcher.DispatchAsync<CreateSessionCommand>(command);
-
-            //ARRANGE
+            // ASSERT
+            result.IdSession.Should().NotBeNull();
         }
     }
 }
