@@ -8,7 +8,7 @@ using Rental.Infrastructure.Services.EncryptService;
 
 namespace Rental.Infrastructure.IoC
 {
-    public class ModuleApplication : Autofac.Module
+    public class ServiceExtensionModule : Autofac.Module
     {
         protected override void Load(ContainerBuilder builder)
         {
@@ -53,6 +53,6 @@ namespace Rental.Infrastructure.IoC
 
             builder.RegisterType<ApplicationDbContext>()
                 .InstancePerLifetimeScope();
+            }
         }
-    }
 }
