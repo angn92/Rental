@@ -11,6 +11,9 @@ using System.Threading.Tasks;
 
 namespace Rental.Api.Controllers
 {
+    /// <summary>
+    /// 
+    /// </summary>
     [Route("api/[controller]")]
     [ApiController]
     public class AccountController : ControllerBase
@@ -18,6 +21,11 @@ namespace Rental.Api.Controllers
         private readonly ICommandDispatcher _commandDispatcher;
         private readonly IQueryDispatcher _queryDispatcher;
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="commandDispatcher"></param>
+        /// <param name="queryDispatcher"></param>
         public AccountController(ICommandDispatcher commandDispatcher, IQueryDispatcher queryDispatcher)
         {
             _commandDispatcher = commandDispatcher;
