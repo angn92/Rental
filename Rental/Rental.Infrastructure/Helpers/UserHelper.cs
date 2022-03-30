@@ -1,10 +1,11 @@
 ﻿using Rental.Core.Domain;
 using Rental.Core.Enum;
+using Rental.Infrastructure.Services;
 using System;
 
 namespace Rental.Infrastructure.Helpers
 {
-    public interface IUserHelper
+    public interface IUserHelper : IService
     {
         string CheckAccountStatus(Customer user);
     }

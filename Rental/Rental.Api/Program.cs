@@ -30,6 +30,7 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+    app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Rental.Api v1"));
 }
 
 app.UseHttpsRedirection();
@@ -37,6 +38,7 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
-//app.UseAuthorization();
+app.UseAuthorization();
 
+app.UseEndpoints(endpoints => endpoints.MapControllers());
 app.Run();

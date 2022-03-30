@@ -14,7 +14,7 @@ namespace Rental.Infrastructure.IoC
         {
             // Register ICommandHandler
             builder.RegisterAssemblyTypes(ThisAssembly)
-                .AsClosedTypesOf(typeof(ICommandHandler<>))
+                .AsClosedTypesOf(typeof(ICommandHandler<,>))
                 .AsImplementedInterfaces();
 
             // Register CommandDispatcher
@@ -35,6 +35,11 @@ namespace Rental.Infrastructure.IoC
             // Register component which use IService
             builder.RegisterAssemblyTypes(ThisAssembly)
                 .Where(x => x.IsAssignableTo<IService>())
+                .AsImplementedInterfaces()
+                .InstancePerLifetimeScope();
+
+            builder.RegisterAssemblyTypes(ThisAssembly)
+                .Where(x => x.IsAssignableTo<ICommand>())
                 .AsImplementedInterfaces()
                 .InstancePerLifetimeScope();
 
