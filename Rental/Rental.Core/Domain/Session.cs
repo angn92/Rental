@@ -7,7 +7,7 @@ namespace Rental.Core.Domain
 {
     public class Session : Entity
     {
-        public virtual string SessionId { get; set; }
+        public virtual int SessionId { get; set; }
         public virtual SessionState State { get; set; }
         public virtual DateTime GenerationDate { get; set; }
         public virtual DateTime LastAccessDate { get; set; }
@@ -18,7 +18,7 @@ namespace Rental.Core.Domain
         {
         }
 
-        public Session([NotNull] string sessionId, Customer customer)
+        public Session([NotNull] int sessionId, Customer customer)
         {
             SessionId = sessionId;
             State = SessionState.NotAuthorized;

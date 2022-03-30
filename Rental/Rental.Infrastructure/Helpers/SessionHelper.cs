@@ -13,7 +13,7 @@ namespace Rental.Infrastructure.Helpers
     {
         void CheckSessionStatus(Session session);
         bool SessionExpired(Session session);
-        Task<Session> CreateSession(ApplicationDbContext context, Customer customer);
+        //Task<Session> CreateSession(ApplicationDbContext context, Customer customer);
     }
 
     public class SessionHelper : ISessionHelper
@@ -26,18 +26,18 @@ namespace Rental.Infrastructure.Helpers
             }
         }
 
-        public async Task<Session> CreateSession(ApplicationDbContext context, [NotNull] Customer customer)
-        {
-            var oldSession = await GetSession(context, customer);
+        //public async Task<Session> CreateSession(ApplicationDbContext context, [NotNull] Customer customer)
+        //{
+        //    var oldSession = await GetSession(context, customer);
 
-            if (oldSession is not null)
-                DeleteOtherSession(context, oldSession);
+        //    if (oldSession is not null)
+        //        DeleteOtherSession(context, oldSession);
 
-            var sessionId = new Guid().ToString();
-            var session = new Session(sessionId, customer);
+        //    var sessionId = new Guid().ToString();
+        //    var session = new Session(sessionId, customer);
 
-            return session;
-        }
+        //    return session;
+        //}
 
         private void DeleteOtherSession(ApplicationDbContext context, [NotNull] Session session)
         {

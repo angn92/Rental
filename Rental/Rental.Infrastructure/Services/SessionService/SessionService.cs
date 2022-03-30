@@ -45,7 +45,7 @@ namespace Rental.Infrastructure.Services.SessionService
                 throw new CoreException(ErrorCode.AccountNotActive, "Account is not active.");
             }
 
-            var sessionId = GenerateNewSession().ToString();
+            var sessionId = GenerateNewSession();
 
             var session = new Session(sessionId, userAccount);
 
@@ -55,12 +55,12 @@ namespace Rental.Infrastructure.Services.SessionService
             return session;
         }
 
-        public async Task<Session> GetSessionAsync(string idSession)
+        public async Task<Session> GetSessionAsync(int idSession)
         {
             return await _context.Sessions.FirstOrDefaultAsync(x => x.SessionId == idSession);
         }
 
-        public async Task RemoveSession(string idSession)
+        public async Task RemoveSession(int idSession)
         {
             var sessionToRemove = await _context.Sessions.FirstOrDefaultAsync(x => x.SessionId == idSession);
 
@@ -73,14 +73,9 @@ namespace Rental.Infrastructure.Services.SessionService
             await _context.SaveChangesAsync();
         }
 
-        private static int GenerateNewSession()
+        private int GenerateNewSession()
         {
-            var rng = new RNGCryptoServiceProvider();
-            var byteArray = new byte[4];
-
-            rng.GetBytes(byteArray);
-
-            return BitConverter.ToInt32(byteArray, 0);
+            return RandomNumberGenerator.GetInt32(100000, 999999);
         }
     }
 }

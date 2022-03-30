@@ -4,10 +4,10 @@ using System.Threading.Tasks;
 
 namespace Rental.Infrastructure.Services.SessionService
 {
-    public interface ISessionService
+    public interface ISessionService : IService
     {
         Task<Session> CreateSessionAsync(Customer user);
-        Task<Session> GetSessionAsync(string idSession);
-        Task RemoveSession(string Session);
+        Task<Session> GetSessionAsync(int idSession);
+        Task RemoveSession(int Session);
     }
 }
