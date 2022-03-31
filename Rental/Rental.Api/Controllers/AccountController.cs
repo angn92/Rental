@@ -49,6 +49,7 @@ namespace Rental.Api.Controllers
         /// <param name="query">Give a nick for user.</param>
         /// <returns></returns>
         [HttpGet("user/details")]
+        
         public async Task<GetCustomerDetailsRs> GetUserDetails([FromQuery][NotNull] GetCustomerDetailsRq query)
         {
             return await _queryDispatcher.DispatchAsync<GetCustomerDetailsRq, GetCustomerDetailsRs>(query);

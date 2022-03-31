@@ -17,6 +17,10 @@ namespace Rental.Infrastructure.IoC
                 .AsClosedTypesOf(typeof(ICommandHandler<,>))
                 .AsImplementedInterfaces();
 
+            builder.RegisterAssemblyTypes(ThisAssembly)
+                .AsClosedTypesOf(typeof(ICommandHandler<>))
+                .AsImplementedInterfaces();
+
             // Register CommandDispatcher
             builder.RegisterType<CommandDispatcher>()
                 .As<ICommandDispatcher>()
