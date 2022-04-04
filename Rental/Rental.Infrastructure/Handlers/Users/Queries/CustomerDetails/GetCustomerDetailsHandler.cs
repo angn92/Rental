@@ -20,7 +20,7 @@ namespace Rental.Infrastructure.Handlers.Users.Queries
         {
             ValidationParameter.FailIfNull(command);
 
-            var customerAccount = await _customerService.GetCustomerAsync(command.Nick);
+            var customerAccount = await _customerService.GetCustomerAsync(command.Username);
 
             return new GetCustomerDetailsRs
             {

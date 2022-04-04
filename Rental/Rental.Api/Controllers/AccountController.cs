@@ -58,7 +58,7 @@ namespace Rental.Api.Controllers
         /// <summary>
         /// Create new session for customer.
         /// </summary>
-        /// <param name="username">Username parameter.</param>
+        /// <param name="username">Username parameter for who sessione will be create.</param>
         /// <returns></returns>
         [HttpPost("session")]
         public async Task<CreateSessionResponse> CreateSeesion([FromQuery] [NotNull] string username)
