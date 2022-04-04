@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Rental.Infrastructure.Configuration;
 using Rental.Infrastructure.EF;
 using Rental.Infrastructure.IoC;
 
@@ -22,6 +23,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseNpgsql
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Configuration.GetSection("Registration").Get<ConfigurationOptions>();
 
 var app = builder.Build();
 
@@ -35,6 +37,12 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
+
+app.Use(async (app, next) =>
+{
+    app.Response.Headers.Add("X-Developed-By", "test");
+    await next.Invoke();
+});
 
 app.UseRouting();
 

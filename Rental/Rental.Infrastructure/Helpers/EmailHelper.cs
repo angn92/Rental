@@ -1,17 +1,20 @@
-﻿using Rental.Infrastructure.EF;
+﻿using JetBrains.Annotations;
+using Rental.Infrastructure.EF;
 using Rental.Infrastructure.Exceptions;
 using System;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 
 namespace Rental.Infrastructure.Helpers
 {
-    public interface IEmailValidator
+    public interface IEmailHelper
     {
-        void ValidateEmail(string email);
+        void ValidateEmail([NotNull] string email);
+        Task SendEmail([NotNull] string receiverEmail, [NotNull] string subject, [CanBeNull] string content = null);
     }
 
-    public class EmailHelper : IEmailValidator
+    public class EmailHelper : IEmailHelper
     {
         private readonly ApplicationDbContext _context;
 
@@ -20,7 +23,12 @@ namespace Rental.Infrastructure.Helpers
             _context = context;
         }
 
-        public void ValidateEmail(string email)
+        public Task SendEmail([NotNull] string receiverEmail, [NotNull] string subject, [CanBeNull] string content = null)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void ValidateEmail([NotNull] string email)
         {
             if (String.IsNullOrWhiteSpace(email))
                 throw new Exception($"Argument {nameof(email)} can not be null or empty.");
@@ -34,7 +42,7 @@ namespace Rental.Infrastructure.Helpers
             IsEmailInUse(_context, email);
         }
 
-        private void IsEmailInUse(ApplicationDbContext context, string email)
+        private static void IsEmailInUse([NotNull] ApplicationDbContext context, [NotNull] string email)
         {
             var emailExist = context.Customers.SingleOrDefault(x => x.Email == email);
 

@@ -5,7 +5,7 @@ namespace Rental.Infrastructure.Services.CustomerService
 {
     public interface ICustomerService : IService
     {
-        Task RegisterAsync(string firstName, string lastName, string username, string email, string phoneNumber, string password);
+        Task RegisterAsync(string firstName, string lastName, string username, string email, string phoneNumber);
         Task<Customer> LoginAsync(string username, string password);
         Task<Customer> GetCustomerAsync(string nick);
         Task<bool> CheckIfExist(string username);

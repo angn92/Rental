@@ -11,10 +11,10 @@ namespace Rental.Infrastructure.Services.CustomerService
     public class CustomerService : ICustomerService
     {
         private readonly ApplicationDbContext _context;
-        private readonly IEmailValidator _emailValidator;
+        private readonly IEmailHelper _emailValidator;
         private readonly IPasswordHelper _passwordHelper;
 
-        public CustomerService(ApplicationDbContext context, IEmailValidator emailValidator, IPasswordHelper passwordHelper)
+        public CustomerService(ApplicationDbContext context, IEmailHelper emailValidator, IPasswordHelper passwordHelper)
         {
             _context = context;
             _emailValidator = emailValidator;
@@ -51,8 +51,7 @@ namespace Rental.Infrastructure.Services.CustomerService
         /// <param name="phoneNumber"></param>
         /// <param name="password"></param>
         /// <returns></returns>
-        public async Task RegisterAsync(string firstName, string lastName, string username, string email, 
-                                        string phoneNumber, string password)
+        public async Task RegisterAsync(string firstName, string lastName, string username, string email, string phoneNumber)
         {
             var customer = await _context.Customers.SingleOrDefaultAsync(x => x.Username == username);
 
@@ -66,8 +65,6 @@ namespace Rental.Infrastructure.Services.CustomerService
                 _emailValidator.ValidateEmail(email);
                 customer = new Customer(firstName, lastName, username, email, phoneNumber);
                 await _context.AddAsync(customer);
-
-                //_passwordHelper.SetPassword(password, user);
             }
             catch (Exception ex)
             {

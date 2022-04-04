@@ -18,8 +18,5 @@ namespace Rental.Infrastructure.Command.Users.Command.Register
 
         [JsonProperty("PhoneNumber")]
         public string PhoneNumber { get; set; }
-
-        [JsonProperty("Password")]
-        public string Password { get; set; }
     }
 }

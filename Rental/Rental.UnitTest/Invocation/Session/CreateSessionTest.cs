@@ -20,7 +20,7 @@ namespace Rental.Test.Invocation.Session
             // ARRANGE
             var customer = CreateCustomerTestHelper.CreateActiveCustomer(GetContext(), firstName, lastName, userName, email, password);
 
-            var emailMock = new Mock<IEmailValidator>();
+            var emailMock = new Mock<IEmailHelper>();
             var passwordMock = new Mock<IPasswordHelper>();
 
             var customerService = new CustomerService(GetContext(), emailMock.Object, passwordMock.Object);

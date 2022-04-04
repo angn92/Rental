@@ -48,7 +48,7 @@ namespace Rental.Infrastructure.IoC
                 .InstancePerLifetimeScope();
 
             builder.RegisterAssemblyTypes(ThisAssembly)
-                .Where(x => x.IsAssignableTo<IEmailValidator>())
+                .Where(x => x.IsAssignableTo<IEmailHelper>())
                 .AsImplementedInterfaces()
                 .InstancePerLifetimeScope();
 

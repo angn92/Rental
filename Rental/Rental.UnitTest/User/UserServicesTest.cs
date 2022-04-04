@@ -36,7 +36,7 @@ namespace Rental.UnitTest.User
         public async Task ShouldBeAbleCheckThatGivenUsernameExist()
         {
             // Arrange
-            var email = new Mock<IEmailValidator>();
+            var email = new Mock<IEmailHelper>();
             var password = new Mock<IPasswordHelper>();
 
             using (var context = new ApplicationDbContext(_options))
@@ -59,7 +59,7 @@ namespace Rental.UnitTest.User
         public async Task ShouldBeAbleGetCustomer()
         {
             // Arrange
-            var email = new Mock<IEmailValidator>();
+            var email = new Mock<IEmailHelper>();
             var password = new Mock<IPasswordHelper>();
 
             using (var context = new ApplicationDbContext(_options))
@@ -83,7 +83,7 @@ namespace Rental.UnitTest.User
         public async Task ShouldReturnErrorMessageWhenUserDoesNotExist()
         {
             // Arrange
-            var email = new Mock<IEmailValidator>();
+            var email = new Mock<IEmailHelper>();
             var password = new Mock<IPasswordHelper>();
 
             using (var context = new ApplicationDbContext(_options))
@@ -106,7 +106,7 @@ namespace Rental.UnitTest.User
         public async Task ShouldBeAbleRegisterUser()
         {
             //Arrange
-            var email = new Mock<IEmailValidator>();
+            var email = new Mock<IEmailHelper>();
             var password = new Mock<IPasswordHelper>();
 
             using (var context = new ApplicationDbContext(_options))
@@ -124,7 +124,7 @@ namespace Rental.UnitTest.User
         public async Task ShouldNotBeAbleRegisterUser_GivenUserAlreadyExist()
         {
             //Arrange
-            var email = new Mock<IEmailValidator>();
+            var email = new Mock<IEmailHelper>();
             var password = new Mock<IPasswordHelper>();
 
             using (var context = new ApplicationDbContext(_options))
