@@ -7,7 +7,6 @@ namespace Rental.Infrastructure.Services.SessionService
 {
     public interface ISessionService : IService
     {
-        Task<Session> CreateSessionAsync([NotNull] ApplicationDbContext context, [NotNull]  Customer user);
         Task<Session> GetSessionAsync([NotNull] ApplicationDbContext context, [NotNull] int idSession);
 
         // Remove session about given id.

@@ -1,12 +1,12 @@
-﻿using Rental.Core.Enum;
-using Rental.Infrastructure.Command;
-using Rental.Infrastructure.Exceptions;
+﻿using Rental.Infrastructure.Command;
 using Rental.Infrastructure.Services.SessionService;
 using Rental.Infrastructure.Services.CustomerService;
 using System.Threading.Tasks;
 using System.Threading;
 using Rental.Core.Validation;
 using Rental.Infrastructure.EF;
+using System.Security.Cryptography;
+using Rental.Core.Domain;
 
 namespace Rental.Infrastructure.Handlers.Sessions
 {
@@ -27,26 +27,31 @@ namespace Rental.Infrastructure.Handlers.Sessions
         {
             ValidationParameter.FailIfNull(command);
 
-            var user = await _customerService.GetCustomerAsync(command.Username);
+            var customer = await _customerService.GetCustomerAsync(command.Username);
 
-            if(user is null)
-            {
-                throw new CoreException(ErrorCode.UserNotExist, $"User {command.Username} does not exist.");
-            }
+            // Do not allow create session if customer has blocked or not active account 
+            await _customerService.ValidateCustomerAccountAsync(customer);
 
-            if (user.Status != AccountStatus.Active)
-            {
-                throw new CoreException(ErrorCode.AccountNotActive, $"User {command.Username} is not active");
-            }
-
+            // If customer has assigned other session remove them all
             await _sessionService.RemoveAllSession(_context, command.Username);
 
-            var session = await _sessionService.CreateSessionAsync(user);
+            var sessionId = GenerateNewSession();
+
+            var session = new Session(sessionId, customer);
+
+            var expirationDate = session.GenerationDate.AddMinutes(5);
 
             return new CreateSessionResponse
             {
-                IdSession = session.SessionId
+                IdSession = session.SessionId,
+                Status = session.State,
+                ExpirationTime = expirationDate
             };
+        }
+
+        private static int GenerateNewSession()
+        {
+            return RandomNumberGenerator.GetInt32(100000, 999999);
         }
     }
 }

@@ -37,7 +37,7 @@ namespace Rental.Api.Controllers
         /// </summary>
         /// <param name="command">Base information about user account.</param>
         /// <returns></returns>
-        [HttpPost("register/user")]
+        [HttpPost("register/customer")]
         public async Task RegisterAccount([FromBody][NotNull] RegisterUser command)
         {
             await _commandDispatcher.DispatchAsync(command);
@@ -48,7 +48,7 @@ namespace Rental.Api.Controllers
         /// </summary>
         /// <param name="query">Give a nick for user.</param>
         /// <returns></returns>
-        [HttpGet("user/details")]
+        [HttpGet("customer/details")]
         
         public async Task<GetCustomerDetailsRs> GetUserDetails([FromQuery][NotNull] GetCustomerDetailsRq query)
         {

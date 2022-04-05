@@ -1,6 +1,7 @@
 ﻿using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
 using Rental.Core.Domain;
+using Rental.Core.Enum;
 using Rental.Infrastructure.EF;
 using Rental.Infrastructure.Exceptions;
 using Rental.Infrastructure.Helpers;
@@ -83,6 +84,17 @@ namespace Rental.Infrastructure.Services.CustomerService
                 return false;
 
             return true;
+        }
+
+        public Task ValidateCustomerAccountAsync(Customer customer)
+        {
+            if (customer.Status == AccountStatus.Blocked)
+                throw new CoreException(ErrorCode.AccountBlocked, "Account is blocked");
+
+            if (customer.Status == AccountStatus.NotActive)
+                throw new CoreException(ErrorCode.AccountNotActive, "Account is not active");
+            
+            return Task.CompletedTask;
         }
     }
 }

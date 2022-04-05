@@ -6,7 +6,6 @@ using Rental.Infrastructure.EF;
 using Rental.Infrastructure.Exceptions;
 using Rental.Infrastructure.Helpers;
 using Rental.Infrastructure.Services.CustomerService;
-using System;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Threading.Tasks;
@@ -22,37 +21,6 @@ namespace Rental.Infrastructure.Services.SessionService
         {
             _customerService = customerService;
             _userHelper = userHelper;
-        }
-
-        public async Task<Session> CreateSessionAsync([NotNull] ApplicationDbContext context, [NotNull] Customer user)
-        {
-            var userAccount = await _customerService.GetCustomerAsync(user.Username);
-
-            if(userAccount == null)
-            {
-                throw new CoreException(ErrorCode.UserNotExist, $"User {user.Username} does not exist.");
-            }
-
-            var accountStatus = _userHelper.CheckAccountStatus(user);
-
-            if(accountStatus == AccountStatus.Blocked.ToString())
-            {
-                throw new CoreException(ErrorCode.AccountBlocked, "Account is blocked.");
-            }
-
-            if(accountStatus == AccountStatus.NotActive.ToString())
-            {
-                throw new CoreException(ErrorCode.AccountNotActive, "Account is not active.");
-            }
-
-            var sessionId = GenerateNewSession();
-
-            var session = new Session(sessionId, userAccount);
-
-            await context.AddAsync(session);
-            await context.SaveChangesAsync();
-
-            return session;
         }
 
         public async Task<Session> GetSessionAsync([NotNull] ApplicationDbContext context, [NotNull] int idSession)

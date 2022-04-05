@@ -9,5 +9,6 @@ namespace Rental.Infrastructure.Services.CustomerService
         Task<Customer> LoginAsync(string username, string password);
         Task<Customer> GetCustomerAsync(string nick);
         Task<bool> CheckIfExist(string username);
+        Task ValidateCustomerAccountAsync(Customer customer);
     }
 }
