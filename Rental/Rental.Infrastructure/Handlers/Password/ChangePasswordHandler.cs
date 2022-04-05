@@ -7,22 +7,23 @@ using Rental.Infrastructure.Services.SessionService;
 using Rental.Infrastructure.Services.CustomerService;
 using System.Threading.Tasks;
 using System.Threading;
+using Rental.Core.Validation;
 
 namespace Rental.Infrastructure.Handlers.Password
 {
     public class ChangePasswordHandler : ICommandHandler<ChangePasswordCommand>
     {
-        private readonly ApplicationDbContext _rentalContext;
-        private readonly ICustomerService _userService;
+        private readonly ApplicationDbContext Context;
+        private readonly ICustomerService _customerService;
         private readonly ISessionService _sessionService;
         private readonly ISessionHelper _sessionHelper;
         private readonly IPasswordHelper _passwordHelper;
 
-        public ChangePasswordHandler(ApplicationDbContext rentalContext, ICustomerService userService, ISessionService sessionService,
+        public ChangePasswordHandler(ApplicationDbContext context, ICustomerService customerService, ISessionService sessionService,
                                      ISessionHelper sessionHelper, IPasswordHelper passwordHelper)
         {
-            _rentalContext = rentalContext;
-            _userService = userService;
+            Context = context;
+            _customerService = customerService;
             _sessionService = sessionService;
             _sessionHelper = sessionHelper;
             _passwordHelper = passwordHelper;
@@ -30,29 +31,16 @@ namespace Rental.Infrastructure.Handlers.Password
 
         public async Task HandleAsync(ChangePasswordCommand command, CancellationToken cancellationToken = default)
         {
-            var session = await _sessionService.GetSessionAsync(command.Session);
+            ValidationParameter.FailIfNull(command);
 
-            if (session == null)
-            {
-                throw new CoreException(ErrorCode.SessionDoesNotExist, $"Session {command.Session} does not exist.");
-            }
+            // to do get session which will be get from headers, implementation after add headers
 
-            _sessionHelper.CheckSessionStatus(session);
+            var customer = await _customerService.GetCustomerAsync(command.Username);
 
-            //var customer = await _customerService.GetCustomerAsync(session.Customer.Username);
+            await _customerService.ValidateCustomerAccountAsync(customer);
+            
+            //Get active password
 
-            //if(customer.Status != AccountStatus.Active)
-            //{
-            //    throw new CoreException(ErrorCode.AccountNotActive, "Only active user can change password.");
-            //}
-
-            if (_sessionHelper.SessionExpired(session))
-            {
-                throw new CoreException(ErrorCode.SessionExpired, $"Session {session.SessionId} is expired.");
-            }
-
-            //Remove old password form DB
-            //var oldPassword = await _passwordHelper.GetActivePassword(customer);
 
             //_rentalContext.Remove(oldPassword);
             await _rentalContext.SaveChangesAsync();

@@ -12,6 +12,10 @@ namespace Rental.Core.Domain
         public virtual string Salt { get; set; }
         public virtual PasswordStatus Status { get; set; }
         public virtual Customer Customer { get; set; }
+        public virtual DateTime? LastChangeDate { get; set; }
+        public virtual DateTime? ExpirationDate { get; set; }
+        public virtual DateTime? LastSuccessfulLoginDate { get; set; }
+        public virtual DateTime? FailedLoginDate { get; set; }
 
         protected Password()
         {

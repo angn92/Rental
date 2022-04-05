@@ -9,8 +9,8 @@ namespace Rental.Core.Domain
     {
         public virtual int SessionId { get; set; }
         public virtual SessionState State { get; set; }
-        public virtual DateTime GenerationDate { get; set; }
-        public virtual DateTime LastAccessDate { get; set; }
+        public virtual DateTime? GenerationDate { get; set; }
+        public virtual DateTime? LastAccessDate { get; set; }
         public virtual int IdCustomer { get; set; }
         public virtual Customer Customer { get; set; }
 

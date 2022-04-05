@@ -6,7 +6,7 @@ namespace Rental.Infrastructure.Handlers.Password
     public class ChangePasswordCommand : ICommand
     {
         [JsonProperty("Username")]
-        public int Username { get; set; }
+        public string Username { get; set; }
 
         [JsonProperty("NewPassword")]
         public string NewPassword { get; set; }
