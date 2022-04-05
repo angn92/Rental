@@ -10,8 +10,8 @@ namespace Rental.Infrastructure.Helpers
 {
     public interface IPasswordHelper
     {
-        Task SetPassword(string password, Customer user);
-        Task<Password> GetActivePassword(Customer user);
+        Task SetPassword(string password, Customer customer);
+        Task<Password> GetActivePassword(Customer customer);
     }
 
     public class PasswordHelper : IPasswordHelper
@@ -25,25 +25,25 @@ namespace Rental.Infrastructure.Helpers
             _encrypt = encrypt;
         }
 
-        public async Task<Password> GetActivePassword(Customer user)
+        public async Task<Password> GetActivePassword(Customer customer)
         {
-            var password = await _context.Passwords.SingleOrDefaultAsync(x => x.Customer.Username == user.Username && 
+            var password = await _context.Passwords.SingleOrDefaultAsync(x => x.Customer.Username == customer.Username && 
                                                               x.Status == PasswordStatus.Active);
 
-            if(password == null)
+            if (password == null)
             {
-                throw new CoreException(ErrorCode.PasswordNotExist, $"User {user.Username} does not have active password.");
+                throw new CoreException(ErrorCode.PasswordNotExist, $"Customer {customer.Username} does not have active password.");
             }
 
             return password;
         }
 
-        public async Task SetPassword(string password, Customer user)
+        public async Task SetPassword(string password, Customer customer)
         {
             var salt = _encrypt.GetSalt(password);
             var hash = _encrypt.GetHash(password, salt);
 
-            var newPassword = new Password(hash, salt, user);
+            var newPassword = new Password(hash, salt, customer);
 
             await _context.AddAsync(newPassword);
             await _context.SaveChangesAsync();
