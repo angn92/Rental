@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using JetBrains.Annotations;
+using Microsoft.EntityFrameworkCore;
 using Rental.Core.Domain;
 using Rental.Core.Enum;
 using Rental.Infrastructure.EF;
@@ -10,8 +11,10 @@ namespace Rental.Infrastructure.Helpers
 {
     public interface IPasswordHelper
     {
-        Task SetPassword(string password, Customer customer);
-        Task<Password> GetActivePassword(Customer customer);
+        Task SetPassword([NotNull] string password, [NotNull] Customer customer);
+        Task<Password> GetActivePassword([NotNull] Customer customer);
+        void ComaprePasswords([NotNull] Password currentPassword, [NotNull] string hashNewPassword);
+        Task RemoveOldPassword([NotNull] string username);
     }
 
     public class PasswordHelper : IPasswordHelper
@@ -19,16 +22,22 @@ namespace Rental.Infrastructure.Helpers
         private readonly IEncrypt _encrypt;
         private readonly ApplicationDbContext _context;
 
-        public PasswordHelper(ApplicationDbContext context, IEncrypt encrypt)
+        public PasswordHelper([NotNull] ApplicationDbContext context, [NotNull] IEncrypt encrypt)
         {
             _context = context;
             _encrypt = encrypt;
         }
 
-        public async Task<Password> GetActivePassword(Customer customer)
+        public void ComaprePasswords([NotNull] Password currentPassword, [NotNull] string hashNewPassword)
         {
-            var password = await _context.Passwords.SingleOrDefaultAsync(x => x.Customer.Username == customer.Username && 
-                                                              x.Status == PasswordStatus.Active);
+            if (currentPassword.Hash.Equals(hashNewPassword))
+                throw new CoreException(ErrorCode.PasswordIncorrect, "Given password is the same like old. Choose another.");
+        }
+
+        public async Task<Password> GetActivePassword([NotNull] Customer customer)
+        {
+            var password = await _context.Passwords.SingleOrDefaultAsync(x => x.Customer.Username == customer.Username 
+                                                                        && x.Status == PasswordStatus.Active);
 
             if (password == null)
             {
@@ -38,7 +47,18 @@ namespace Rental.Infrastructure.Helpers
             return password;
         }
 
-        public async Task SetPassword(string password, Customer customer)
+        public async Task RemoveOldPassword([NotNull] string username)
+        {
+            var passwordToDelete = await _context.Passwords.SingleOrDefaultAsync(x => x.Customer.Username == username);
+
+            if (passwordToDelete == null)
+                return;
+
+            _context.Passwords.Remove(passwordToDelete);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task SetPassword([NotNull] string password, [NotNull] Customer customer)
         {
             var salt = _encrypt.GetSalt(password);
             var hash = _encrypt.GetHash(password, salt);

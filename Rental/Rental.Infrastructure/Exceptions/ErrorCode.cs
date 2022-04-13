@@ -35,6 +35,8 @@
         /// </summary>
         public static string PasswordNotExist => "password_not_exist";
 
+        public static string PasswordIncorrect => "new_password_is_identical_like_old_password";
+
         /// <summary>
         /// Product exist 
         /// </summary>

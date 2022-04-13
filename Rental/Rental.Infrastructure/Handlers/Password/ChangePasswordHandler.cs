@@ -1,7 +1,4 @@
-﻿using Rental.Core.Enum;
-using Rental.Infrastructure.Command;
-using Rental.Infrastructure.EF;
-using Rental.Infrastructure.Exceptions;
+﻿using Rental.Infrastructure.Command;
 using Rental.Infrastructure.Helpers;
 using Rental.Infrastructure.Services.SessionService;
 using Rental.Infrastructure.Services.CustomerService;
@@ -13,16 +10,14 @@ namespace Rental.Infrastructure.Handlers.Password
 {
     public class ChangePasswordHandler : ICommandHandler<ChangePasswordCommand>
     {
-        private readonly ApplicationDbContext Context;
         private readonly ICustomerService _customerService;
         private readonly ISessionService _sessionService;
         private readonly ISessionHelper _sessionHelper;
         private readonly IPasswordHelper _passwordHelper;
 
-        public ChangePasswordHandler(ApplicationDbContext context, ICustomerService customerService, ISessionService sessionService,
+        public ChangePasswordHandler(ICustomerService customerService, ISessionService sessionService,
                                      ISessionHelper sessionHelper, IPasswordHelper passwordHelper)
         {
-            Context = context;
             _customerService = customerService;
             _sessionService = sessionService;
             _sessionHelper = sessionHelper;
@@ -39,15 +34,14 @@ namespace Rental.Infrastructure.Handlers.Password
 
             await _customerService.ValidateCustomerAccountAsync(customer);
             
-            //Get active password
+            var activeUserPassword = await _passwordHelper.GetActivePassword(customer);
 
+            //compare old password and new password. New password can not be exactly same like old password
+            _passwordHelper.ComaprePasswords(activeUserPassword, command.NewPassword);
 
-            //_rentalContext.Remove(oldPassword);
-            await _rentalContext.SaveChangesAsync();
+            await _passwordHelper.RemoveOldPassword(command.Username);
 
-            //Set new password and save to DB
-
-            //await _passwordHelper.SetPassword(command.NewPassword, customer);
+            await _passwordHelper.SetPassword(command.NewPassword, customer);
         }
     }
 }
