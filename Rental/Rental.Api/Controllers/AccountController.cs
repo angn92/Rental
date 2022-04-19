@@ -1,5 +1,6 @@
 ﻿using JetBrains.Annotations;
 using Microsoft.AspNetCore.Mvc;
+using Rental.Core.Enum;
 using Rental.Infrastructure.Command;
 using Rental.Infrastructure.Command.Users.Command.Register;
 using Rental.Infrastructure.Handlers.Password;
@@ -86,16 +87,18 @@ namespace Rental.Api.Controllers
         /// Change account status.
         /// </summary>
         /// <param name="username"></param>
+        /// <param name="accountStatus"></param>
         /// <returns></returns>
         [HttpPut("account/status")]
-        public async Task ChangeAccountStatus([FromQuery] string username)
+        public async Task ChangeAccountStatus([FromBody] [NotNull] string username, [FromBody] AccountStatus accountStatus)
         {
             var command = new ChangeAccountStatus
             {
-                Username = username
+                Username = username,
+                Status = accountStatus
             };
 
-            await _commandDispatcher.DispatchAsync<ChangeAccountStatus, ChangeAccountStatusResponse>(command);
+            await _commandDispatcher.DispatchAsync<ChangeAccountStatus>(command);
         }
 
         //[HttpGet("account/status")]
