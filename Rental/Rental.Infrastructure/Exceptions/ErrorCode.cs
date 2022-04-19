@@ -29,6 +29,7 @@
         public static string SessionDoesNotExist => "session_not_exist";
         public static string SessioNotActive => "session_not_active";
         public static string SessionExpired => "session_expired";
+        public static string SessionNotAuthorized => "sesion_not_authorized";
 
         /// <summary>
         /// Password error 

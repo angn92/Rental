@@ -14,6 +14,8 @@ namespace Rental.Infrastructure.Helpers
         void CheckSessionStatus(Session session);
         bool SessionExpired(Session session);
         //Task<Session> CreateSession(ApplicationDbContext context, Customer customer);
+
+        Task ValidateSession([NotNull] ApplicationDbContext context, [NotNull] Customer customerId);
     }
 
     public class SessionHelper : ISessionHelper
@@ -45,14 +47,30 @@ namespace Rental.Infrastructure.Helpers
             context.SaveChangesAsync();
         }
 
-        private static async Task<Session> GetSession(ApplicationDbContext context, Customer customer)
-        {
-            return await context.Sessions.SingleOrDefaultAsync(x => x.IdCustomer == customer.CustomerId);
-        }
+        
 
         public bool SessionExpired(Session session)
         {
             return session.LastAccessDate.AddMinutes(5) < DateTime.UtcNow;
+        }
+
+        public async Task ValidateSession([NotNull] ApplicationDbContext context, [NotNull] Customer customerId)
+        {
+            var session = await GetSession(context, customerId);
+
+            if (session == null)
+                throw new CoreException(ErrorCode.SessionDoesNotExist, "Session does not exist.");
+
+            if (session.State == SessionState.NotActive)
+                throw new CoreException(ErrorCode.SessioNotActive, $"Session {session.SessionId} is not active, should has status active.");
+
+            if (session.State == SessionState.NotAuthorized)
+                throw new CoreException(ErrorCode.SessionNotAuthorized, $"Session {session.SessionId} is not authorized");
+        }
+
+        private static async Task<Session> GetSession(ApplicationDbContext context, Customer customer)
+        {
+            return await context.Sessions.SingleOrDefaultAsync(x => x.IdCustomer == customer.CustomerId);
         }
     }
 }
