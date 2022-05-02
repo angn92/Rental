@@ -33,7 +33,7 @@ namespace Rental.Infrastructure.Handlers.Sessions
             await _customerService.ValidateCustomerAccountAsync(customer);
 
             // If customer has assigned other session remove them all
-            await _sessionService.RemoveAllSession(_context, command.Username);
+            await _sessionService.RemoveAllSession(command.Username);
 
             var sessionId = GenerateNewSession();
 

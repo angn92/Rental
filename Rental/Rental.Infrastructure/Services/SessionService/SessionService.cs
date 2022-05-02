@@ -14,21 +14,23 @@ namespace Rental.Infrastructure.Services.SessionService
 {
     public class SessionService : ISessionService
     {
+        private readonly ApplicationDbContext context;
         private readonly ICustomerService _customerService;
         private readonly IUserHelper _userHelper;
 
-        public SessionService(ICustomerService customerService, IUserHelper userHelper)
+        public SessionService(ApplicationDbContext context, ICustomerService customerService, IUserHelper userHelper)
         {
+            this.context = context;
             _customerService = customerService;
             _userHelper = userHelper;
         }
 
-        public async Task<Session> GetSessionAsync([NotNull] ApplicationDbContext context, [NotNull] int idSession)
+        public async Task<Session> GetSessionAsync([NotNull] int idSession)
         {
             return await context.Sessions.FirstOrDefaultAsync(x => x.SessionId == idSession);
         }
 
-        public async Task RemoveAllSession([NotNull] ApplicationDbContext context, [NotNull] string username)
+        public async Task RemoveAllSession([NotNull] string username)
         {
             var session = context.Sessions.Where(x => x.Customer.Username == username).ToList();
 
@@ -36,7 +38,7 @@ namespace Rental.Infrastructure.Services.SessionService
             await context.SaveChangesAsync();
         }
 
-        public async Task RemoveSession([NotNull] ApplicationDbContext context, [NotNull] int idSession)
+        public async Task RemoveSession([NotNull] int idSession)
         {
             var sessionToRemove = await context.Sessions.FirstOrDefaultAsync(x => x.SessionId == idSession);
 

@@ -24,7 +24,7 @@ namespace Rental.Infrastructure.Handlers.Users.Queries.AccountInfo
 
         public async Task<GetAccountStatusRs> HandleAsync(GetAccountStatusRq query, CancellationToken cancellationToken = default)
         {
-            var session = await _sessionService.GetSessionAsync(query.IdSession);
+            var session = await _sessionService.GetSessionAsync(query.SessionId);
 
             if(session is null)
             {

@@ -112,7 +112,7 @@ namespace Rental.UnitTest.User
             using (var context = new ApplicationDbContext(_options))
             {
                 var userService = new CustomerService(context, email.Object, password.Object);
-                await userService.RegisterAsync(_firstName, _lastName, _userName, _email, _phone, _password);
+                await userService.RegisterAsync(_firstName, _lastName, _userName, _email, _phone);
 
                 var registeredUser = context.Customers.FirstOrDefaultAsync(x => x.Username == _userName);
 
@@ -136,7 +136,7 @@ namespace Rental.UnitTest.User
             using (var context = new ApplicationDbContext(_options))
             {
                 var userService = new CustomerService(context, email.Object, password.Object);
-                var exception = Assert.ThrowsAsync<CoreException>(() => userService.RegisterAsync(_firstName, _lastName, _userName, _email, _phone, _password));
+                var exception = Assert.ThrowsAsync<CoreException>(() => userService.RegisterAsync(_firstName, _lastName, _userName, _email, _phone));
 
                 Assert.AreEqual(ErrorCode.UsernameExist, exception.Code);
             }

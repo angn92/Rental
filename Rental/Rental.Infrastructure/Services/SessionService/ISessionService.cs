@@ -7,12 +7,12 @@ namespace Rental.Infrastructure.Services.SessionService
 {
     public interface ISessionService : IService
     {
-        Task<Session> GetSessionAsync([NotNull] ApplicationDbContext context, [NotNull] int idSession);
+        Task<Session> GetSessionAsync([NotNull] int sessionId);
 
         // Remove session about given id.
-        Task RemoveSession([NotNull] ApplicationDbContext context, [NotNull] int session);
+        Task RemoveSession([NotNull] int session);
 
         // Remove all sessions for given customer if any exists. 
-        Task RemoveAllSession([NotNull] ApplicationDbContext context, [NotNull] string username);
+        Task RemoveAllSession([NotNull] string username);
     }
 }
