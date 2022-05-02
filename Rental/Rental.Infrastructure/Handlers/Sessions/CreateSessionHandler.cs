@@ -39,7 +39,7 @@ namespace Rental.Infrastructure.Handlers.Sessions
 
             var session = new Session(sessionId, customer);
 
-            var expirationDate = session.GenerationDate.AddMinutes(5);
+            var expirationDate =  session.GenerationDate;
 
             return new CreateSessionResponse
             {

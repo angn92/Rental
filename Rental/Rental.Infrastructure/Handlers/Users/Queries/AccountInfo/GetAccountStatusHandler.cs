@@ -5,6 +5,7 @@ using Rental.Infrastructure.Services.SessionService;
 using Rental.Infrastructure.Services.CustomerService;
 using System.Threading.Tasks;
 using System.Threading;
+using Rental.Core.Domain;
 
 namespace Rental.Infrastructure.Handlers.Users.Queries.AccountInfo
 {
@@ -24,9 +25,9 @@ namespace Rental.Infrastructure.Handlers.Users.Queries.AccountInfo
 
         public async Task<GetAccountStatusRs> HandleAsync(GetAccountStatusRq query, CancellationToken cancellationToken = default)
         {
-            var session = await _sessionService.GetSessionAsync(query.SessionId);
 
-            if(session is null)
+            var session = await _sessionService.GetSessionAsync(query.SessionId);
+            if (session is null)
             {
                 throw new CoreException(ErrorCode.SessionDoesNotExist, $"Session not created.");
             }

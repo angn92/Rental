@@ -13,6 +13,6 @@ namespace Rental.Infrastructure.Handlers.Sessions
         public SessionState Status { get; set; }
 
         [JsonProperty("ExpirationTime")]
-        public DateTime ExpirationTime { get; set; }
+        public DateTime? ExpirationTime { get; set; }
     }
 }
