@@ -8,6 +8,7 @@ using Microsoft.Extensions.Hosting;
 using Rental.Infrastructure.Configuration;
 using Rental.Infrastructure.EF;
 using Rental.Infrastructure.IoC;
+using RentalCommon.Headers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,10 +21,11 @@ builder.Services.AddControllers();
 //Get connection string
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseNpgsql(connectionString));
+//builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseInMemoryDatabase("testDB"));
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Configuration.GetSection("Registration").Get<ConfigurationOptions>();
+//builder.Configuration.GetSection("Registration").Get<ConfigurationOptions>();
 
 var app = builder.Build();
 
@@ -38,12 +40,7 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
-app.Use(async (app, next) =>
-{
-    app.Response.Headers.Add("X-Developed-By", "test");
-    await next.Invoke();
-});
-
+app.UseMiddleware<ResponseMiddleware>();
 app.UseRouting();
 
 app.UseAuthorization();

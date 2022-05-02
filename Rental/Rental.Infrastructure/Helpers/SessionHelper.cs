@@ -51,7 +51,7 @@ namespace Rental.Infrastructure.Helpers
 
         public bool SessionExpired(Session session)
         {
-            return session.LastAccessDate.AddMinutes(5) < DateTime.UtcNow;
+            return true;// session.LastAccessDate.AddMinutes(5) < DateTime.UtcNow;
         }
 
         public async Task ValidateSession([NotNull] ApplicationDbContext context, [NotNull] Customer customerId)
