@@ -90,7 +90,7 @@ namespace Rental.Api.Controllers
         /// <param name="accountStatus"></param>
         /// <returns></returns>
         [HttpPut("account/status")]
-        public async Task ChangeAccountStatus([FromBody] [NotNull] string username, [FromBody] AccountStatus accountStatus)
+        public async Task ChangeAccountStatus([FromBody] [NotNull] string username, AccountStatus accountStatus)
         {
             var command = new ChangeAccountStatus
             {

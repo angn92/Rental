@@ -35,8 +35,8 @@ namespace Rental.Infrastructure.Handlers.Users.Command.Register
 
             await _customerService.RegisterAsync(command.FirstName, command.LastName, command.Username, command.Email, command.PhoneNumber);
 
-            if (_options.Value.SendRealEmail)
-                await _emailHelper.SendEmail(command.Email, "content todo");
+            //if (_options.Value.SendRealEmail)
+            //    await _emailHelper.SendEmail(command.Email, "content todo");
 
         }
     }
