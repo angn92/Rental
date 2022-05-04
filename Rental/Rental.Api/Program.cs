@@ -20,8 +20,15 @@ builder.Services.AddControllers();
 
 //Get connection string
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseNpgsql(connectionString));
-//builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseInMemoryDatabase("testDB"));
+
+// Set correct database  
+var memoryDb = builder.Configuration.GetSection("InMemoryDatabase");
+
+if (memoryDb.Value.Equals("True"))
+    builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseInMemoryDatabase("testDB"));
+else
+    builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseNpgsql(connectionString));
+
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -33,7 +40,6 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    //app.UseSwaggerUI();
     app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Rental.Api v1"));
 }
 
