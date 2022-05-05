@@ -1,16 +1,25 @@
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.HttpLogging;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Rental.Infrastructure.Configuration;
 using Rental.Infrastructure.EF;
 using Rental.Infrastructure.IoC;
 using RentalCommon.Headers;
 
 var builder = WebApplication.CreateBuilder(args);
+
+//Defoult middleware logging in .NET 6
+builder.Services.AddHttpLogging(logging =>
+{
+    logging.LoggingFields = HttpLoggingFields.RequestBody | HttpLoggingFields.RequestPropertiesAndHeaders |
+                            HttpLoggingFields.ResponseBody | HttpLoggingFields.ResponsePropertiesAndHeaders;
+});
 
 //Autofac 
 builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
@@ -36,6 +45,9 @@ builder.Configuration.GetSection("Registration").Get<ConfigurationOptions>();
 
 var app = builder.Build();
 
+//Enable HTTP logging 
+app.UseHttpLogging();
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -45,11 +57,9 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-
 app.UseMiddleware<ResponseMiddleware>();
 app.UseRouting();
-
 app.UseAuthorization();
-
 app.UseEndpoints(endpoints => endpoints.MapControllers());
+
 app.Run();
