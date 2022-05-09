@@ -24,7 +24,7 @@ namespace Rental.Infrastructure.Handlers.Password
             _passwordHelper = passwordHelper;
         }
 
-        public async Task HandleAsync(ChangePasswordCommand command, CancellationToken cancellationToken = default)
+        public async ValueTask HandleAsync(ChangePasswordCommand command, CancellationToken cancellationToken = default)
         {
             ValidationParameter.FailIfNull(command);
 

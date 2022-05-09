@@ -16,7 +16,7 @@ namespace Rental.Infrastructure.Handlers.Users.Queries
             _customerService = customerService;
         }
 
-        public async Task<GetCustomerDetailsRs> HandleAsync([NotNull] GetCustomerDetailsRq command, CancellationToken cancellationToken = default)
+        public async ValueTask<GetCustomerDetailsRs> HandleAsync([NotNull] GetCustomerDetailsRq command, CancellationToken cancellationToken = default)
         {
             ValidationParameter.FailIfNull(command);
 

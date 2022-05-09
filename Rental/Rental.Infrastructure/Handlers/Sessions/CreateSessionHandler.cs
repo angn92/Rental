@@ -23,7 +23,7 @@ namespace Rental.Infrastructure.Handlers.Sessions
             _sessionService = sessionService;
         }
 
-        public async Task<CreateSessionResponse> HandleAsync(CreateSessionCommand command, CancellationToken cancellationToken = default)
+        public async ValueTask<CreateSessionResponse> HandleAsync(CreateSessionCommand command, CancellationToken cancellationToken = default)
         {
             ValidationParameter.FailIfNull(command);
 

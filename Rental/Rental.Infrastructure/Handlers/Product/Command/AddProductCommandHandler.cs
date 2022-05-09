@@ -22,7 +22,7 @@ namespace Rental.Infrastructure.Handlers.Product.Command
             _productHelper = productHelper;
         }
 
-        public async Task HandleAsync(AddProductCommand command, CancellationToken cancellationToken = default)
+        public async ValueTask HandleAsync(AddProductCommand command, CancellationToken cancellationToken = default)
         {
             ValidationParameter.FailIfNull(command);
 

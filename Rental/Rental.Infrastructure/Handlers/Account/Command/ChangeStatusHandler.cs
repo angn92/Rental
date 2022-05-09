@@ -17,7 +17,7 @@ namespace Rental.Infrastructure.Handlers.Account.Command
             _customerService = customerService;
         }
 
-        public async Task HandleAsync(ChangeStatusCommand command, CancellationToken cancellationToken = default)
+        public async ValueTask HandleAsync(ChangeStatusCommand command, CancellationToken cancellationToken = default)
         {
             var request = command.ChangeStatusRequest;
 

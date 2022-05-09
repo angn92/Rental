@@ -24,7 +24,7 @@ namespace Rental.Infrastructure.Handlers.Users.Command.AccountInfo
             this.customerService = customerService;
         }
 
-        public async Task HandleAsync(ChangeAccountStatus command, CancellationToken cancellationToken = default)
+        public async ValueTask HandleAsync(ChangeAccountStatus command, CancellationToken cancellationToken = default)
         {
             ValidationParameter.FailIfNullOrEmpty(command.Username);
 
