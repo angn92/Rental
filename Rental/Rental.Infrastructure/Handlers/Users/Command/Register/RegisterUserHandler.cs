@@ -24,7 +24,7 @@ namespace Rental.Infrastructure.Handlers.Users.Command.Register
             _emailHelper = emailHelper;
         }
 
-        public async Task HandleAsync(RegisterUser command, CancellationToken cancellationToken = default)
+        public async ValueTask HandleAsync(RegisterUser command, CancellationToken cancellationToken = default)
         {
             ValidationParameter.FailIfNull(command);
 

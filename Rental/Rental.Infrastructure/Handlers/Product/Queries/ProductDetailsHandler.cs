@@ -16,7 +16,7 @@ namespace Rental.Infrastructure.Handlers.Product.Queries
             Context = context;
         }
 
-        public Task<ProductDetailsResponse> HandleAsync(ProductDetailRequest query, CancellationToken cancellationToken = default)
+        public ValueTask<ProductDetailsResponse> HandleAsync(ProductDetailRequest query, CancellationToken cancellationToken = default)
         {
             throw new NotImplementedException();
         }

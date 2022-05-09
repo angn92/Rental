@@ -23,7 +23,7 @@ namespace Rental.Infrastructure.Handlers.Users.Queries.AccountInfo
             _customerService = customerService;
         }
 
-        public async Task<GetAccountStatusRs> HandleAsync(GetAccountStatusRq query, CancellationToken cancellationToken = default)
+        public async ValueTask<GetAccountStatusRs> HandleAsync(GetAccountStatusRq query, CancellationToken cancellationToken = default)
         {
 
             var session = await _sessionService.GetSessionAsync(query.SessionId);
