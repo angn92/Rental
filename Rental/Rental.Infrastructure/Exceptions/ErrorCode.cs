@@ -3,6 +3,7 @@
     public  class ErrorCode
     {
         public static string IncorrectArgument => "incorrect_argument";
+        public static string EnumMapError => "could_not_be_mapped";
 
         /// <summary>
         /// User account error

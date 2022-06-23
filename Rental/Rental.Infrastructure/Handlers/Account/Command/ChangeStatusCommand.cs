@@ -16,10 +16,10 @@ namespace Rental.Infrastructure.Handlers.Account.Command
 
     public class ChangeStatusRequest
     {
-        [JsonProperty("Username")]
+        [JsonProperty("username")]
         public string Username { get; set; }
 
-        [JsonProperty("AccountStatus")]
-        public AccountStatus Status { get; set; }
+        [JsonProperty("accountStatus")]
+        public string Status { get; set; }
     }
 }
