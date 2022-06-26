@@ -2,7 +2,7 @@
 using Rental.Core.Enum;
 using Rental.Infrastructure.Command;
 
-namespace Rental.Infrastructure.Handlers.Account.Command
+namespace Rental.Infrastructure.Handlers.Account.ChangeStatus.Command
 {
     public class ChangeStatusCommand : ICommand
     {
@@ -20,6 +20,9 @@ namespace Rental.Infrastructure.Handlers.Account.Command
         public string Username { get; set; }
 
         [JsonProperty("accountStatus")]
-        public string Status { get; set; }
+        public AccountStatus Status { get; set; }
+
+        [JsonProperty("reason")]
+        public string Reason { get; set; }
     }
 }

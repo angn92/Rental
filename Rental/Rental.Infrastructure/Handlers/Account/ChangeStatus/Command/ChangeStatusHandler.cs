@@ -1,14 +1,11 @@
-﻿using Rental.Core.Enum;
-using Rental.Core.Validation;
+﻿using Rental.Core.Validation;
 using Rental.Infrastructure.Command;
 using Rental.Infrastructure.EF;
-using Rental.Infrastructure.Exceptions;
 using Rental.Infrastructure.Services.CustomerService;
-using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Rental.Infrastructure.Handlers.Account.Command
+namespace Rental.Infrastructure.Handlers.Account.ChangeStatus.Command
 {
     public class ChangeStatusHandler : ICommandHandler<ChangeStatusCommand>
     {
@@ -26,19 +23,14 @@ namespace Rental.Infrastructure.Handlers.Account.Command
             var request = command.ChangeStatusRequest;
 
             ValidationParameter.FailIfNullOrEmpty(request.Username);
-            ValidationParameter.FailIfNullOrEmpty(request.Status);
+            ValidationParameter.FailIfNullOrEmpty(request.Status.ToString());
 
             var customer = await _customerService.GetCustomerAsync(request.Username);
 
-            var mapEnum = Enum.TryParse<AccountStatus>(request.Status, out AccountStatus accountStatus);
-
-            if (!mapEnum)
-                throw new CoreException(ErrorCode.EnumMapError, $"Wrong mapped");
-
-            if (customer.Status.Equals(accountStatus))
+            if (customer.Status.Equals(request.Status))
                 return;
 
-            customer.Status = accountStatus;
+            customer.Status = request.Status;
            
             await _rentalContext.SaveChangesAsync(cancellationToken);
         }

@@ -5,6 +5,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Handlers\Account\Queries\**" />
+    <EmbeddedResource Remove="Handlers\Account\Queries\**" />
+    <None Remove="Handlers\Account\Queries\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Rental.Core\Rental.Core.csproj" />
   </ItemGroup>
 
@@ -18,10 +24,6 @@
     </PackageReference>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="6.0.3" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Handlers\Account\Queries\" />
   </ItemGroup>
 
 </Project>
