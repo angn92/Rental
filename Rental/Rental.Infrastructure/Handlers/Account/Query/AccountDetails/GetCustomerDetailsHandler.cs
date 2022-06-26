@@ -5,7 +5,7 @@ using Rental.Infrastructure.Services.CustomerService;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Rental.Infrastructure.Handlers.Users.Queries
+namespace Rental.Infrastructure.Handlers.Account.Query.AccountDetails
 {
     public class GetCustomerDetailsHandler : IQueryHandler<GetCustomerDetailsRq, GetCustomerDetailsRs>
     {

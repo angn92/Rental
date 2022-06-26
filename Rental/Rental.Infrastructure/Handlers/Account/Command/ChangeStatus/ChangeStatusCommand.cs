@@ -2,7 +2,7 @@
 using Rental.Core.Enum;
 using Rental.Infrastructure.Command;
 
-namespace Rental.Infrastructure.Handlers.Account.ChangeStatus.Command
+namespace Rental.Infrastructure.Handlers.Account.Commmand.ChangeStatus
 {
     public class ChangeStatusCommand : ICommand
     {

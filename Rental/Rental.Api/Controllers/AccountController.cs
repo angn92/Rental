@@ -1,11 +1,12 @@
 ﻿using JetBrains.Annotations;
 using Microsoft.AspNetCore.Mvc;
+using Rental.Core.Validation;
 using Rental.Infrastructure.Command;
-using Rental.Infrastructure.Command.Users.Command.Register;
-using Rental.Infrastructure.Handlers.Account.ChangeStatus.Command;
+using Rental.Infrastructure.Handlers.Account.Command.CreateAccount;
+using Rental.Infrastructure.Handlers.Account.Commmand.ChangeStatus;
+using Rental.Infrastructure.Handlers.Account.Query.AccountDetails;
 using Rental.Infrastructure.Handlers.Password;
 using Rental.Infrastructure.Handlers.Sessions;
-using Rental.Infrastructure.Handlers.Users.Queries;
 using Rental.Infrastructure.Query;
 using System.Threading.Tasks;
 
@@ -38,8 +39,10 @@ namespace Rental.Api.Controllers
         /// <param name="command">Base information about user account.</param>
         /// <returns></returns>
         [HttpPost("register/customer")]
-        public async Task RegisterAccount([FromBody][NotNull] RegisterUser command)
+        public async Task RegisterAccount([FromBody][NotNull] RegisterCustomer command)
         {
+            ValidationParameter.FailIfNull(command);
+
             await _commandDispatcher.DispatchAsync(command);
         }
 

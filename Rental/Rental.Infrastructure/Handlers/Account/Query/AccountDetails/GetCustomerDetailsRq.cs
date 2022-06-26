@@ -1,11 +1,11 @@
 ﻿using Newtonsoft.Json;
 using Rental.Infrastructure.Query;
 
-namespace Rental.Infrastructure.Handlers.Users.Queries
+namespace Rental.Infrastructure.Handlers.Account.Query.AccountDetails
 {
     public class GetCustomerDetailsRq : IQuery
     {
-        [JsonProperty("Username", Required = Required.Always)]
+        [JsonProperty("username", Required = Required.Always)]
         public string Username { get; set; }
     }
 }

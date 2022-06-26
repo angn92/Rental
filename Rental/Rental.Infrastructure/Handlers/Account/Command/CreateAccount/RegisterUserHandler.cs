@@ -1,7 +1,6 @@
 ﻿using Microsoft.Extensions.Options;
 using Rental.Core.Validation;
 using Rental.Infrastructure.Command;
-using Rental.Infrastructure.Command.Users.Command.Register;
 using Rental.Infrastructure.Configuration;
 using Rental.Infrastructure.Exceptions;
 using Rental.Infrastructure.Helpers;
@@ -9,9 +8,9 @@ using Rental.Infrastructure.Services.CustomerService;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Rental.Infrastructure.Handlers.Users.Command.Register
+namespace Rental.Infrastructure.Handlers.Account.Command.CreateAccount
 {
-    public class RegisterUserHandler : ICommandHandler<RegisterUser>
+    public class RegisterUserHandler : ICommandHandler<RegisterCustomer>
     {
         private readonly ICustomerService _customerService;
         private readonly IOptions<ConfigurationOptions> _options;
@@ -24,7 +23,7 @@ namespace Rental.Infrastructure.Handlers.Users.Command.Register
             _emailHelper = emailHelper;
         }
 
-        public async ValueTask HandleAsync(RegisterUser command, CancellationToken cancellationToken = default)
+        public async ValueTask HandleAsync(RegisterCustomer command, CancellationToken cancellationToken = default)
         {
             ValidationParameter.FailIfNull(command);
 

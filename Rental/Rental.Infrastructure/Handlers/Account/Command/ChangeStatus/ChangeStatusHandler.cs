@@ -1,11 +1,12 @@
 ﻿using Rental.Core.Validation;
 using Rental.Infrastructure.Command;
 using Rental.Infrastructure.EF;
+using Rental.Infrastructure.Handlers.Account.Commmand.ChangeStatus;
 using Rental.Infrastructure.Services.CustomerService;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Rental.Infrastructure.Handlers.Account.ChangeStatus.Command
+namespace Rental.Infrastructure.Handlers.Account.Command.ChangeStatus
 {
     public class ChangeStatusHandler : ICommandHandler<ChangeStatusCommand>
     {
