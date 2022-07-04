@@ -53,7 +53,7 @@ namespace Rental.Api.Controllers
         /// <returns></returns>
         [HttpGet("customer/details")]
         
-        public async Task<GetCustomerDetailsRs> GetUserDetails([FromQuery][NotNull] GetCustomerDetailsRq query)
+        public async Task<GetCustomerDetailsRs> GetUserDetails([FromRoute][NotNull] GetCustomerDetailsRq query)
         {
             return await _queryDispatcher.DispatchAsync<GetCustomerDetailsRq, GetCustomerDetailsRs>(query);
         }
@@ -63,8 +63,8 @@ namespace Rental.Api.Controllers
         /// </summary>
         /// <param name="username">Username parameter for who sessione will be create.</param>
         /// <returns></returns>
-        [HttpPost("session")]
-        public async Task<CreateSessionResponse> CreateSeesion([FromQuery] [NotNull] string username)
+        [HttpPost("session/{username}")]
+        public async Task<CreateSessionResponse> CreateSeesion([FromRoute] [NotNull] string username)
         {
             var command = new CreateSessionCommand
             {

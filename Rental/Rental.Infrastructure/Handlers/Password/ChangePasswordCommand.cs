@@ -5,10 +5,10 @@ namespace Rental.Infrastructure.Handlers.Password
 {
     public class ChangePasswordCommand : ICommand
     {
-        [JsonProperty("Username")]
+        [JsonProperty("Username", Required = Required.Always)]
         public string Username { get; set; }
 
-        [JsonProperty("NewPassword")]
+        [JsonProperty("NewPassword", Required = Required.Always)]
         public string NewPassword { get; set; }
     }
 }

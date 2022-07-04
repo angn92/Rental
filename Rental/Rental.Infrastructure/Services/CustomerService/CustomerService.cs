@@ -86,15 +86,13 @@ namespace Rental.Infrastructure.Services.CustomerService
             return true;
         }
 
-        public Task ValidateCustomerAccountAsync(Customer customer)
+        public void ValidateCustomerAccountAsync(Customer customer)
         {
             if (customer.Status == AccountStatus.Blocked)
                 throw new CoreException(ErrorCode.AccountBlocked, "Account is blocked");
 
             if (customer.Status == AccountStatus.NotActive)
                 throw new CoreException(ErrorCode.AccountNotActive, "Account is not active");
-            
-            return Task.CompletedTask;
         }
     }
 }
