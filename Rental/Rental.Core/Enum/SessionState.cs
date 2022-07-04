@@ -4,6 +4,7 @@
     {
         NotActive = 0,
         Active,
-        NotAuthorized
+        NotAuthorized,
+        Expired
     }
 }

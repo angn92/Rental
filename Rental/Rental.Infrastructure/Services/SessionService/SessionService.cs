@@ -34,6 +34,9 @@ namespace Rental.Infrastructure.Services.SessionService
         {
             var session = context.Sessions.Where(x => x.Customer.Username == username).ToList();
 
+            if(!session.Any())
+                return;
+
             context.Remove(session);
             await context.SaveChangesAsync();
         }

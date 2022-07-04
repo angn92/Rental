@@ -30,7 +30,7 @@ namespace Rental.Infrastructure.Handlers.Sessions
             var customer = await _customerService.GetCustomerAsync(command.Username);
 
             // Do not allow create session if customer has blocked or not active account 
-            await _customerService.ValidateCustomerAccountAsync(customer);
+            _customerService.ValidateCustomerAccountAsync(customer);
 
             // If customer has assigned other session remove them all
             await _sessionService.RemoveAllSession(command.Username);
@@ -51,7 +51,7 @@ namespace Rental.Infrastructure.Handlers.Sessions
 
         private static int GenerateNewSession()
         {
-            return RandomNumberGenerator.GetInt32(100000, 999999);
+            return RandomNumberGenerator.GetInt32(100000000, 999999999);
         }
     }
 }
