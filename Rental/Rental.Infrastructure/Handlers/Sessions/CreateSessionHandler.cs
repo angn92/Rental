@@ -7,6 +7,7 @@ using Rental.Core.Validation;
 using Rental.Infrastructure.EF;
 using System.Security.Cryptography;
 using Rental.Core.Domain;
+using Rental.Core.Enum;
 
 namespace Rental.Infrastructure.Handlers.Sessions
 {
@@ -37,7 +38,7 @@ namespace Rental.Infrastructure.Handlers.Sessions
 
             var sessionId = GenerateNewSession();
 
-            var session = new Session(sessionId, customer);
+            var session = new Session(sessionId, customer, SessionState.Active);
 
             var expirationDate =  session.GenerationDate;
 

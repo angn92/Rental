@@ -41,10 +41,10 @@ namespace Rental.Core.Domain
         {
         }
 
-        public Session([NotNull] int sessionId, [NotNull] Customer customer)
+        public Session([NotNull] int sessionId, [NotNull] Customer customer, [NotNull] SessionState sessionState)
         {
             SessionId = sessionId;
-            State = SessionState.NotAuthorized;
+            State = sessionState;
             UpdateLastAccessDate();
             GenerationDate = DateTime.UtcNow;
             Customer = customer;

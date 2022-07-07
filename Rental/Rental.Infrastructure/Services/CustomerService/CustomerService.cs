@@ -33,7 +33,7 @@ namespace Rental.Infrastructure.Services.CustomerService
             var customer = await _context.Customers.SingleOrDefaultAsync(x => x.Username == username);
 
             if (customer is null)
-                throw new CoreException(ErrorCode.UserNotExist, $"This user {username} does not exist.");
+                throw new CoreException(ErrorCode.UserNotExist, $"User {username} does not exist.");
 
             return customer;
         }
@@ -52,15 +52,10 @@ namespace Rental.Infrastructure.Services.CustomerService
         /// <param name="email"></param>
         /// <param name="phoneNumber"></param>
         /// <returns></returns>
-        public async Task RegisterAsync([NotNull] string firstName, [NotNull] string lastName, [NotNull] string username,
-                                        [NotNull] string email, [NotNull] string phoneNumber)
+        public async Task<Customer> RegisterAsync([NotNull] string firstName, [NotNull] string lastName, [NotNull] string username,
+                                        [NotNull] string email, [CanBeNull] string phoneNumber)
         {
-            var customer = await _context.Customers.SingleOrDefaultAsync(x => x.Username == username);
-
-            if (customer != null)
-            {
-                throw new CoreException(ErrorCode.UsernameExist, $"Username {customer.Username} already exist.");
-            }
+            Customer customer;
 
             try
             {
@@ -74,6 +69,8 @@ namespace Rental.Infrastructure.Services.CustomerService
             }
 
             await _context.SaveChangesAsync();
+
+            return customer;
         }
 
         public async Task<bool> CheckIfExist([NotNull] string username)

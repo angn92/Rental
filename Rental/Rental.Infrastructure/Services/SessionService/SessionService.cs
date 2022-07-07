@@ -25,6 +25,16 @@ namespace Rental.Infrastructure.Services.SessionService
             _userHelper = userHelper;
         }
 
+        public async Task<Session> CreateNotAuthorizeSession([NotNull] Customer customer)
+        {
+            var session = new Session(GenerateNewIdSession(), customer, SessionState.NotAuthorized);
+
+            context.Add(session);
+            await context.SaveChangesAsync();
+
+            return session;
+        }
+
         public async Task<Session> GetSessionAsync([NotNull] int idSession)
         {
             return await context.Sessions.FirstOrDefaultAsync(x => x.SessionId == idSession);
@@ -54,9 +64,9 @@ namespace Rental.Infrastructure.Services.SessionService
             await context.SaveChangesAsync();
         }
 
-        private int GenerateNewSession()
+        private static int GenerateNewIdSession()
         {
-            return RandomNumberGenerator.GetInt32(100000, 999999);
+            return RandomNumberGenerator.GetInt32(100000000, 999999999);
         }
     }
 }
