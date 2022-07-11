@@ -14,6 +14,7 @@ namespace Rental.Infrastructure.EF
         public virtual DbSet<Category> Categories { get; set; }
         public virtual DbSet<Product> Products { get; set; }
         public virtual DbSet<Session> Sessions { get; set; }
+        public virtual DbSet<Dictionary> Dictionaries { get; set; }
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
@@ -50,6 +51,10 @@ namespace Rental.Infrastructure.EF
             modelBuilder.Entity<Product>()
                     .HasOne<Category>(c => c.Category)
                     .WithMany(p => p.Products);
+
+            modelBuilder.Entity<Dictionary>()
+                    .Property<string>("Value")
+                    .HasMaxLength(255);
         }
 
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)

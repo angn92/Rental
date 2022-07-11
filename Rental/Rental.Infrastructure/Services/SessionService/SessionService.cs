@@ -25,7 +25,7 @@ namespace Rental.Infrastructure.Services.SessionService
             _userHelper = userHelper;
         }
 
-        public async Task<Session> CreateNotAuthorizeSession([NotNull] Customer customer)
+        public async Task<Session> CreateNotAuthorizedSession([NotNull] Customer customer)
         {
             var session = new Session(GenerateNewIdSession(), customer, SessionState.NotAuthorized);
 

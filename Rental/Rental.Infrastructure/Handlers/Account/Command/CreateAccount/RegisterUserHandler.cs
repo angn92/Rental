@@ -43,7 +43,7 @@ namespace Rental.Infrastructure.Handlers.Account.Command.CreateAccount
 
                 var customer = await _customerService.RegisterAsync(command.FirstName, command.LastName, command.Username, command.Email, command.PhoneNumber);
 
-                var customerSession = await _sessionService.CreateNotAuthorizeSession(customer);
+                var customerSession = await _sessionService.CreateNotAuthorizedSession(customer);
             }
             catch (Exception ex)
             {

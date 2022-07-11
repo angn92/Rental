@@ -15,6 +15,6 @@ namespace Rental.Infrastructure.Services.SessionService
         // Remove all sessions for given customer if any exists. 
         Task RemoveAllSession([NotNull] string username);
 
-        Task<Session> CreateNotAuthorizeSession([NotNull] Customer username);
+        Task<Session> CreateNotAuthorizedSession([NotNull] Customer username);
     }
 }
