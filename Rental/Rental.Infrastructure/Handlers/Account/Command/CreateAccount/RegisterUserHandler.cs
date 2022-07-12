@@ -1,7 +1,9 @@
-﻿using Microsoft.Extensions.Options;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Rental.Core.Validation;
 using Rental.Infrastructure.Command;
 using Rental.Infrastructure.Configuration;
+using Rental.Infrastructure.EF;
 using Rental.Infrastructure.Exceptions;
 using Rental.Infrastructure.Helpers;
 using Rental.Infrastructure.Services.CustomerService;
@@ -18,14 +20,16 @@ namespace Rental.Infrastructure.Handlers.Account.Command.CreateAccount
         private readonly IOptions<ConfigurationOptions> _options;
         private readonly IEmailHelper _emailHelper;
         private readonly ISessionService _sessionService;
+        private readonly ApplicationDbContext _context;
 
         public RegisterUserHandler(ICustomerService customerService, IOptions<ConfigurationOptions> options, IEmailHelper emailHelper,
-                                    ISessionService sessionService)
+                                    ISessionService sessionService, ApplicationDbContext context)
         {
             _customerService = customerService;
             _options = options;
             _emailHelper = emailHelper;
             _sessionService = sessionService;
+            _context = context;
         }
 
         public async ValueTask HandleAsync(RegisterCustomer command, CancellationToken cancellationToken = default)
@@ -44,6 +48,21 @@ namespace Rental.Infrastructure.Handlers.Account.Command.CreateAccount
                 var customer = await _customerService.RegisterAsync(command.FirstName, command.LastName, command.Username, command.Email, command.PhoneNumber);
 
                 var customerSession = await _sessionService.CreateNotAuthorizedSession(customer);
+
+                var message = _context.Dictionaries.FirstOrDefaultAsync(x => x.Name == "RegisterEmail", cancellationToken);
+
+                if (message == null)
+                    throw new CoreException(ErrorCode.IncorrectArgument, $"Given parameter does not exist.");
+
+                var prepareEmail = new EmailConfiguration
+                {
+                    From = "test@email.com",
+                    To = "customer@email.com",
+                    Subject = "Register new account",
+                    Message = "Just now you created new account in our application. Thanks"
+                };
+
+
             }
             catch (Exception ex)
             {

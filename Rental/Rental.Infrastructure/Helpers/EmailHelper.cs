@@ -1,4 +1,7 @@
 ﻿using JetBrains.Annotations;
+using Microsoft.Extensions.Options;
+using MimeKit;
+using Rental.Infrastructure.Configuration;
 using Rental.Infrastructure.EF;
 using Rental.Infrastructure.Exceptions;
 using System;
@@ -11,21 +14,33 @@ namespace Rental.Infrastructure.Helpers
     public interface IEmailHelper
     {
         void ValidateEmail([NotNull] string email);
-        Task SendEmail([NotNull] string receiverEmail, [NotNull] string subject, [CanBeNull] string content = null);
+        void SendEmail([NotNull] EmailConfiguration emailConfiguration);
     }
 
     public class EmailHelper : IEmailHelper
     {
         private readonly ApplicationDbContext _context;
+        private readonly IOptions<ConfigurationOptions> _options;
 
-        public EmailHelper(ApplicationDbContext context)
+        public EmailHelper(ApplicationDbContext context, IOptions<ConfigurationOptions> options)
         {
             _context = context;
+            _options = options;
         }
 
-        public Task SendEmail([NotNull] string receiverEmail, [NotNull] string subject, [CanBeNull] string content = null)
+        public void SendEmail([NotNull] EmailConfiguration emailConfiguration)
         {
-            throw new NotImplementedException();
+            var emailMessage = new MimeMessage();
+
+            emailMessage.From.Add(MailboxAddress.Parse(emailConfiguration.From));
+            emailMessage.To.Add(MailboxAddress.Parse(emailConfiguration.To));
+            emailMessage.Subject = emailConfiguration.Subject;
+            emailMessage.Body = new TextPart(MimeKit.Text.TextFormat.Text) { Text = emailConfiguration.Message };
+
+            if (!_options.Value.SendRealEmail)
+                return;
+
+            //Send real email
         }
 
         public void ValidateEmail([NotNull] string email)
