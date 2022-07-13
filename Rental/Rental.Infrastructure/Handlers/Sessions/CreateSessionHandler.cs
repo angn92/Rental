@@ -38,9 +38,12 @@ namespace Rental.Infrastructure.Handlers.Sessions
 
             var sessionId = GenerateNewSession();
 
-            var session = new Session(sessionId, customer, SessionState.Active);
+            var session = new Session(sessionId, customer, SessionState.NotAuthorized);
 
-            var expirationDate =  session.GenerationDate;
+            await _context.AddAsync(session);
+            await _context.SaveChangesAsync();
+
+            var expirationDate = session.GenerationDate;
 
             return new CreateSessionResponse
             {

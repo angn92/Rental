@@ -62,6 +62,7 @@ namespace Rental.Infrastructure.Handlers.Account.Command.CreateAccount
                     Message = "Just now you created new account in our application. Thanks"
                 };
 
+                _emailHelper.SendEmail(prepareEmail);
 
             }
             catch (Exception ex)

@@ -7,7 +7,6 @@ using Rental.Infrastructure.Exceptions;
 using System;
 using System.Linq;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace Rental.Infrastructure.Helpers
 {
