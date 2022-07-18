@@ -33,17 +33,17 @@ namespace Rental.Infrastructure.Handlers.Account.Command.LoginSession
 
             try
             {
-                var session = sessionService.GetSessionAsync(request.SessionId).Result;
+                var session = await sessionService.GetSessionAsync(request.SessionId);
 
-                var customer = customerService.GetCustomerAsync(command.Request.Username).Result;
+                var customer = await customerService.GetCustomerAsync(command.Request.Username);
 
                 customerService.ValidateCustomerAccountAsync(customer);
 
-                var password = passwordHelper.GetActivePassword(customer).Result;
+                var password = await passwordHelper.GetActivePassword(customer);
 
                 //Check input password
                 passwordHelper.ComaprePasswords(password, request.Password);
-
+               
                 session.State = SessionState.Active;
                 session.UpdateLastAccessDate();
 
