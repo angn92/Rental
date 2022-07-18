@@ -74,6 +74,13 @@ namespace Rental.Api.Controllers
             return await _commandDispatcher.DispatchAsync<CreateSessionCommand, CreateSessionResponse>(command);
         }
 
+        [HttpPut("session/authentication/{sessionId}")]
+        public async Task<AuthenticationSessionResponse> LogInSession([FromRoute][NotNull] string sessionId)
+        {
+            var command = new 
+        }
+
+
         /// <summary>
         /// Change password for customer account.
         /// </summary>
