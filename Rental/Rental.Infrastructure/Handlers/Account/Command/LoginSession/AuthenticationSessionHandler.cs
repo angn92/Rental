@@ -12,15 +12,12 @@ namespace Rental.Infrastructure.Handlers.Account.Command.LoginSession
 {
     public class AuthenticationSessionHandler : ICommandHandler<AuthenticationSessionCommand, AuthenticationSessionResponse>
     {
-        private readonly IUserHelper userHelper;
         private readonly ICustomerService customerService;
         private readonly IPasswordHelper passwordHelper;
         private readonly ISessionService sessionService;
 
-        public AuthenticationSessionHandler(IUserHelper userHelper, ICustomerService customerService, IPasswordHelper passwordHelper,
-                                            ISessionService sessionService)
+        public AuthenticationSessionHandler(ICustomerService customerService, IPasswordHelper passwordHelper, ISessionService sessionService)
         {
-            this.userHelper = userHelper;
             this.customerService = customerService;
             this.passwordHelper = passwordHelper;
             this.sessionService = sessionService;
