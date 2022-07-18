@@ -27,11 +27,11 @@ namespace Rental.Infrastructure.Helpers
             await context.SaveChangesAsync();
         }
 
-        public string CheckAccountStatus(Customer user)
+        public string CheckAccountStatus(Customer customer)
         {
             string status = null;
 
-            switch (user.Status)
+            switch (customer.Status)
             {
                 case AccountStatus.Active:
                     status = AccountStatus.Active.ToString();

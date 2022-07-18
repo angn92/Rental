@@ -6,10 +6,10 @@
         public static string EnumMapError => "could_not_be_mapped";
 
         /// <summary>
-        /// User account error
+        /// Customer account error
         /// </summary>
         public static string UsernameExist => "username_exist";
-        public static string UserNotExist => "user_not_exist";
+        public static string UserNotExist => "customer_not_exist";
         public static string AccountBlocked => "account_is_blocked";
         public static string AccountNotActive => "account_is_not_active";
 

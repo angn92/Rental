@@ -6,7 +6,7 @@ namespace Rental.Infrastructure.Handlers.Account.Command.LoginSession
     public class AuthenticationSessionResponse
     {
         [JsonProperty("SessionId")]
-        public string SessionId { get; set; }
+        public int SessionId { get; set; }
 
         [JsonProperty("SessionState")]
         public string SessionState { get; set; }

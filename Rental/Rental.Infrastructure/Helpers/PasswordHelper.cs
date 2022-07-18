@@ -31,7 +31,7 @@ namespace Rental.Infrastructure.Helpers
         public void ComaprePasswords([NotNull] Password currentPassword, [NotNull] string hashNewPassword)
         {
             if (currentPassword.Hash.Equals(hashNewPassword))
-                throw new CoreException(ErrorCode.PasswordIncorrect, "Given password is the same like old. Choose another.");
+                throw new CoreException(ErrorCode.PasswordIncorrect, "Given password is the same like old password.");
         }
 
         public async Task<Password> GetActivePassword([NotNull] Customer customer)

@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using JetBrains.Annotations;
+using Newtonsoft.Json;
 using Rental.Infrastructure.Command;
 
 namespace Rental.Infrastructure.Handlers.Account.Command.LoginSession
@@ -11,12 +12,14 @@ namespace Rental.Infrastructure.Handlers.Account.Command.LoginSession
     public class AuthenticationSessionRequest
     {
         [JsonProperty("SessionId")]
-        public string SessionId { get; set; }
+        public int SessionId { get; set; }
 
         [JsonProperty("Username")]
+        [NotNull]
         public string Username { get; set; }
 
         [JsonProperty("Password")]
+        [NotNull]
         public string Password { get; set; }
 
     }
