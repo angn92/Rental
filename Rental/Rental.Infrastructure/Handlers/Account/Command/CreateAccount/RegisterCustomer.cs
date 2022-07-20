@@ -19,5 +19,8 @@ namespace Rental.Infrastructure.Handlers.Account.Command.CreateAccount
 
         [JsonProperty("phoneNumber", Required = Required.AllowNull)]
         public string PhoneNumber { get; set; }
+
+        [JsonProperty("password", Required = Required.Always)]
+        public string Password { get; set; }
     }
 }

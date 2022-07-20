@@ -25,15 +25,13 @@ namespace Rental.Infrastructure.Handlers.Account.Command.LoginSession
 
         public async ValueTask<AuthenticationSessionResponse> HandleAsync(AuthenticationSessionCommand command, CancellationToken cancellationToken = default)
         {
-            var request = command.Request;
-
-            ValidationParameter.FailIfNull(nameof(request));
+            ValidationParameter.FailIfNull(nameof(command));
 
             AuthenticationSessionResponse authSessionResponse = null;
 
             try
             {
-                var session = await sessionService.GetSessionAsync(request.SessionId);
+                //var session = await sessionService.GetSessionAsync(request.SessionId);
 
                 var customer = await customerService.GetCustomerAsync(command.Request.Username);
 
@@ -42,16 +40,16 @@ namespace Rental.Infrastructure.Handlers.Account.Command.LoginSession
                 var password = await passwordHelper.GetActivePassword(customer);
 
                 //Check input password
-                passwordHelper.ComaprePasswords(password, request.Password);
+                passwordHelper.ComaprePasswords(password, command.Request.Password);
                
-                session.State = SessionState.Active;
-                session.UpdateLastAccessDate();
+                //session.State = SessionState.Active;
+                //session.UpdateLastAccessDate();
 
                 authSessionResponse = new AuthenticationSessionResponse
                 {
-                    SessionId = session.SessionId,
-                    SessionState = session.State.ToString(),
-                    ExpirationTime = session.LastAccessDate.AddMinutes(10)
+                    //SessionId = session.SessionId,
+                    //SessionState = session.State.ToString(),
+                    //ExpirationTime = session.LastAccessDate.AddMinutes(10)
                 };
                 
             }

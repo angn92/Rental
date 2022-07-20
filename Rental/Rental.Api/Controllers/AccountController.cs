@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Rental.Core.Validation;
 using Rental.Infrastructure.Command;
 using Rental.Infrastructure.Handlers.Account.Command.CreateAccount;
+using Rental.Infrastructure.Handlers.Account.Command.LoginSession;
 using Rental.Infrastructure.Handlers.Account.Commmand.ChangeStatus;
 using Rental.Infrastructure.Handlers.Account.Query.AccountDetails;
 using Rental.Infrastructure.Handlers.Password;
@@ -75,9 +76,15 @@ namespace Rental.Api.Controllers
         }
 
         [HttpPut("session/authentication/{sessionId}")]
-        public async Task<AuthenticationSessionResponse> LogInSession([FromRoute][NotNull] string sessionId)
+        public async Task<AuthenticationSessionResponse> LogInSession([FromRoute] string sessionId, [NotNull] AuthenticationSessionRequest request)
         {
-            var command = new 
+            var command = new AuthenticationSessionCommand
+            {
+                Request = request,
+                SessionId = sessionId
+            };
+
+            return await _commandDispatcher.DispatchAsync<AuthenticationSessionCommand, AuthenticationSessionResponse>(command);
         }
 
 

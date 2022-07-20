@@ -16,40 +16,42 @@ namespace Rental.Infrastructure.Handlers.Account.Command.CreateAccount
 {
     public class RegisterUserHandler : ICommandHandler<RegisterCustomer>
     {
-        private readonly ICustomerService _customerService;
-        private readonly IOptions<ConfigurationOptions> _options;
-        private readonly IEmailHelper _emailHelper;
-        private readonly ISessionService _sessionService;
-        private readonly ApplicationDbContext _context;
+        private readonly ICustomerService customerService;
+        private readonly IOptions<ConfigurationOptions> options;
+        private readonly IEmailHelper emailHelper;
+        private readonly ISessionService sessionService;
+        private readonly ApplicationDbContext context;
+        private readonly IPasswordHelper passwordHelper;
 
         public RegisterUserHandler(ICustomerService customerService, IOptions<ConfigurationOptions> options, IEmailHelper emailHelper,
-                                    ISessionService sessionService, ApplicationDbContext context)
+                                    ISessionService sessionService, ApplicationDbContext context, IPasswordHelper passwordHelper)
         {
-            _customerService = customerService;
-            _options = options;
-            _emailHelper = emailHelper;
-            _sessionService = sessionService;
-            _context = context;
+            this.customerService = customerService;
+            this.options = options;
+            this.emailHelper = emailHelper;
+            this.sessionService = sessionService;
+            this.context = context;
+            this.passwordHelper = passwordHelper;
         }
 
         public async ValueTask HandleAsync(RegisterCustomer command, CancellationToken cancellationToken = default)
         {
             ValidationParameter.FailIfNull(command);
 
-            var customerExist = await _customerService.CheckIfExist(command.Username);
+            var customerExist = await customerService.CheckIfExist(command.Username);
 
             if (customerExist)
                 throw new CoreException(ErrorCode.UsernameExist, $"This name {command.Username} is use.");
 
             try
             {
-                _emailHelper.ValidateEmail(command.Email);
+                var customer = await customerService.RegisterAsync(command.FirstName, command.LastName, command.Username, command.Email, command.PhoneNumber);
 
-                var customer = await _customerService.RegisterAsync(command.FirstName, command.LastName, command.Username, command.Email, command.PhoneNumber);
+                var customerSession = await sessionService.CreateNotAuthorizedSession(customer);
 
-                var customerSession = await _sessionService.CreateNotAuthorizedSession(customer);
+                await passwordHelper.SetPassword(command.Password, customer);
 
-                var message = _context.Dictionaries.FirstOrDefaultAsync(x => x.Name == "RegisterEmail", cancellationToken);
+                var message = context.Dictionaries.FirstOrDefaultAsync(x => x.Name == "RegisterEmail", cancellationToken);
 
                 if (message == null)
                     throw new CoreException(ErrorCode.IncorrectArgument, $"Given parameter does not exist.");
@@ -62,7 +64,7 @@ namespace Rental.Infrastructure.Handlers.Account.Command.CreateAccount
                     Message = "Just now you created new account in our application. Thanks"
                 };
 
-                _emailHelper.SendEmail(prepareEmail);
+                emailHelper.SendEmail(prepareEmail);
 
             }
             catch (Exception ex)
