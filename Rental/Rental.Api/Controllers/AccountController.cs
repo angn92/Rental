@@ -50,12 +50,17 @@ namespace Rental.Api.Controllers
         /// <summary>
         /// Return customer details.
         /// </summary>
-        /// <param name="query">Give a nick for user.</param>
+        /// <param name="username"></param>
         /// <returns></returns>
-        [HttpGet("customer/details")]
+        [HttpGet("customer/details/{username}")]
         
-        public async Task<GetCustomerDetailsRs> GetUserDetails([FromRoute][NotNull] GetCustomerDetailsRq query)
+        public async Task<GetCustomerDetailsRs> GetUserDetails([FromRoute][NotNull] string username)
         {
+            var query = new GetCustomerDetailsRq
+            {
+                Username = username
+            };
+
             return await _queryDispatcher.DispatchAsync<GetCustomerDetailsRq, GetCustomerDetailsRs>(query);
         }
 
@@ -75,8 +80,14 @@ namespace Rental.Api.Controllers
             return await _commandDispatcher.DispatchAsync<CreateSessionCommand, CreateSessionResponse>(command);
         }
 
+        /// <summary>
+        /// Authenticat session
+        /// </summary>
+        /// <param name="sessionId"></param>
+        /// <param name="request"></param>
+        /// <returns></returns>
         [HttpPut("session/authentication/{sessionId}")]
-        public async Task<AuthenticationSessionResponse> LogInSession([FromRoute] string sessionId, [NotNull] AuthenticationSessionRequest request)
+        public async Task<AuthenticationSessionResponse> LogInSession([FromRoute] int sessionId, [NotNull] AuthenticationSessionRequest request)
         {
             var command = new AuthenticationSessionCommand
             {
