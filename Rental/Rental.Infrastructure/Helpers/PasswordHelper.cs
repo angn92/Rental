@@ -30,8 +30,8 @@ namespace Rental.Infrastructure.Helpers
 
         public void ComaprePasswords([NotNull] Password currentPassword, [NotNull] string hashNewPassword)
         {
-            if (currentPassword.Hash.Equals(hashNewPassword))
-                throw new CoreException(ErrorCode.PasswordIncorrect, "Given password is the same like old password.");
+            if (BCrypt.Net.BCrypt.Verify(hashNewPassword, currentPassword.Hash))
+                throw new CoreException(ErrorCode.PasswordIncorrect, "Given password is incorrect.");
         }
 
         public async Task<Password> GetActivePassword([NotNull] Customer customer)

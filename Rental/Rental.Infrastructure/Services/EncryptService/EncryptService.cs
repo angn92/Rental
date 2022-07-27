@@ -29,7 +29,7 @@ namespace Rental.Infrastructure.Services.EncryptService
             if (String.IsNullOrWhiteSpace(salt))
                 throw new ArgumentException("Can not generate hash from empty argument", nameof(salt));
 
-            var hash = Convert.ToBase64String(KeyDerivation.Pbkdf2(password, GetBytes(salt), KeyDerivationPrf.HMACSHA512, 10000, 256 / 8));
+            var hash = BCrypt.Net.BCrypt.HashPassword(password + salt);
 
             return hash;
         }

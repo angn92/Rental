@@ -1,6 +1,7 @@
 ﻿using Rental.Core.Enum;
 using Rental.Core.Validation;
 using Rental.Infrastructure.Command;
+using Rental.Infrastructure.EF;
 using Rental.Infrastructure.Helpers;
 using Rental.Infrastructure.Services.CustomerService;
 using Rental.Infrastructure.Services.SessionService;
@@ -15,12 +16,15 @@ namespace Rental.Infrastructure.Handlers.Account.Command.LoginSession
         private readonly ICustomerService customerService;
         private readonly IPasswordHelper passwordHelper;
         private readonly ISessionService sessionService;
+        private readonly ApplicationDbContext context;
 
-        public AuthenticationSessionHandler(ICustomerService customerService, IPasswordHelper passwordHelper, ISessionService sessionService)
+        public AuthenticationSessionHandler(ICustomerService customerService, IPasswordHelper passwordHelper, ISessionService sessionService,
+                                            ApplicationDbContext context)
         {
             this.customerService = customerService;
             this.passwordHelper = passwordHelper;
             this.sessionService = sessionService;
+            this.context = context;
         }
 
         public async ValueTask<AuthenticationSessionResponse> HandleAsync(AuthenticationSessionCommand command, CancellationToken cancellationToken = default)
@@ -51,7 +55,8 @@ namespace Rental.Infrastructure.Handlers.Account.Command.LoginSession
                     SessionState = session.State.ToString(),
                     ExpirationTime = session.LastAccessDate.AddMinutes(10)
                 };
-                
+
+                await context.SaveChangesAsync();
             }
             catch (Exception ex)
             {
