@@ -17,6 +17,12 @@ namespace Rental.Core.Domain
         public virtual DateTime? LastSuccessfulLoginDate { get; set; }
         public virtual DateTime? FailedLoginDate { get; set; }
 
+        /// <summary>
+        /// Password marker indicated that password is new. When is new user after correct first login will change status on Active. 
+        /// Default password has status not active
+        /// </summary>
+        public virtual bool NewPassword { get; set; }
+
         protected Password()
         {
         }
@@ -26,8 +32,9 @@ namespace Rental.Core.Domain
             PasswordId = Guid.NewGuid().ToString();
             SetPasswordHash(hash);
             SetPasswordSalt(salt);
-            ActivatePassword();
+            SetPasswordNotActive();
             Customer = customer;
+            NewPassword = true;
         }
 
         public void SetPasswordHash(string hash)
@@ -48,6 +55,17 @@ namespace Rental.Core.Domain
         public void BlockadePassword()
         {
             Status = PasswordStatus.Blocked;
+        }
+
+        //After first correct log in password will change status on Active
+        public void SetPasswordNotActive()
+        {
+            Status = PasswordStatus.NotActive;
+        }
+
+        public void ChangePasswordMarker()
+        {
+            NewPassword = false;
         }
     }
 }

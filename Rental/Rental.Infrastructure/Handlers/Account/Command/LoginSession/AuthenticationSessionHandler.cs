@@ -45,6 +45,8 @@ namespace Rental.Infrastructure.Handlers.Account.Command.LoginSession
                 //Check input password
                 passwordHelper.ComaprePasswords(password, command.Request.Password);
 
+                password.ChangePasswordMarker();
+
                 session.State = SessionState.Active;
                 session.UpdateLastAccessDate();
 

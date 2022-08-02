@@ -42,9 +42,9 @@ namespace Rental.Infrastructure.Services.SessionService
 
         public async Task RemoveAllSession([NotNull] string username)
         {
-            var session = context.Sessions.Where(x => x.Customer.Username == username).ToList();
+            var session = await context.Sessions.Where(x => x.Customer.Username == username).FirstOrDefaultAsync();
 
-            if(!session.Any())
+            if(session is null)
                 return;
 
             context.Remove(session);

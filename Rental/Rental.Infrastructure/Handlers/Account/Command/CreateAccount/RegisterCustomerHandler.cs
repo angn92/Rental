@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace Rental.Infrastructure.Handlers.Account.Command.CreateAccount
 {
-    public class RegisterUserHandler : ICommandHandler<RegisterCustomer>
+    public class RegisterCustomerHandler : ICommandHandler<RegisterCustomer>
     {
         private readonly ICustomerService customerService;
         private readonly IOptions<ConfigurationOptions> options;
@@ -23,7 +23,7 @@ namespace Rental.Infrastructure.Handlers.Account.Command.CreateAccount
         private readonly ApplicationDbContext context;
         private readonly IPasswordHelper passwordHelper;
 
-        public RegisterUserHandler(ICustomerService customerService, IOptions<ConfigurationOptions> options, IEmailHelper emailHelper,
+        public RegisterCustomerHandler(ICustomerService customerService, IOptions<ConfigurationOptions> options, IEmailHelper emailHelper,
                                     ISessionService sessionService, ApplicationDbContext context, IPasswordHelper passwordHelper)
         {
             this.customerService = customerService;
