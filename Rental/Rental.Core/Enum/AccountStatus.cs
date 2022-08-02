@@ -2,8 +2,8 @@
 {
     public enum AccountStatus
     {
-        Active,
         NotActive,
-        Blocked
+        Blocked,
+        Active
     }
 }

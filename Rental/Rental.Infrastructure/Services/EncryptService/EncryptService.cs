@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Cryptography.KeyDerivation;
-using System;
+﻿using System;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -9,11 +8,8 @@ namespace Rental.Infrastructure.Services.EncryptService
     {
         private static readonly int Size = 16;
 
-        public string GetSalt(string password)
+        public string GenerateSalt()
         {
-            if (String.IsNullOrWhiteSpace(password))
-                throw new ArgumentException("Can not generate salt from empty argument", nameof(password));
-
             var salt = new byte[Size];
             var rng = RandomNumberGenerator.Create();
             rng.GetBytes(salt);
@@ -21,7 +17,7 @@ namespace Rental.Infrastructure.Services.EncryptService
             return Convert.ToBase64String(salt);
         }
 
-        public string GetHash(string password, string salt)
+        public string GenerateHash(string password, string salt)
         {
             if (String.IsNullOrWhiteSpace(password))
                 throw new ArgumentException("Can not generate hash from empty argument", nameof(password));

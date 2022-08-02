@@ -30,7 +30,7 @@ namespace Rental.Infrastructure.Helpers
 
         public void ComaprePasswords([NotNull] Password currentPassword, [NotNull] string hashNewPassword)
         {
-            if (BCrypt.Net.BCrypt.Verify(hashNewPassword, currentPassword.Hash))
+            if (!BCrypt.Net.BCrypt.Verify(hashNewPassword + currentPassword.Salt, currentPassword.Hash))
                 throw new CoreException(ErrorCode.PasswordIncorrect, "Given password is incorrect.");
         }
 
@@ -60,8 +60,9 @@ namespace Rental.Infrastructure.Helpers
 
         public async Task SetPassword([NotNull] string password, [NotNull] Customer customer)
         {
-            var salt = _encrypt.GetSalt(password);
-            var hash = _encrypt.GetHash(password, salt);
+            var salt = _encrypt.GenerateSalt();
+
+            var hash = _encrypt.GenerateHash(password, salt);
 
             var newPassword = new Password(hash, salt, customer);
 

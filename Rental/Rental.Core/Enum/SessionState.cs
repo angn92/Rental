@@ -2,9 +2,8 @@
 {
     public enum SessionState
     {
-        NotActive,
-        Active,
         NotAuthorized,
-        Expired
+        Expired,
+        Active,
     }
 }

@@ -31,8 +31,7 @@ namespace Rental.Infrastructure.Handlers.Account.Command.LoginSession
         {
             ValidationParameter.FailIfNull(nameof(command));
 
-            AuthenticationSessionResponse authSessionResponse = null;
-
+            AuthenticationSessionResponse authSessionResponse;
             try
             {
                 var session = await sessionService.GetSessionAsync(command.SessionId);
@@ -60,7 +59,7 @@ namespace Rental.Infrastructure.Handlers.Account.Command.LoginSession
             }
             catch (Exception ex)
             {
-                // log error
+                throw new Exception(ex.Message, ex);
             }
 
             return authSessionResponse;

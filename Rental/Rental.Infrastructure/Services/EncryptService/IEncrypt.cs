@@ -2,7 +2,7 @@
 {
     public interface IEncrypt
     {
-        string GetHash(string password, string salt);
-        string GetSalt(string password);
+        string GenerateHash(string password, string salt);
+        string GenerateSalt();
     }
 }

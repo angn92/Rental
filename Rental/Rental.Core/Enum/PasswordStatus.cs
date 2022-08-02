@@ -2,8 +2,9 @@
 {
     public enum PasswordStatus
     {
-        Active,
+        NotActive,
         Blocked,
-        Expired
+        Expired,
+        Active
     }
 }
