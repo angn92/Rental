@@ -11,6 +11,9 @@ using Rental.Infrastructure.Configuration;
 using Rental.Infrastructure.EF;
 using Rental.Infrastructure.IoC;
 using RentalCommon.Headers;
+using System;
+using System.IO;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -40,7 +43,14 @@ else
 
 
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+
+//Configuration for comments in swagger GUI
+builder.Services.AddSwaggerGen(options =>
+{
+    var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
+});
+
 builder.Configuration.GetSection("Registration").Get<ConfigurationOptions>();
 
 var app = builder.Build();
