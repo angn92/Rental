@@ -22,9 +22,9 @@ namespace Rental.Infrastructure.Helpers
     {
         public void CheckSessionStatus(Session session)
         {
-            if(session.State == SessionState.NotActive)
+            if(session.State == SessionState.NotAuthorized)
             {
-                throw new CoreException(ErrorCode.SessioNotActive, $"Given session {session.SessionId} is not active.");
+                throw new CoreException(ErrorCode.SessionNotAuthorized, $"Given session {session.SessionId} is not authorized yet.");
             }
         }
 
@@ -60,9 +60,6 @@ namespace Rental.Infrastructure.Helpers
 
             if (session == null)
                 throw new CoreException(ErrorCode.SessionDoesNotExist, "Session does not exist.");
-
-            if (session.State == SessionState.NotActive)
-                throw new CoreException(ErrorCode.SessioNotActive, $"Session {session.SessionId} is not active, should has status active.");
 
             if (session.State == SessionState.NotAuthorized)
                 throw new CoreException(ErrorCode.SessionNotAuthorized, $"Session {session.SessionId} is not authorized");
