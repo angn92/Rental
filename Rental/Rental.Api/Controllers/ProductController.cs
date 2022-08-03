@@ -19,20 +19,20 @@ namespace Rental.Api.Controllers
         }
 
         /// <summary>
-        /// Add new product to rental.
+        /// Add new product for customer to rental.
         /// </summary>
         /// <param name="request"></param>
-        /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        [HttpPost("/new/product")]
-        public async Task AddProductAsync([FromBody] [NotNull] ProductRequest request, [CanBeNull] CancellationToken cancellationToken = default)
+        [HttpPost("product")]
+        public async Task AddProductAsync([FromBody] [NotNull] ProductRequest request)
         {
             var command = new ProductRequest
             {
                 Name = request.Name,
                 Amount = request.Amount,
                 CategoryName = request.CategoryName,
-                Description = request.Description
+                Description = request.Description,
+                Username = request.Username
             };
 
             await commandDispacher.DispatchAsync(new AddProductCommand(command));

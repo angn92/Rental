@@ -15,16 +15,20 @@ namespace Rental.Infrastructure.Handlers.Product.Command
 
     public class ProductRequest
     {
-        [JsonProperty("Name")]
+        [JsonProperty("name")]
         public string Name { get; set; }
 
-        [JsonProperty("Description")]
+        [JsonProperty("description")]
         public string Description { get; set; }
 
-        [JsonProperty("Amount")]
+        [JsonProperty("amount")]
         public int Amount { get; set; }
 
-        [JsonProperty("CategoryName")]
+        [JsonProperty("categoryName")]
         public string CategoryName { get; set; }
+
+        [JsonProperty("username")]
+        public string Username { get; set; }
+
     }
 }

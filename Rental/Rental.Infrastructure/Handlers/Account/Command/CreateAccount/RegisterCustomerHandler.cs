@@ -51,7 +51,7 @@ namespace Rental.Infrastructure.Handlers.Account.Command.CreateAccount
 
                 await passwordHelper.SetPassword(command.Password, customer);
 
-                var message = context.Dictionaries.FirstOrDefaultAsync(x => x.Name == "RegisterEmail", cancellationToken);
+                var message = await context.Dictionaries.FirstOrDefaultAsync(x => x.Name == "RegisterEmail", cancellationToken);
 
                 if (message == null)
                     throw new CoreException(ErrorCode.IncorrectArgument, $"Given parameter does not exist.");

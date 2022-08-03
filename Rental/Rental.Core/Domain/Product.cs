@@ -19,7 +19,7 @@ namespace Rental.Core.Domain
         protected Product()
         {}
 
-        public Product([NotNull] string name, [NotNull] int amount, [NotNull] Category category)
+        public Product([NotNull] string name, [NotNull] int amount, [NotNull] Category category, [NotNull] Customer customer)
         {
             ProductId = Guid.NewGuid().ToString();
             SetName(name);
@@ -27,6 +27,7 @@ namespace Rental.Core.Domain
             QuantityAvailable = amount;
             SetAvailableStatus();
             Category = category;
+            Customer = customer;
         }
 
         public void SetName(string name)
