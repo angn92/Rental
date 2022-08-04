@@ -1,15 +1,14 @@
 ﻿using Newtonsoft.Json;
 using Rental.Infrastructure.Command;
 
-namespace Rental.Infrastructure.Handlers.Product.Command
+namespace Rental.Infrastructure.Handlers.Product.Command.NewProduct
 {
-    public class AddProductCommand : ICommand
+    public class ProductCommand : ICommand
     {
-        public AddProductCommand(ProductRequest request)
+        public ProductCommand(ProductRequest request)
         {
             Request = request;
         }
-
         public ProductRequest Request { get; }
     }
 
@@ -29,6 +28,5 @@ namespace Rental.Infrastructure.Handlers.Product.Command
 
         [JsonProperty("username")]
         public string Username { get; set; }
-
     }
 }

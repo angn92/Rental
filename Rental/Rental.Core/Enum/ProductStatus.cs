@@ -3,6 +3,7 @@
     public enum ProductStatus
     {
         Available = 1,
-        Reserved
+        Reserved,
+        Inaccessible
     }
 }

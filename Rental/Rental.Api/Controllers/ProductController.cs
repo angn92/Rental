@@ -1,7 +1,7 @@
 ﻿using JetBrains.Annotations;
 using Microsoft.AspNetCore.Mvc;
 using Rental.Infrastructure.Command;
-using Rental.Infrastructure.Handlers.Product.Command;
+using Rental.Infrastructure.Handlers.Product.Command.NewProduct;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -35,7 +35,7 @@ namespace Rental.Api.Controllers
                 Username = request.Username
             };
 
-            await commandDispacher.DispatchAsync(new AddProductCommand(command));
+            await commandDispacher.DispatchAsync(new ProductCommand(command));
         }
 
         //public async Task<ProductDetailsResponse> GetProductDetailsAsync([FromBody][NotNull] ProductDetailRequest request, [CanBeNull] CancellationToken = default)
