@@ -2,7 +2,8 @@
 using Microsoft.AspNetCore.Mvc;
 using Rental.Infrastructure.Command;
 using Rental.Infrastructure.Handlers.Product.Command.NewProduct;
-using System.Threading;
+using Rental.Infrastructure.Handlers.Product.Query.ProductDetails;
+using Rental.Infrastructure.Query;
 using System.Threading.Tasks;
 
 namespace Rental.Api.Controllers
@@ -12,10 +13,12 @@ namespace Rental.Api.Controllers
     public class ProductController : Controller
     {
         private readonly ICommandDispatcher commandDispacher;
+        private readonly IQueryDispatcher queryDispatcher;
 
-        public ProductController(ICommandDispatcher commandDispacher)
+        public ProductController(ICommandDispatcher commandDispacher, IQueryDispatcher queryDispatcher)
         {
             this.commandDispacher = commandDispacher;
+            this.queryDispatcher = queryDispatcher;
         }
 
         /// <summary>
@@ -38,9 +41,20 @@ namespace Rental.Api.Controllers
             await commandDispacher.DispatchAsync(new ProductCommand(command));
         }
 
-        //public async Task<ProductDetailsResponse> GetProductDetailsAsync([FromBody][NotNull] ProductDetailRequest request, [CanBeNull] CancellationToken = default)
-        //{
+        /// <summary>
+        /// Get product details.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpGet("product/{id}")]
+        public async Task<ProductDetailsResponse> GetProductDetailsAsync([FromRoute] [NotNull] string id)
+        {
+            var request = new ProductDetailRequest
+            {
+                ProductId = id
+            };
 
-        //}
+            return await queryDispatcher.DispatchAsync<ProductDetailRequest, ProductDetailsResponse>(request);
+        }
     }
 }

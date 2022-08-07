@@ -16,8 +16,7 @@ namespace Rental.Infrastructure.Handlers.Product.Command.NewProduct
         private readonly IProductHelper productHelper;
         private readonly ICustomerService customerService;
         private readonly ISessionHelper sessionHelper;
-
-        public ApplicationDbContext context { get; }
+        private readonly ApplicationDbContext context;
 
         public ProductCommandHandler([NotNull] ApplicationDbContext context, IProductHelper productHelper, ICustomerService customerService,
                     ISessionHelper sessionHelper)
@@ -36,9 +35,6 @@ namespace Rental.Infrastructure.Handlers.Product.Command.NewProduct
                 throw new CoreException(ErrorCode.IncorrectArgument, $"Value of {nameof(command.Request.Name)} in invalid.");
 
             var customer = await customerService.GetCustomerAsync(command.Request.Username);
-
-            if (customer == null)
-                throw new CoreException(ErrorCode.UserNotExist, $"Customer {command.Request.Username} does not exist.");
 
             var session = await sessionHelper.GetSessionAsync(context, customer);
 

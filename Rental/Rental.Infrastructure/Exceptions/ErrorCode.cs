@@ -40,8 +40,9 @@
         public static string PasswordIncorrect => "new_password_is_identical_like_old_password";
 
         /// <summary>
-        /// Product exist 
+        /// Product error
         /// </summary>
         public static string ProductExist => "product_exist";
+        public static string ProductNotExist => "product_not_exist";
     }
 }

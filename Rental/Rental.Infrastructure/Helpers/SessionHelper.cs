@@ -11,25 +11,28 @@ namespace Rental.Infrastructure.Helpers
 {
     public interface ISessionHelper
     {
-        void CheckSessionStatus(Session session);
-        bool SessionExpired(Session session);
+        SessionState CheckSessionStatus([NotNull] Session session);
+        bool SessionExpired([NotNull] Session session);
         void ValidateSession([NotNull] Session session);
         Task<Session> GetSessionAsync([NotNull] ApplicationDbContext context, [NotNull] Customer customer);
     }
 
     public class SessionHelper : ISessionHelper
     {
-        public void CheckSessionStatus(Session session)
+        public SessionState CheckSessionStatus([NotNull] Session session)
         {
             if(session.State == SessionState.NotAuthorized)
-            {
-                throw new CoreException(ErrorCode.SessionNotAuthorized, $"Given session {session.SessionId} is not authorized yet.");
-            }
+                return SessionState.NotAuthorized;
+
+            if (session.State == SessionState.Expired)
+                return SessionState.Expired;
+
+            return SessionState.Active;
         }
 
-        public bool SessionExpired(Session session)
+        public bool SessionExpired([NotNull] Session session)
         {
-            return true;// session.LastAccessDate.AddMinutes(5) < DateTime.UtcNow;
+            return session.LastAccessDate.AddMinutes(5) < DateTime.UtcNow;
         }
 
         public void ValidateSession([NotNull] Session session)

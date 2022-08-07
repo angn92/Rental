@@ -18,6 +18,8 @@ namespace Rental.Infrastructure.Helpers
         Task<StatusProduct> GetStatusProductAsync([NotNull] string name);
 
         Task ChangeProductStatusAsync([NotNull] string name);
+
+        Task<Product> GetProductDetailsAsync([NotNull] ApplicationDbContext context, [NotNull] string productId);
     }
 
     public class ProductHelper : IProductHelper
@@ -47,6 +49,16 @@ namespace Rental.Infrastructure.Helpers
         public async Task<StatusProduct> GetStatusProductAsync([NotNull] string name)
         {
             throw new System.NotImplementedException();
+        }
+
+        public async Task<Product> GetProductDetailsAsync([NotNull] ApplicationDbContext context, [NotNull] string productId)
+        {
+            var product = await context.Products.SingleOrDefaultAsync(x => x.ProductId == productId);
+
+            if (product == null)
+                throw new CoreException(ErrorCode.ProductNotExist, $"Product with id {productId} does not exist.");
+
+            return product;
         }
     }
 }
