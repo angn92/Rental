@@ -44,5 +44,6 @@
         /// </summary>
         public static string ProductExist => "product_exist";
         public static string ProductNotExist => "product_not_exist";
+        public static string ProductNotAvailable => "product_not_available";
     }
 }

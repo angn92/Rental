@@ -58,9 +58,9 @@ namespace Rental.Api.Controllers
             return await queryDispatcher.DispatchAsync<ProductDetailRequest, ProductDetailsResponse>(request);
         }
 
-        public async Task<ProductBookingResponse> BookingProductAsync([FromBody] ProductBookingRequest request)
-        {
+        //public async Task<ProductBookingResponse> BookingProductAsync([FromBody] ProductBookingRequest request)
+        //{
 
-        }
+        //}
     }
 }

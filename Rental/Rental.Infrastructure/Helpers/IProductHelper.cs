@@ -17,7 +17,7 @@ namespace Rental.Infrastructure.Helpers
 
         Task<StatusProduct> GetStatusProductAsync([NotNull] string name);
 
-        Task ChangeProductStatusAsync([NotNull] string name);
+        void MakeReservationProduct([NotNull] Product product);
 
         Task<Product> GetProductDetailsAsync([NotNull] ApplicationDbContext context, [NotNull] string productId);
     }
@@ -41,9 +41,9 @@ namespace Rental.Infrastructure.Helpers
                 throw new CoreException(ErrorCode.ProductExist, $"This product {name} exist in your board.");
         }
 
-        public async Task ChangeProductStatusAsync([NotNull] string name)
+        public void MakeReservationProduct([NotNull] Product product)
         {
-            throw new System.NotImplementedException();
+            product.SetReservedStatus();
         }
 
         public async Task<StatusProduct> GetStatusProductAsync([NotNull] string name)

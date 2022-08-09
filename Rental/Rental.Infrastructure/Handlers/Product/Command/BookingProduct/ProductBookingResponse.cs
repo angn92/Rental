@@ -18,7 +18,7 @@ namespace Rental.Infrastructure.Handlers.Product.Command.BookingProduct
         public int Amount { get; set; }
 
         [JsonProperty("numberDays")]
-        public int NumberDays { get; set; }
+        public TimeSpan? NumberDays { get; set; }
 
         [JsonProperty("owner")]
         public string Owner { get; set; }
