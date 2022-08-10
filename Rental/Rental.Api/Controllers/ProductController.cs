@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Rental.Infrastructure.Command;
 using Rental.Infrastructure.Handlers.Product.Command.BookingProduct;
+using Rental.Infrastructure.Handlers.Product.Command.Cancel;
 using Rental.Infrastructure.Handlers.Product.Command.NewProduct;
 using Rental.Infrastructure.Handlers.Product.Query.ProductDetails;
 using Rental.Infrastructure.Query;
@@ -58,9 +59,28 @@ namespace Rental.Api.Controllers
             return await queryDispatcher.DispatchAsync<ProductDetailRequest, ProductDetailsResponse>(request);
         }
 
-        //public async Task<ProductBookingResponse> BookingProductAsync([FromBody] ProductBookingRequest request)
-        //{
+        /// <summary>
+        /// Make a reservation product
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        [HttpPut]
+        public async Task<ProductBookingResponse> BookingProductAsync([FromBody] ProductBookingRequest request)
+        {
+            var command = new ProductBookingCommand(request);
 
-        //}
+            return await commandDispacher.DispatchAsync<ProductBookingCommand, ProductBookingResponse>(command);
+        }
+
+        /// <summary>
+        /// Cancel reservation for the borrowed product.
+        /// </summary>
+        /// <param name="command"></param>
+        /// <returns></returns>
+        [HttpPut]
+        public async Task CancelReservation([FromBody] CancelReservationCommand command)
+        {
+            await commandDispacher.DispatchAsync<CancelReservationCommand>(command);
+        }
     }
 }

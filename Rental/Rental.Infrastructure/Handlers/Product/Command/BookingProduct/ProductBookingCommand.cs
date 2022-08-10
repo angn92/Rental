@@ -7,6 +7,11 @@ namespace Rental.Infrastructure.Handlers.Product.Command.BookingProduct
     public class ProductBookingCommand : ICommand
     {
         public ProductBookingRequest Request { get; set; }
+
+        public ProductBookingCommand(ProductBookingRequest request)
+        {
+            Request = request;
+        }
     }
 
     public class ProductBookingRequest
