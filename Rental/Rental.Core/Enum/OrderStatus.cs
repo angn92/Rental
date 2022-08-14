@@ -8,7 +8,7 @@ namespace Rental.Core.Enum
 {
     public enum OrderStatus
     {
-        Created = 0,
+        Available = 0,
         Cancelled,
         Accepted,
         Finished

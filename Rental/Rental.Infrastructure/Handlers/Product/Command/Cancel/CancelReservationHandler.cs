@@ -14,11 +14,13 @@ namespace Rental.Infrastructure.Handlers.Product.Command.Cancel
     {
         private readonly ApplicationDbContext context;
         private readonly IProductHelper productHelper;
+        private readonly IOrderHelper orderHelper;
 
-        public CancelReservationHandler([NotNull] ApplicationDbContext context, IProductHelper productHelper)
+        public CancelReservationHandler([NotNull] ApplicationDbContext context, IProductHelper productHelper, IOrderHelper orderHelper)
         {
             this.context = context;
             this.productHelper = productHelper;
+            this.orderHelper = orderHelper;
         }
 
         public async ValueTask HandleAsync(CancelReservationCommand command, CancellationToken cancellationToken = default)
@@ -32,7 +34,9 @@ namespace Rental.Infrastructure.Handlers.Product.Command.Cancel
                 throw new CoreException(ErrorCode.ProductIsNotReserved, $"You can not canceling reservation for {product.Name} because this item is not reserved.");
 
             //Find Order for current product
+            var order = await orderHelper.GetAcceptedOrderForGivenProduct(context, product.ProductId, product.Customer.CustomerId.ToString());
 
+            order.ChangeOrderStatus(OrderStatus.Available);
         }
     }
 }
