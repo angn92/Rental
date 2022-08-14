@@ -40,24 +40,24 @@ namespace Rental.Infrastructure.Handlers.Product.Command.BookingProduct
 
             productHelper.MakeReservationProduct(product);
 
-            var transaction = new Order
+            var order = new Order
             {
-                TransactionId = Guid.NewGuid().ToString(),
+                OrderId = Guid.NewGuid().ToString(),
                 CustomerId = customer.CustomerId.ToString(),
                 ProductId = product.ProductId,
                 ProductName = product.Name,
                 Amount = request.Amount,
                 From = request.From,
                 To = request.To,
-                TransactionHash = Guid.NewGuid().ToString()
+                OrderHash = Guid.NewGuid().ToString()
             };
 
-            await context.AddAsync(transaction, cancellationToken);
+            await context.AddAsync(order, cancellationToken);
             await context.SaveChangesAsync(cancellationToken);
 
             var response = new ProductBookingResponse
             {
-                OrderId = transaction.TransactionId,
+                OrderId = order.OrderId,
                 OrderTime = DateTime.UtcNow,
                 Amount = request.Amount,
                 Owner = customer.FirstName,

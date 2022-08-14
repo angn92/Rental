@@ -21,24 +21,6 @@ namespace Rental.Core.Domain
         public virtual int Amount { get; set; }
         public virtual OrderStatus OrderStatus { get; set; }
 
-        protected Order()
-        {
-        }
-
-        public Order(string orderId, string productId, string customerId, string productName, string orderHash, DateTime? from, DateTime? to, 
-                    int amount, OrderStatus orderStatus)
-        {
-            OrderId = orderId;
-            ProductId = productId;
-            CustomerId = customerId;
-            ProductName = productName;
-            OrderHash = orderHash;
-            From = from;
-            To = to;
-            Amount = amount;
-            OrderStatus = orderStatus;
-        }
-
         public void ChangeOrderStatus([NotNull] OrderStatus status)
         {
             OrderStatus = status;
