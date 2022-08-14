@@ -226,7 +226,7 @@ namespace Rental.Infrastructure.Migrations
                     b.ToTable("Sessions");
                 });
 
-            modelBuilder.Entity("Rental.Core.Domain.Transaction", b =>
+            modelBuilder.Entity("Rental.Core.Domain.Order", b =>
                 {
                     b.Property<string>("TransactionId")
                         .HasColumnType("text");

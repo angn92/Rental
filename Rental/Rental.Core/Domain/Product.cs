@@ -14,6 +14,10 @@ namespace Rental.Core.Domain
         public virtual string Description { get; set; }
         public virtual ProductStatus Status { get; set; }
         public virtual Category Category { get; set; }
+
+        /// <summary>
+        /// Product owner
+        /// </summary>
         public virtual Customer Customer { get; set; }
 
         protected Product()

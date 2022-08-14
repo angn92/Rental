@@ -7,9 +7,6 @@ namespace Rental.Infrastructure.Handlers.Product.Command.Cancel
 {
     public class CancelReservationCommand : ICommand
     {
-        /// <summary>
-        /// ProductId
-        /// </summary>
         [JsonProperty("productId", Required = Required.Always)]
         public string ProductId { get; set; }
 

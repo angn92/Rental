@@ -15,11 +15,9 @@ namespace Rental.Infrastructure.Helpers
 
         Task CheckIfGivenProductExistAsync([NotNull] ApplicationDbContext context, [NotNull] string name, [NotNull] Customer customer);
 
-        Task<StatusProduct> GetStatusProductAsync([NotNull] string name);
-
         void MakeReservationProduct([NotNull] Product product);
 
-        Task<Product> GetProductDetailsAsync([NotNull] ApplicationDbContext context, [NotNull] string productId);
+        Task<Product> GetProductAsync([NotNull] ApplicationDbContext context, [NotNull] string productId);
     }
 
     public class ProductHelper : IProductHelper
@@ -46,12 +44,8 @@ namespace Rental.Infrastructure.Helpers
             product.SetReservedStatus();
         }
 
-        public async Task<StatusProduct> GetStatusProductAsync([NotNull] string name)
-        {
-            throw new System.NotImplementedException();
-        }
 
-        public async Task<Product> GetProductDetailsAsync([NotNull] ApplicationDbContext context, [NotNull] string productId)
+        public async Task<Product> GetProductAsync([NotNull] ApplicationDbContext context, [NotNull] string productId)
         {
             var product = await context.Products.SingleOrDefaultAsync(x => x.ProductId == productId);
 

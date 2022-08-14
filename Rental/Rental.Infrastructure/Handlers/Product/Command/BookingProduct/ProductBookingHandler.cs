@@ -33,14 +33,14 @@ namespace Rental.Infrastructure.Handlers.Product.Command.BookingProduct
 
             var customer = await customerService.GetCustomerAsync(command.Request.Username);
 
-            var product = await productHelper.GetProductDetailsAsync(context, request.ProductId);
+            var product = await productHelper.GetProductAsync(context, request.ProductId);
 
             if (product.Status != ProductStatus.Available)
                 throw new CoreException(ErrorCode.ProductNotAvailable, $"{product.Name} is not available now.");
 
             productHelper.MakeReservationProduct(product);
 
-            var transaction = new Transaction
+            var transaction = new Order
             {
                 TransactionId = Guid.NewGuid().ToString(),
                 CustomerId = customer.CustomerId.ToString(),
