@@ -57,7 +57,7 @@ namespace Rental.Infrastructure.Handlers.Account.Command.LoginSession
                     ExpirationTime = session.LastAccessDate.AddMinutes(10)
                 };
 
-                await context.SaveChangesAsync();
+                await context.SaveChangesAsync(cancellationToken);
             }
             catch (Exception ex)
             {

@@ -16,6 +16,7 @@ namespace Rental.Infrastructure.EF
         public virtual DbSet<Session> Sessions { get; set; }
         public virtual DbSet<Dictionary> Dictionaries { get; set; }
         public virtual DbSet<Order> Orders { get; set; }
+        public virtual DbSet<ActionHistory> ActionHistories { get; set; }
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {

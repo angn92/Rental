@@ -7,6 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Rental.Api.UA;
 using Rental.Infrastructure.Configuration;
 using Rental.Infrastructure.EF;
 using Rental.Infrastructure.IoC;
@@ -54,6 +55,14 @@ builder.Services.AddSwaggerGen(options =>
 builder.Configuration.GetSection("Registration").Get<ConfigurationOptions>();
 
 var app = builder.Build();
+
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+
+    var context = services.GetRequiredService<UpgradeAction>();
+    context.StartEd(1);
+}
 
 //Enable HTTP logging 
 app.UseHttpLogging();
