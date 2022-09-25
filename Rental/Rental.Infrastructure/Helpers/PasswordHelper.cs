@@ -5,16 +5,18 @@ using Rental.Core.Enum;
 using Rental.Infrastructure.EF;
 using Rental.Infrastructure.Exceptions;
 using Rental.Infrastructure.Services.EncryptService;
+using System.Security.Cryptography;
 using System.Threading.Tasks;
 
 namespace Rental.Infrastructure.Helpers
 {
     public interface IPasswordHelper
     {
-        Task SetPassword([NotNull] string password, [NotNull] Customer customer);
+        Task SetPassword([NotNull] string password, [NotNull] Customer customer, int code);
         Task<Password> GetActivePassword([NotNull] Customer customer);
         void ComaprePasswords([NotNull] Password currentPassword, [NotNull] string hashNewPassword);
         Task RemoveOldPassword([NotNull] string username);
+        int GenerateActivationCode();
     }
 
     public class PasswordHelper : IPasswordHelper
@@ -32,6 +34,11 @@ namespace Rental.Infrastructure.Helpers
         {
             if (!BCrypt.Net.BCrypt.Verify(hashNewPassword + currentPassword.Salt, currentPassword.Hash))
                 throw new CoreException(ErrorCode.PasswordIncorrect, "Given password is incorrect.");
+        }
+
+        public int GenerateActivationCode()
+        {
+            return RandomNumberGenerator.GetInt32(999999);
         }
 
         public async Task<Password> GetActivePassword([NotNull] Customer customer)
@@ -58,13 +65,13 @@ namespace Rental.Infrastructure.Helpers
             await _context.SaveChangesAsync();
         }
 
-        public async Task SetPassword([NotNull] string password, [NotNull] Customer customer)
+        public async Task SetPassword([NotNull] string password, [NotNull] Customer customer, int code)
         {
             var salt = _encrypt.GenerateSalt();
 
             var hash = _encrypt.GenerateHash(password, salt);
 
-            var newPassword = new Password(hash, salt, customer);
+            var newPassword = new Password(hash, salt, customer, code);
 
             await _context.AddAsync(newPassword);
             await _context.SaveChangesAsync();

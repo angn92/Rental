@@ -62,6 +62,15 @@ namespace Rental.Infrastructure.IoC
 
             builder.RegisterType<ApplicationDbContext>()
                 .InstancePerLifetimeScope();
-            }
+
+            builder.RegisterAssemblyTypes(ThisAssembly)
+                .Where(x => x.IsAssignableTo<IProductHelper>())
+                .AsImplementedInterfaces()
+                .InstancePerLifetimeScope();
+
+            builder.RegisterType<SessionHelper>()
+                .As<ISessionHelper>()
+                .InstancePerLifetimeScope();
+        }
         }
 }

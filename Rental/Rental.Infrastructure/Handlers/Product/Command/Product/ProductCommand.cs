@@ -14,9 +14,15 @@ namespace Rental.Infrastructure.Handlers.Product.Command.NewProduct
 
     public class ProductRequest
     {
+        /// <summary>
+        /// Product name
+        /// </summary>
         [JsonProperty("name")]
         public string Name { get; set; }
 
+        /// <summary>
+        /// Short product description
+        /// </summary>
         [JsonProperty("description")]
         public string Description { get; set; }
 
@@ -26,6 +32,9 @@ namespace Rental.Infrastructure.Handlers.Product.Command.NewProduct
         [JsonProperty("categoryName")]
         public string CategoryName { get; set; }
 
+        /// <summary>
+        /// User for who's this product belongs
+        /// </summary>
         [JsonProperty("username")]
         public string Username { get; set; }
     }

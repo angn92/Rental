@@ -28,6 +28,7 @@ namespace Rental.Infrastructure.Helpers
             var product = new Product(name, quantity, category, customer, description);
 
             await context.AddAsync(product);
+            await context.SaveChangesAsync();
         }
 
         public async Task CheckIfGivenProductExistAsync([NotNull] ApplicationDbContext context, [NotNull] string name, [NotNull] Customer customer)

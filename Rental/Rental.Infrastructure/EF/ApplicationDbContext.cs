@@ -16,7 +16,7 @@ namespace Rental.Infrastructure.EF
         public virtual DbSet<Session> Sessions { get; set; }
         public virtual DbSet<Dictionary> Dictionaries { get; set; }
         public virtual DbSet<Order> Orders { get; set; }
-        public virtual DbSet<ActionHistory> ActionHistories { get; set; }
+        
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
@@ -54,6 +54,8 @@ namespace Rental.Infrastructure.EF
                     .HasOne<Category>(c => c.Category)
                     .WithMany(p => p.Products);
 
+            //modelBuilder.Entity<Dictionary>()
+            //    .HasOne<>
             modelBuilder.Entity<Dictionary>()
                     .Property<string>("Value")
                     .HasMaxLength(255);

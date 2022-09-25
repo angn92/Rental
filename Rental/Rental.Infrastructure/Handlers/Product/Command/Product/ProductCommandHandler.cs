@@ -32,7 +32,7 @@ namespace Rental.Infrastructure.Handlers.Product.Command.NewProduct
             ValidationParameter.FailIfNull(command);
 
             if (string.IsNullOrWhiteSpace(command.Request.Name))
-                throw new CoreException(ErrorCode.IncorrectArgument, $"Value of {nameof(command.Request.Name)} in invalid.");
+                throw new CoreException(ErrorCode.IncorrectArgument, $"Value of {nameof(command.Request.Name)} is invalid.");
 
             var customer = await customerService.GetCustomerAsync(command.Request.Username);
 

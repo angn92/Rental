@@ -28,7 +28,7 @@ namespace Rental.Api.Controllers
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        [HttpPost("product/create")]
+        [HttpPost("Create")]
         public async Task AddProductAsync([FromBody] [NotNull] ProductRequest request)
         {
             var command = new ProductRequest
@@ -48,7 +48,7 @@ namespace Rental.Api.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        [HttpGet("product/{id}")]
+        [HttpGet("{Id}")]
         public async Task<ProductDetailsResponse> GetProductDetailsAsync([FromRoute] [NotNull] string id)
         {
             var request = new ProductDetailRequest
@@ -64,7 +64,7 @@ namespace Rental.Api.Controllers
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        [HttpPut("booking")]
+        [HttpPut("Booking")]
         public async Task<ProductBookingResponse> BookingProductAsync([FromBody] ProductBookingRequest request)
         {
             var command = new ProductBookingCommand(request);
@@ -77,7 +77,7 @@ namespace Rental.Api.Controllers
         /// </summary>
         /// <param name="command"></param>
         /// <returns></returns>
-        [HttpPut("cancel")]
+        [HttpPut("Cancel")]
         public async Task CancelReservation([FromBody] CancelReservationCommand command)
         {
             await commandDispacher.DispatchAsync<CancelReservationCommand>(command);

@@ -23,11 +23,13 @@ namespace Rental.Core.Domain
         /// </summary>
         public virtual bool NewPassword { get; set; }
 
+        public virtual int ActivationCode { get; set; }
+
         protected Password()
         {
         }
 
-        public Password([NotNull] string hash, [NotNull] string salt, [NotNull] Customer customer)
+        public Password([NotNull] string hash, [NotNull] string salt, [NotNull] Customer customer, int code)
         {
             PasswordId = Guid.NewGuid().ToString();
             SetPasswordHash(hash);
@@ -35,6 +37,7 @@ namespace Rental.Core.Domain
             SetPasswordNotActive();
             Customer = customer;
             NewPassword = true;
+            ActivationCode = code;
         }
 
         public void SetPasswordHash(string hash)

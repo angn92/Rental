@@ -49,19 +49,22 @@ namespace Rental.Infrastructure.Handlers.Account.Command.CreateAccount
 
                 var customerSession = await sessionService.CreateNotAuthorizedSession(customer);
 
-                await passwordHelper.SetPassword(command.Password, customer);
+                var code = passwordHelper.GenerateActivationCode();
+
+                await passwordHelper.SetPassword(command.Password, customer, code);
 
                 var message = await context.Dictionaries.FirstOrDefaultAsync(x => x.Name == "RegisterEmail", cancellationToken);
 
                 if (message == null)
                     throw new CoreException(ErrorCode.IncorrectArgument, $"Given parameter does not exist.");
 
+                
                 var prepareEmail = new EmailConfiguration
                 {
                     From = "test@email.com",
-                    To = "customer@email.com",
-                    Subject = "Register new account",
-                    Message = "Just now you created new account in our application. Thanks"
+                    To = command.Email,
+                    Subject = message.Name,
+                    Message = message.Value,
                 };
 
                 emailHelper.SendEmail(prepareEmail);

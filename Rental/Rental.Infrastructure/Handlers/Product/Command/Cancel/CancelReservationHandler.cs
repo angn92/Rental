@@ -25,7 +25,7 @@ namespace Rental.Infrastructure.Handlers.Product.Command.Cancel
 
         public async ValueTask HandleAsync(CancelReservationCommand command, CancellationToken cancellationToken = default)
         {
-            ValidationParameter.FailIfNullOrEmpty(command.Username);
+            ValidationParameter.FailIfNullOrEmpty(command.Username); 
 
             //Find product in db
             var product = await productHelper.GetProductAsync(context, command.ProductId);

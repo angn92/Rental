@@ -27,7 +27,7 @@ namespace Rental.Infrastructure.Helpers
             await context.SaveChangesAsync();
         }
 
-        public string CheckAccountStatus(Customer customer)
+        public string CheckAccountStatus([NotNull] Customer customer)
         {
             string status = null;
 
