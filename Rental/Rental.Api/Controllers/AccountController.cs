@@ -40,6 +40,17 @@ namespace Rental.Api.Controllers
         }
 
         /// <summary>
+        /// Method to authorize password for new created account. This method also authorize session which was created during the first step - create account
+        /// </summary>
+        /// <param name="authorizeCode"></param>
+        /// <returns></returns>
+        [HttpPut("register/authorize/password")]
+        public async Task AuthorizePassword([FromBody] string authorizeCode)
+        {
+            // TODO: implementation for activation password and session 
+        }
+
+        /// <summary>
         /// Return customer details.
         /// </summary>
         /// <param name="username"></param>

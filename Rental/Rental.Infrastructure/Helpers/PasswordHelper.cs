@@ -12,7 +12,7 @@ namespace Rental.Infrastructure.Helpers
 {
     public interface IPasswordHelper
     {
-        Task SetPassword([NotNull] string password, [NotNull] Customer customer, int code);
+        Task SetPassword([NotNull] string password, [NotNull] Customer customer, [NotNull] string code);
         Task<Password> GetActivePassword([NotNull] Customer customer);
         void ComaprePasswords([NotNull] Password currentPassword, [NotNull] string hashNewPassword);
         Task RemoveOldPassword([NotNull] string username);
@@ -65,13 +65,13 @@ namespace Rental.Infrastructure.Helpers
             await _context.SaveChangesAsync();
         }
 
-        public async Task SetPassword([NotNull] string password, [NotNull] Customer customer, int code)
+        public async Task SetPassword([NotNull] string password, [NotNull] Customer customer, string code)
         {
             var salt = _encrypt.GenerateSalt();
+            var passwordHash = _encrypt.GenerateHash(password, salt);
+            var codeHash = _encrypt.GenerateHash(code, salt);
 
-            var hash = _encrypt.GenerateHash(password, salt);
-
-            var newPassword = new Password(hash, salt, customer, code);
+            var newPassword = new Password(passwordHash, salt, customer, codeHash);
 
             await _context.AddAsync(newPassword);
             await _context.SaveChangesAsync();

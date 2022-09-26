@@ -51,24 +51,17 @@ namespace Rental.Infrastructure.Handlers.Account.Command.CreateAccount
 
                 var code = passwordHelper.GenerateActivationCode();
 
-                await passwordHelper.SetPassword(command.Password, customer, code);
+                await passwordHelper.SetPassword(command.Password, customer, code.ToString());
 
-                var message = await context.Dictionaries.FirstOrDefaultAsync(x => x.Name == "RegisterEmail", cancellationToken);
-
-                if (message == null)
-                    throw new CoreException(ErrorCode.IncorrectArgument, $"Given parameter does not exist.");
-
-                
                 var prepareEmail = new EmailConfiguration
                 {
                     From = "test@email.com",
                     To = command.Email,
-                    Subject = message.Name,
-                    Message = message.Value,
+                    Subject = "Activate password",
+                    Message = $"You created new account. This is your activation code {code}",
                 };
 
                 emailHelper.SendEmail(prepareEmail);
-
             }
             catch (Exception ex)
             {

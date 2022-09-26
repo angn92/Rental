@@ -23,13 +23,13 @@ namespace Rental.Core.Domain
         /// </summary>
         public virtual bool NewPassword { get; set; }
 
-        public virtual int ActivationCode { get; set; }
+        public virtual string ActivationCode { get; set; }
 
         protected Password()
         {
         }
 
-        public Password([NotNull] string hash, [NotNull] string salt, [NotNull] Customer customer, int code)
+        public Password([NotNull] string hash, [NotNull] string salt, [NotNull] Customer customer, string code)
         {
             PasswordId = Guid.NewGuid().ToString();
             SetPasswordHash(hash);

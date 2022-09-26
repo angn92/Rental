@@ -41,7 +41,7 @@ namespace Rental.Infrastructure.Handlers.Password
 
             await _passwordHelper.RemoveOldPassword(command.Username);
 
-            await _passwordHelper.SetPassword(command.NewPassword, customer);
+            await _passwordHelper.SetPassword(command.NewPassword, customer, 123);
         }
     }
 }
