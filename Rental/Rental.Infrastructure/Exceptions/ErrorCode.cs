@@ -24,6 +24,7 @@
         public static string SessioNotActive => "session_not_active";
         public static string SessionExpired => "session_expired";
         public static string SessionNotAuthorized => "sesion_not_authorized";
+        public static string WrongSessionState => "wrong_session_satte";
         #endregion
 
 

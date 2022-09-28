@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Rental.Core.Validation;
 using Rental.Infrastructure.Command;
+using Rental.Infrastructure.Handlers.Account.Command.AuthorizePassword;
 using Rental.Infrastructure.Handlers.Account.Command.CreateAccount;
 using Rental.Infrastructure.Handlers.Account.Command.LoginSession;
 using Rental.Infrastructure.Handlers.Account.Commmand.ChangeStatus;
@@ -42,12 +43,19 @@ namespace Rental.Api.Controllers
         /// <summary>
         /// Method to authorize password for new created account. This method also authorize session which was created during the first step - create account
         /// </summary>
-        /// <param name="authorizeCode"></param>
+        /// <param name="sessionId"></param>
+        /// <param name="request"></param>
         /// <returns></returns>
-        [HttpPut("register/authorize/password")]
-        public async Task AuthorizePassword([FromBody] string authorizeCode)
+        [HttpPut("register/authorize/password/{sessionId}")]
+        public async Task AuthorizePassword([FromRoute] int sessionId, [NotNull] AuthorizePasswordRequest request)
         {
-            // TODO: implementation for activation password and session 
+            var command = new AuthorizePasswordCommand
+            {
+                Request = request,
+                SessionId = sessionId
+            };
+
+            await _commandDispatcher.DispatchAsync(command); 
         }
 
         /// <summary>

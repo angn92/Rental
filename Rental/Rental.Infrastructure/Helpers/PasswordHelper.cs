@@ -5,6 +5,7 @@ using Rental.Core.Enum;
 using Rental.Infrastructure.EF;
 using Rental.Infrastructure.Exceptions;
 using Rental.Infrastructure.Services.EncryptService;
+using System.Linq;
 using System.Security.Cryptography;
 using System.Threading.Tasks;
 
@@ -17,6 +18,7 @@ namespace Rental.Infrastructure.Helpers
         void ComaprePasswords([NotNull] Password currentPassword, [NotNull] string hashNewPassword);
         Task RemoveOldPassword([NotNull] string username);
         int GenerateActivationCode();
+        Task<Password> FindPasswordToAuthorize([NotNull] string username, [NotNull] string code);
     }
 
     public class PasswordHelper : IPasswordHelper
@@ -34,6 +36,13 @@ namespace Rental.Infrastructure.Helpers
         {
             if (!BCrypt.Net.BCrypt.Verify(hashNewPassword + currentPassword.Salt, currentPassword.Hash))
                 throw new CoreException(ErrorCode.PasswordIncorrect, "Given password is incorrect.");
+        }
+
+        public async Task<Password> FindPasswordToAuthorize([NotNull] string username, [NotNull] string code)
+        {
+            return await _context.Passwords.Where(x => x.Customer.Username == username && x.Status == PasswordStatus.NotActive && x.ActivationCode == code)
+                                                   .OrderByDescending(x => x.CreatedAt)
+                                                   .FirstOrDefaultAsync();
         }
 
         public int GenerateActivationCode()
