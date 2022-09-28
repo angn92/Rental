@@ -131,6 +131,12 @@ namespace Rental.Api.Controllers
             await _commandDispatcher.DispatchAsync<ChangeStatusCommand>(command);
         }
 
+        [HttpGet("details/session/{sessionId}")]
+        public async Task VerifySessionDetails([FromRoute] [NotNull] int sessionId)
+        {
+
+        }
+
         //[HttpGet("account/status")]
         //public async Task GetAccountStatus([FromQuery] string username)
         //{
