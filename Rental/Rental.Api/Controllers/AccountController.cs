@@ -7,6 +7,7 @@ using Rental.Infrastructure.Handlers.Account.Command.CreateAccount;
 using Rental.Infrastructure.Handlers.Account.Command.LoginSession;
 using Rental.Infrastructure.Handlers.Account.Commmand.ChangeStatus;
 using Rental.Infrastructure.Handlers.Account.Query.AccountDetails;
+using Rental.Infrastructure.Handlers.Account.Query.SessionDetails;
 using Rental.Infrastructure.Handlers.Password;
 using Rental.Infrastructure.Handlers.Sessions;
 using Rental.Infrastructure.Query;
@@ -41,30 +42,12 @@ namespace Rental.Api.Controllers
         }
 
         /// <summary>
-        /// Method to authorize password for new created account. This method also authorize session which was created during the first step - create account
-        /// </summary>
-        /// <param name="sessionId"></param>
-        /// <param name="request"></param>
-        /// <returns></returns>
-        [HttpPut("register/authorize/password/{sessionId}")]
-        public async Task AuthorizePassword([FromRoute] int sessionId, [NotNull] AuthorizePasswordRequest request)
-        {
-            var command = new AuthorizePasswordCommand
-            {
-                Request = request,
-                SessionId = sessionId
-            };
-
-            await _commandDispatcher.DispatchAsync(command); 
-        }
-
-        /// <summary>
         /// Return customer details.
         /// </summary>
         /// <param name="username"></param>
         /// <returns></returns>
         [HttpGet("customer/details/{username}")]
-        
+
         public async Task<GetCustomerDetailsRs> GetUserDetails([FromRoute][NotNull] string username)
         {
             var query = new GetCustomerDetailsRq
@@ -73,6 +56,16 @@ namespace Rental.Api.Controllers
             };
 
             return await _queryDispatcher.DispatchAsync<GetCustomerDetailsRq, GetCustomerDetailsRs>(query);
+        }
+
+        /// <summary>
+        /// Change account status.
+        /// </summary>
+        /// <returns></returns>
+        [HttpPut("status")]
+        public async Task ChangeAccountStatus([FromBody][NotNull] ChangeStatusCommand command)
+        {
+            await _commandDispatcher.DispatchAsync<ChangeStatusCommand>(command);
         }
 
         /// <summary>
@@ -92,7 +85,7 @@ namespace Rental.Api.Controllers
         }
 
         /// <summary>
-        /// Authenticat session
+        /// Authentication session given in URL
         /// </summary>
         /// <param name="sessionId"></param>
         /// <param name="request"></param>
@@ -109,6 +102,21 @@ namespace Rental.Api.Controllers
             return await _commandDispatcher.DispatchAsync<AuthenticationSessionCommand, AuthenticationSessionResponse>(command);
         }
 
+        /// <summary>
+        /// Check session details and update LastAccessDate
+        /// </summary>
+        /// <param name="sessionId"></param>
+        /// <returns></returns>
+        [HttpGet("details/session/{sessionId}")]
+        public async Task<SessionDetailsRs> VerifySessionDetails([FromRoute][NotNull] int sessionId)
+        {
+            var request = new SessionDetailsRq
+            {
+                Session = sessionId
+            };
+
+            return await _queryDispatcher.DispatchAsync<SessionDetailsRq, SessionDetailsRs>(request); 
+        }
 
         /// <summary>
         /// Change password for customer account.
@@ -122,20 +130,26 @@ namespace Rental.Api.Controllers
         }
 
         /// <summary>
-        /// Change account status.
+        /// Method to authorize password for new created account. This method also authorize session which was created during the first step - create account
         /// </summary>
+        /// <param name="sessionId"></param>
+        /// <param name="request"></param>
         /// <returns></returns>
-        [HttpPut("status")]
-        public async Task ChangeAccountStatus([FromBody] [NotNull] ChangeStatusCommand command)
+        [HttpPut("register/authorize/password/{sessionId}")]
+        public async Task AuthorizePassword([FromRoute] int sessionId, [NotNull] AuthorizePasswordRequest request)
         {
-            await _commandDispatcher.DispatchAsync<ChangeStatusCommand>(command);
+            var command = new AuthorizePasswordCommand
+            {
+                Request = request,
+                SessionId = sessionId
+            };
+
+            await _commandDispatcher.DispatchAsync(command);
         }
 
-        [HttpGet("details/session/{sessionId}")]
-        public async Task VerifySessionDetails([FromRoute] [NotNull] int sessionId)
-        {
+        
 
-        }
+        
 
         //[HttpGet("account/status")]
         //public async Task GetAccountStatus([FromQuery] string username)
