@@ -47,8 +47,8 @@ namespace Rental.Infrastructure.Handlers.Product.Command.BookingProduct
                 ProductId = product.ProductId,
                 ProductName = product.Name,
                 Amount = request.Amount,
-                From = request.From,
-                To = request.To,
+                ValidFrom = request.From,
+                ValidTo = request.To,
                 OrderHash = Guid.NewGuid().ToString()
             };
 

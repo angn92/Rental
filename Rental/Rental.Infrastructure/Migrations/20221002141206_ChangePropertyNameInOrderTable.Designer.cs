@@ -12,8 +12,8 @@ using Rental.Infrastructure.EF;
 namespace Rental.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20220809202340_newTableTransaction")]
-    partial class newTableTransaction
+    [Migration("20221002141206_ChangePropertyNameInOrderTable")]
+    partial class ChangePropertyNameInOrderTable
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -106,9 +106,52 @@ namespace Rental.Infrastructure.Migrations
                     b.ToTable("Dictionaries");
                 });
 
+            modelBuilder.Entity("Rental.Core.Domain.Order", b =>
+                {
+                    b.Property<string>("OrderId")
+                        .HasColumnType("text");
+
+                    b.Property<int>("Amount")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("CustomerId")
+                        .HasColumnType("text");
+
+                    b.Property<string>("OrderHash")
+                        .HasColumnType("text");
+
+                    b.Property<int>("OrderStatus")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("ProductId")
+                        .HasColumnType("text");
+
+                    b.Property<string>("ProductName")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime?>("ValidFrom")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime?>("ValidTo")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("OrderId");
+
+                    b.ToTable("Orders");
+                });
+
             modelBuilder.Entity("Rental.Core.Domain.Password", b =>
                 {
                     b.Property<string>("PasswordId")
+                        .HasColumnType("text");
+
+                    b.Property<string>("ActivationCode")
                         .HasColumnType("text");
 
                     b.Property<DateTime>("CreatedAt")
@@ -224,43 +267,6 @@ namespace Rental.Infrastructure.Migrations
                         .IsUnique();
 
                     b.ToTable("Sessions");
-                });
-
-            modelBuilder.Entity("Rental.Core.Domain.Order", b =>
-                {
-                    b.Property<string>("TransactionId")
-                        .HasColumnType("text");
-
-                    b.Property<int>("Amount")
-                        .HasColumnType("integer");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("CustomerId")
-                        .HasColumnType("text");
-
-                    b.Property<DateTime?>("ValidFrom")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("ProductId")
-                        .HasColumnType("text");
-
-                    b.Property<string>("ProductName")
-                        .HasColumnType("text");
-
-                    b.Property<DateTime?>("ValidTo")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("TransactionHash")
-                        .HasColumnType("text");
-
-                    b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.HasKey("TransactionId");
-
-                    b.ToTable("Transactions");
                 });
 
             modelBuilder.Entity("Rental.Core.Domain.Password", b =>
