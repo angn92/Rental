@@ -1,4 +1,5 @@
 ﻿using Rental.Core.Validation;
+using Rental.Infrastructure.DTO;
 using Rental.Infrastructure.EF;
 using Rental.Infrastructure.Exceptions;
 using Rental.Infrastructure.Helpers;
@@ -49,14 +50,17 @@ namespace Rental.Infrastructure.Handlers.Orders.Query.OrderDetails
 
             var response = new OrderDetailsRs
             {
-                OrderId = order.OrderId,
-                OrderProduct = new OrderProduct
+                OrderDetailDto = new OrderDetailDto
                 {
-                    Name = product.Name,
-                    Owner = product.Customer.FirstName + " " + product.Customer.LastName,
-                },
-                OrderStatus = order.OrderStatus.ToString(),
-                ValidTo = order.ValidTo
+                    OrderId = order.OrderId,
+                    OrderProduct = new OrderProduct
+                    {
+                        Name = product.Name,
+                        Owner = product.Customer.FirstName + " " + product.Customer.LastName,
+                    },
+                    OrderStatus = order.OrderStatus.ToString(),
+                    ValidTo = order.ValidTo
+                }
             };
 
             return response;

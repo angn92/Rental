@@ -23,7 +23,7 @@ namespace Rental.Api.Controllers
         /// <param name="id"></param>
         /// <param name="sessionId"></param>
         /// <returns></returns>
-        [HttpGet("details/{id}")]
+        [HttpGet("detail/{id}")]
         public async Task<OrderDetailsRs> DisplayOrderDetails([FromRoute] [NotNull] string id, [FromBody] int sessionId)
         {
             var request = new OrderDetailsRq
@@ -33,6 +33,11 @@ namespace Rental.Api.Controllers
             };
 
             return await queryDispatcher.DispatchAsync<OrderDetailsRq, OrderDetailsRs>(request);
+        }
+
+        public async Task<OrdersListRs> GetAllActiveOrders([FromBody] [NotNull] string username)
+        {
+
         }
     }
 }
