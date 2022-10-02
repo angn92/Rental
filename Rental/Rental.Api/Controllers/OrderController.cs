@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ﻿using JetBrains.Annotations;
 using Microsoft.AspNetCore.Mvc;
 using Rental.Infrastructure.Handlers.Orders.Query.OrderDetails;
@@ -35,9 +36,6 @@ namespace Rental.Api.Controllers
             return await queryDispatcher.DispatchAsync<OrderDetailsRq, OrderDetailsRs>(request);
         }
 
-        public async Task<OrdersListRs> GetAllActiveOrders([FromBody] [NotNull] string username)
+        public async Task<OrdersListRs> GetAllActiveOrders([FromBody][NotNull] string username)
         {
-
         }
-    }
-}
