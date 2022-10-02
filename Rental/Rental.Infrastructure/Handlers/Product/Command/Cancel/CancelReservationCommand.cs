@@ -1,5 +1,4 @@
 ﻿using Newtonsoft.Json;
-using Rental.Core.Enum;
 using Rental.Infrastructure.Command;
 using System;
 
@@ -20,9 +19,6 @@ namespace Rental.Infrastructure.Handlers.Product.Command.Cancel
         public string Reason { get; set; }
 
         [JsonProperty("cancelTime", Required = Required.Always)]
-        public DateTime? CancelTime { get; set; }
-
-        [JsonProperty("status", Required = Required.Always)]
-        public ProductStatus Status { get; set; }
+        public DateTime? CancelationTime { get; set; }
     }
 }

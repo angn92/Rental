@@ -37,6 +37,8 @@ namespace Rental.Infrastructure.Handlers.Product.Command.Cancel
             var order = await orderHelper.GetAcceptedOrderForGivenProduct(context, product.ProductId, product.Customer.CustomerId.ToString());
 
             order.ChangeOrderStatus(OrderStatus.Available);
+
+            await context.SaveChangesAsync(cancellationToken);
         }
     }
 }

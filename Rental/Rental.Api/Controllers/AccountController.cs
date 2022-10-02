@@ -146,15 +146,5 @@ namespace Rental.Api.Controllers
 
             await _commandDispatcher.DispatchAsync(command);
         }
-
-        
-
-        
-
-        //[HttpGet("account/status")]
-        //public async Task GetAccountStatus([FromQuery] string username)
-        //{
-
-        //}
     }
 }
