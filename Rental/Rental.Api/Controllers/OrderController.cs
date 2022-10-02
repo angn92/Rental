@@ -1,5 +1,4 @@
-<<<<<<< HEAD
-﻿using JetBrains.Annotations;
+using JetBrains.Annotations;
 using Microsoft.AspNetCore.Mvc;
 using Rental.Infrastructure.Handlers.Orders.Query.OrderDetails;
 using Rental.Infrastructure.Query;
@@ -25,7 +24,7 @@ namespace Rental.Api.Controllers
         /// <param name="sessionId"></param>
         /// <returns></returns>
         [HttpGet("detail/{id}")]
-        public async Task<OrderDetailsRs> DisplayOrderDetails([FromRoute] [NotNull] string id, [FromBody] int sessionId)
+        public async Task<OrderDetailsRs> DisplayOrderDetails([FromRoute][NotNull] string id, [FromBody] int sessionId)
         {
             var request = new OrderDetailsRq
             {
@@ -39,3 +38,5 @@ namespace Rental.Api.Controllers
         public async Task<OrdersListRs> GetAllActiveOrders([FromBody][NotNull] string username)
         {
         }
+    }
+}
