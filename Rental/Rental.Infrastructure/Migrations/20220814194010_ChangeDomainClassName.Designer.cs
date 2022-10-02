@@ -120,7 +120,7 @@ namespace Rental.Infrastructure.Migrations
                     b.Property<string>("CustomerId")
                         .HasColumnType("text");
 
-                    b.Property<DateTime?>("From")
+                    b.Property<DateTime?>("ValidFrom")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("OrderHash")
@@ -135,7 +135,7 @@ namespace Rental.Infrastructure.Migrations
                     b.Property<string>("ProductName")
                         .HasColumnType("text");
 
-                    b.Property<DateTime?>("To")
+                    b.Property<DateTime?>("ValidTo")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<DateTime>("UpdatedAt")

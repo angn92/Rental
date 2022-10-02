@@ -11,6 +11,8 @@ namespace Rental.Infrastructure.Helpers
     public interface IOrderHelper
     {
         Task<Order> GetAcceptedOrderForGivenProduct([NotNull] ApplicationDbContext context, [NotNull] string productId, [NotNull] string borrower);
+
+        Task<Order> GetOrderByIdAsync([NotNull] ApplicationDbContext context, [NotNull] string orderId);
     }
 
     public class OrderHelper : IOrderHelper
@@ -23,6 +25,11 @@ namespace Rental.Infrastructure.Helpers
                 throw new CoreException(ErrorCode.OrderNotExist, $"Given order not exist.");
 
             return order;
+        }
+
+        public async Task<Order> GetOrderByIdAsync([NotNull] ApplicationDbContext context, [NotNull] string orderId)
+        {
+            return await context.Orders.SingleOrDefaultAsync(x => x.OrderId == orderId);
         }
     }
 }
