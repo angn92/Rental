@@ -2,6 +2,7 @@
 using Rental.Infrastructure.DTO;
 using Rental.Infrastructure.EF;
 using Rental.Infrastructure.Exceptions;
+using Rental.Infrastructure.Handlers.Orders.Query.ActiveOrders;
 using Rental.Infrastructure.Helpers;
 using Rental.Infrastructure.Query;
 using Rental.Infrastructure.Services.CustomerService;
@@ -10,7 +11,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Rental.Infrastructure.Handlers.Orders.Query.ActiveOrders
+namespace Rental.Infrastructure.Handlers.Orderss.Query.ActiveOrders
 {
     public class ActiveOrdersHandler : IQueryHandler<ActiveOrdersRq, ActiveOrdersRs>
     {

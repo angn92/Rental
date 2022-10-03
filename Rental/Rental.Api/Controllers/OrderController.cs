@@ -27,13 +27,13 @@ namespace Rental.Api.Controllers
         [HttpGet("detail/{id}")]
         public async Task<OrderDetailsRs> DisplayOrderDetails([FromRoute][NotNull] string id, [FromBody] int sessionId)
         {
-            var request = new OrderDetailsRq
+            var query = new OrderDetailsRq
             {
                 OrderId = id,
                 SessionId = sessionId
             };
 
-            return await queryDispatcher.DispatchAsync<OrderDetailsRq, OrderDetailsRs>(request);
+            return await queryDispatcher.DispatchAsync<OrderDetailsRq, OrderDetailsRs>(query);
         }
 
         /// <summary>
@@ -45,13 +45,13 @@ namespace Rental.Api.Controllers
         [HttpGet("activeOrders")]
         public async Task<ActiveOrdersRs> GetAllActiveOrders([FromBody][NotNull] string username, [NotNull] int sessionId)
         {
-            var request = new ActiveOrdersRq
+            var query = new ActiveOrdersRq
             {
                 Username = username,
                 SessionId = sessionId
             };
 
-            return await queryDispatcher.DispatchAsync<ActiveOrdersRq, ActiveOrdersRs>(request);
+            return await queryDispatcher.DispatchAsync<ActiveOrdersRq, ActiveOrdersRs>(query);
         }
     }
 }
