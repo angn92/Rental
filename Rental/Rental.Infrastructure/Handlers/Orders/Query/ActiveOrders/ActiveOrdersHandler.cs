@@ -1,4 +1,5 @@
-﻿using Rental.Core.Validation;
+﻿using Rental.Core.Enum;
+using Rental.Core.Validation;
 using Rental.Infrastructure.DTO;
 using Rental.Infrastructure.EF;
 using Rental.Infrastructure.Exceptions;
@@ -49,7 +50,17 @@ namespace Rental.Infrastructure.Handlers.Orders.Query.ActiveOrders
 
             var customer = await customerService.GetCustomerAsync(query.Username);
 
-            var orderActiveList = orderHelper.GetActiveOrders(context, customer.CustomerId.ToString());
+            var orderActiveList = from order in context.Orders
+                     join product in context.Products
+                     on order.ProductId equals product.ProductId
+                     select new 
+                     {
+                         OrderId = order.OrderId,
+                         OrderStatus = order.OrderStatus,
+                         ValidTo = order.ValidTo,
+                         Name = product.Name,
+                         Owner = product.Customer.FirstName
+                     };
 
             foreach (var item in orderActiveList)
             {
@@ -60,8 +71,8 @@ namespace Rental.Infrastructure.Handlers.Orders.Query.ActiveOrders
                     ValidTo = item.ValidTo,
                     OrderProduct = new OrderProduct
                     {
-                        Name = item.ProductName,
-                        Owner = item.CustomerId //TODO: to change way return information about order and product add fatch<product> in linq
+                        Name = item.Name,
+                        Owner = item.Owner
                     }
                 });
             }
