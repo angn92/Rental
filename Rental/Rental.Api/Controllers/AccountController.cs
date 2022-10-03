@@ -33,7 +33,7 @@ namespace Rental.Api.Controllers
         /// </summary>
         /// <param name="command">Base information about user account.</param>
         /// <returns></returns>
-        [HttpPost("register/customer")]
+        [HttpPost("Register/Customer")]
         public async Task RegisterAccount([FromBody][NotNull] RegisterCustomer command)
         {
             ValidationParameter.FailIfNull(command);
@@ -46,7 +46,7 @@ namespace Rental.Api.Controllers
         /// </summary>
         /// <param name="username"></param>
         /// <returns></returns>
-        [HttpGet("customer/details/{username}")]
+        [HttpGet("Customer/Details/{username}")]
 
         public async Task<GetCustomerDetailsRs> GetUserDetails([FromRoute][NotNull] string username)
         {
@@ -62,7 +62,7 @@ namespace Rental.Api.Controllers
         /// Change account status.
         /// </summary>
         /// <returns></returns>
-        [HttpPut("status")]
+        [HttpPut("Status")]
         public async Task ChangeAccountStatus([FromBody][NotNull] ChangeStatusCommand command)
         {
             await _commandDispatcher.DispatchAsync<ChangeStatusCommand>(command);
@@ -73,7 +73,7 @@ namespace Rental.Api.Controllers
         /// </summary>
         /// <param name="username">Username parameter for who sessione will be create.</param>
         /// <returns></returns>
-        [HttpPost("session/{username}")]
+        [HttpPost("Session/{username}")]
         public async Task<CreateSessionResponse> CreateSeesion([FromRoute] [NotNull] string username)
         {
             var command = new CreateSessionCommand
@@ -90,7 +90,7 @@ namespace Rental.Api.Controllers
         /// <param name="sessionId"></param>
         /// <param name="request"></param>
         /// <returns></returns>
-        [HttpPut("session/authentication/{sessionId}")]
+        [HttpPut("Session/Authentication/{sessionId}")]
         public async Task<AuthenticationSessionResponse> LogInSession([FromRoute] int sessionId, [NotNull] AuthenticationSessionRequest request)
         {
             var command = new AuthenticationSessionCommand
@@ -107,7 +107,7 @@ namespace Rental.Api.Controllers
         /// </summary>
         /// <param name="sessionId"></param>
         /// <returns></returns>
-        [HttpGet("details/session/{sessionId}")]
+        [HttpGet("Details/Session/{sessionId}")]
         public async Task<SessionDetailsRs> VerifySessionDetails([FromRoute][NotNull] int sessionId)
         {
             var request = new SessionDetailsRq
@@ -123,7 +123,7 @@ namespace Rental.Api.Controllers
         /// </summary>
         /// <param name="command"></param>
         /// <returns></returns>
-        [HttpPut("change/password")]
+        [HttpPut("Change/Password")]
         public async Task ChangePassword([FromBody][NotNull] ChangePasswordCommand command)
         {
             await _commandDispatcher.DispatchAsync(command);
@@ -135,7 +135,7 @@ namespace Rental.Api.Controllers
         /// <param name="sessionId"></param>
         /// <param name="request"></param>
         /// <returns></returns>
-        [HttpPut("register/authorize/password/{sessionId}")]
+        [HttpPut("Register/Authorize/Password/{sessionId}")]
         public async Task AuthorizePassword([FromRoute] int sessionId, [NotNull] AuthorizePasswordRequest request)
         {
             var command = new AuthorizePasswordCommand

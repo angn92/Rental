@@ -1,15 +1,12 @@
-﻿using Rental.Core.Enum;
-using Rental.Core.Validation;
+﻿using Rental.Core.Validation;
 using Rental.Infrastructure.DTO;
 using Rental.Infrastructure.EF;
 using Rental.Infrastructure.Exceptions;
 using Rental.Infrastructure.Helpers;
 using Rental.Infrastructure.Query;
 using Rental.Infrastructure.Services.CustomerService;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -18,14 +15,12 @@ namespace Rental.Infrastructure.Handlers.Orders.Query.ActiveOrders
     public class ActiveOrdersHandler : IQueryHandler<ActiveOrdersRq, ActiveOrdersRs>
     {
         private readonly ApplicationDbContext context;
-        private readonly IOrderHelper orderHelper;
         private readonly ICustomerService customerService;
         private readonly ISessionHelper sessionHelper;
 
-        public ActiveOrdersHandler(ApplicationDbContext context, IOrderHelper orderHelper, ICustomerService customerService, ISessionHelper sessionHelper)
+        public ActiveOrdersHandler(ApplicationDbContext context, ICustomerService customerService, ISessionHelper sessionHelper)
         {
             this.context = context;
-            this.orderHelper = orderHelper;
             this.customerService = customerService;
             this.sessionHelper = sessionHelper;
         }

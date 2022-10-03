@@ -36,6 +36,13 @@ namespace Rental.Api.Controllers
             return await queryDispatcher.DispatchAsync<OrderDetailsRq, OrderDetailsRs>(request);
         }
 
+        /// <summary>
+        /// Return all current active orders for given user
+        /// </summary>
+        /// <param name="username"></param>
+        /// <param name="sessionId"></param>
+        /// <returns></returns>
+        [HttpGet("activeOrders")]
         public async Task<ActiveOrdersRs> GetAllActiveOrders([FromBody][NotNull] string username, [NotNull] int sessionId)
         {
             var request = new ActiveOrdersRq
