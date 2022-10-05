@@ -14,6 +14,6 @@ namespace Rental.Api.Controllers
             this.queryDispatcher = queryDispatcher;
         }
 
-        public 
+         
     }
 }

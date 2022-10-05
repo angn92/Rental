@@ -56,7 +56,6 @@ namespace Rental.Infrastructure.Services.CustomerService
                                         [NotNull] string email, [CanBeNull] string phoneNumber)
         {
             Customer customer;
-
             try
             {
                 _emailValidator.ValidateEmail(email);
