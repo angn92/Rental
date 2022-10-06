@@ -38,7 +38,7 @@ namespace Rental.Infrastructure.Handlers.Account.Command.LoginSession
 
                 var customer = await customerService.GetCustomerAsync(command.Request.Username);
 
-                customerService.ValidateCustomerAccountAsync(customer);
+                customerService.ValidateCustomerAccount(customer);
 
                 var password = await passwordHelper.GetActivePassword(customer);
 

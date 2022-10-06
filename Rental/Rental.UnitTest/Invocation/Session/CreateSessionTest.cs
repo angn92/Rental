@@ -19,7 +19,7 @@ namespace Rental.Test.Invocation.Session
         public async Task ShouldBeAbleCreateNewSession()
         {
             // ARRANGE
-            CreateCustomerTestHelper.CreateActiveCustomer(GetContext(), firstName, lastName, userName, email, password);
+            CreateCustomerTestHelper.CreateCustomer(GetContext(), firstName, lastName, userName, email, password);
 
             var emailMock = new Mock<IEmailHelper>();
             var passwordMock = new Mock<IPasswordHelper>();

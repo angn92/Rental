@@ -23,4 +23,8 @@
     <ProjectReference Include="..\Rental.Infrastructure\Rental.Infrastructure.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="IntegrationTest\" />
+  </ItemGroup>
+
 </Project>

@@ -7,17 +7,18 @@ using Rental.Infrastructure.EF;
 using Rental.Infrastructure.Exceptions;
 using Rental.Infrastructure.Helpers;
 using Rental.Infrastructure.Services.CustomerService;
+using Rental.Test.Helpers;
 using System;
 using System.Threading.Tasks;
 
-namespace Rental.UnitTest.User
+namespace Rental.Test.UnitTest
 {
     [TestFixture]
     public class CustomerServicesTest
     {
         private DbContextOptions<ApplicationDbContext> _options;
         private ApplicationDbContext _context;
-       
+
         [SetUp]
         public void SetUp()
         {
@@ -34,7 +35,7 @@ namespace Rental.UnitTest.User
             // Arrange
             var email = new Mock<IEmailHelper>();
             var password = new Mock<IPasswordHelper>();
-            
+
             await _context.Customers.AddAsync(new Customer("firstName", "lastName", "username", "test@email.com", "123123123"));
             await _context.SaveChangesAsync();
 
@@ -106,21 +107,47 @@ namespace Rental.UnitTest.User
         }
 
         [Test]
-        public async Task ShouldNotBeAbleRegisterUser_GivenUserAlreadyExist()
+        public void ShouldBeAbleValidateCustomerAccount_AndThrowException_AccountIsBlocked()
         {
-            //Arrange
+            // Arrange
             var email = new Mock<IEmailHelper>();
             var password = new Mock<IPasswordHelper>();
 
-            await _context.Customers.AddAsync(new Customer("firstName", "lastName", "username", "test@email.com", "123123123"));
-            await _context.SaveChangesAsync();
+            var customer = CreateCustomerTestHelper.CreateCustomer(_context, "Jan", "Kowalski", "janek00", "jan@email.com", null, x =>
+            {
+                x.Status = AccountStatus.Blocked;
+            });
+
             var userService = new CustomerService(_context, email.Object, password.Object);
 
             // Act
-            var exception = Assert.ThrowsAsync<CoreException>(() => userService.RegisterAsync("another name", "lastName", "username", "email@email.com", "123451234"));
+            var result = Assert.Throws<CoreException>(() => userService.ValidateCustomerAccount(customer));
 
             // Assert
-            Assert.AreEqual(ErrorCode.UsernameExist, exception.Code);
+            Assert.AreEqual(ErrorCode.AccountBlocked, result.Code);
+            Assert.AreEqual("Account is blocked.", result.Message);
+        }
+
+        [Test]
+        public void ShouldBeAbleValidateCustomerAccount_AndThrowException_AccountIsNotActive()
+        {
+            // Arrange
+            var email = new Mock<IEmailHelper>();
+            var password = new Mock<IPasswordHelper>();
+
+            var customer = CreateCustomerTestHelper.CreateCustomer(_context, "Jan", "Kowalski", "janek00", "jan@email.com", null, x =>
+            {
+                x.Status = AccountStatus.NotActive;
+            });
+
+            var userService = new CustomerService(_context, email.Object, password.Object);
+
+            // Act
+            var result = Assert.Throws<CoreException>(() => userService.ValidateCustomerAccount(customer));
+
+            // Assert
+            Assert.AreEqual(ErrorCode.AccountNotActive, result.Code);
+            Assert.AreEqual("Account is not active.", result.Message);
         }
     }
 }

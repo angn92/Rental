@@ -15,6 +15,6 @@ namespace Rental.Infrastructure.Services.CustomerService
 
         Task<bool> CheckIfExist([NotNull] string username);
 
-        void ValidateCustomerAccountAsync([NotNull] Customer customer);
+        void ValidateCustomerAccount([NotNull] Customer customer);
     }
 }

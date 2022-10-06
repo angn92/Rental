@@ -32,7 +32,7 @@ namespace Rental.Infrastructure.Handlers.Password
 
             var customer = await _customerService.GetCustomerAsync(command.Username);
 
-            _customerService.ValidateCustomerAccountAsync(customer);
+            _customerService.ValidateCustomerAccount(customer);
             
             var activeUserPassword = await _passwordHelper.GetActivePassword(customer);
 
