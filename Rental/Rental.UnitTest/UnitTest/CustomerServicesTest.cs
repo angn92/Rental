@@ -100,10 +100,26 @@ namespace Rental.Test.UnitTest
             // Act
             await userService.RegisterAsync("firstName", "lastName", "username", "test@email.com", "123123123");
 
-            var registeredUser = _context.Customers.FirstOrDefaultAsync(x => x.Username == "firstName");
+            var registeredUser = await _context.Customers.FirstOrDefaultAsync(x => x.Username == "firstName");
 
             // Assert 
             Assert.NotNull(registeredUser);
+            Assert.AreEqual("username", registeredUser.Username);
+        }
+
+        [Test]
+        public void ShouldNotBeAbleRegisterUser_InvaalidEmail()
+        {
+            //Arrange
+            var email = new Mock<IEmailHelper>();
+            var password = new Mock<IPasswordHelper>();
+            var userService = new CustomerService(_context, email.Object, password.Object);
+
+            // Act
+            var exception = Assert.ThrowsAsync<CoreException>(() => userService.RegisterAsync("firstName", "lastName", "username", null, "123123123"));
+
+            // Assert
+            Assert.AreEqual(ErrorCode.InvalidEmail, exception.Code);
         }
 
         [Test]
