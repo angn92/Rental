@@ -110,38 +110,6 @@ namespace Rental.Test.UnitTest
         }
 
         [Test]
-        public void ShouldBeThrowException_EmailParameterIsNull()
-        {
-            //Arrange
-            var passwordMock = new Mock<IPasswordHelper>();
-            var optionsMock = new Mock<IOptions<ConfigurationOptions>>();
-
-            var email = new EmailHelper(_context, optionsMock.Object);
-
-            // Act
-            var exception = Assert.Throws<ArgumentNullException>(() => email.ValidateEmail(null));
-
-            // Assert
-            Assert.AreEqual("Value cannot be null. (Parameter 'email')", exception.Message);
-        }
-
-        [Test]
-        public void ShouldThrowInvalidEmail()
-        {
-            //Arrange
-            var passwordMock = new Mock<IPasswordHelper>();
-            var optionsMock = new Mock<IOptions<ConfigurationOptions>>();
-
-            var email = new EmailHelper(_context, optionsMock.Object);
-
-            // Act
-            var exception = Assert.Throws<CoreException>(() => email.ValidateEmail("wrongEmail"));
-
-            // Assert
-            Assert.AreEqual(ErrorCode.InvalidEmail, exception.Code);
-        }
-
-        [Test]
         public void ShouldBeAbleValidateCustomerAccount_AndThrowException_AccountIsBlocked()
         {
             // Arrange

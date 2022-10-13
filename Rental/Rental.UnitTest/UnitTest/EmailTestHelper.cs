@@ -1,0 +1,80 @@
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
+using Moq;
+using NUnit.Framework;
+using Rental.Core.Enum;
+using Rental.Infrastructure.Configuration;
+using Rental.Infrastructure.EF;
+using Rental.Infrastructure.Exceptions;
+using Rental.Infrastructure.Helpers;
+using Rental.Test.Helpers;
+using System;
+
+namespace Rental.Test.UnitTest
+{
+    [TestFixture]
+    public class EmailTestHelper
+    {
+        private DbContextOptions<ApplicationDbContext> _options;
+        private ApplicationDbContext _context;
+
+        [SetUp]
+        public void SetUp()
+        {
+            _options = new DbContextOptionsBuilder<ApplicationDbContext>()
+                .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
+                .Options;
+
+            _context = new ApplicationDbContext(_options);
+        }
+
+        [Test]
+        public void ShouldBeThrowException_EmailParameterIsNull()
+        {
+            //Arrange
+            var optionsMock = new Mock<IOptions<ConfigurationOptions>>();
+
+            var email = new EmailHelper(_context, optionsMock.Object);
+
+            // Act
+            var exception = Assert.Throws<ArgumentNullException>(() => email.ValidateEmail(null));
+
+            // Assert
+            Assert.AreEqual("Value cannot be null. (Parameter 'email')", exception.Message);
+        }
+
+        [Test]
+        public void ShouldThrowInvalidEmail()
+        {
+            //Arrange
+            var optionsMock = new Mock<IOptions<ConfigurationOptions>>();
+
+            var email = new EmailHelper(_context, optionsMock.Object);
+
+            // Act
+            var exception = Assert.Throws<CoreException>(() => email.ValidateEmail("wrongEmail"));
+
+            // Assert
+            Assert.AreEqual(ErrorCode.InvalidEmail, exception.Code);
+        }
+
+        [Test]
+        public void ShouldThrowErrorEmailInUse()
+        {
+            //Arrange
+            var optionsMock = new Mock<IOptions<ConfigurationOptions>>();
+            var email = new EmailHelper(_context, optionsMock.Object);
+
+            var customer = CreateCustomerTestHelper.CreateCustomer(_context, "Jan", "Kowalski", "janek00", "jan@email.com", null, x =>
+            {
+                x.Status = AccountStatus.NotActive;
+            });
+
+            // Act
+            var exception = Assert.Throws<CoreException>(() => email.ValidateEmail("jan@email.com"));
+
+            // Assert
+            Assert.AreEqual(ErrorCode.EmailInUse, exception.Code);
+        }
+    }
+}
