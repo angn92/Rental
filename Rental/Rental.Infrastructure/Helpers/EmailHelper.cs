@@ -45,7 +45,7 @@ namespace Rental.Infrastructure.Helpers
         public void ValidateEmail([NotNull] string email)
         {
             if (String.IsNullOrWhiteSpace(email))
-                throw new Exception($"Argument {nameof(email)} can not be null or empty.");
+                throw new ArgumentNullException(nameof(email));
 
             var regex = new Regex(@"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$");
             var match = regex.Match(email);

@@ -1,8 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Moq;
 using NUnit.Framework;
 using Rental.Core.Domain;
 using Rental.Core.Enum;
+using Rental.Infrastructure.Configuration;
 using Rental.Infrastructure.EF;
 using Rental.Infrastructure.Exceptions;
 using Rental.Infrastructure.Helpers;
@@ -55,17 +57,17 @@ namespace Rental.Test.UnitTest
             var email = new Mock<IEmailHelper>();
             var password = new Mock<IPasswordHelper>();
 
-            await _context.Customers.AddAsync(new Customer("firstName", "lastName", "username", "test@email.com", null));
+            await _context.Customers.AddAsync(new Customer("Jan", "Kowalski", "kowal123", "kowal@email.com", null));
             await _context.SaveChangesAsync();
 
             var userService = new CustomerService(_context, email.Object, password.Object);
 
             // Act
-            var user = await userService.GetCustomerAsync("username");
+            var user = await userService.GetCustomerAsync("kowal123");
 
             // Assert
             Assert.IsNotNull(user);
-            Assert.AreEqual("username", user.FirstName);
+            Assert.AreEqual("kowal123", user.Username);
             Assert.AreEqual(AccountStatus.Active.ToString(), user.Status.ToString());
             Assert.IsNull(user.Phone);
         }
@@ -77,7 +79,7 @@ namespace Rental.Test.UnitTest
             var email = new Mock<IEmailHelper>();
             var password = new Mock<IPasswordHelper>();
 
-            await _context.Customers.AddAsync(new Customer("firstName", "lastName", "username", "test@email.com", "123123123"));
+            await _context.Customers.AddAsync(new Customer("Jan", "Kowalski", "kowal123", "kowal@email.com", "123123123"));
             await _context.SaveChangesAsync();
 
             var userService = new CustomerService(_context, email.Object, password.Object);
@@ -98,25 +100,42 @@ namespace Rental.Test.UnitTest
             var userService = new CustomerService(_context, email.Object, password.Object);
 
             // Act
-            await userService.RegisterAsync("firstName", "lastName", "username", "test@email.com", "123123123");
+            await userService.RegisterAsync("Jan", "Kowalski", "kowal123", "kowal@email.com", "123123123");
 
-            var registeredUser = await _context.Customers.FirstOrDefaultAsync(x => x.Username == "firstName");
+            var registeredUser = await _context.Customers.FirstOrDefaultAsync(x => x.Username == "kowal123");
 
             // Assert 
             Assert.NotNull(registeredUser);
-            Assert.AreEqual("username", registeredUser.Username);
+            Assert.AreEqual("kowal123", registeredUser.Username);
         }
 
         [Test]
-        public void ShouldNotBeAbleRegisterUser_InvaalidEmail()
+        public void ShouldBeThrowException_EmailParameterIsNull()
         {
             //Arrange
-            var email = new Mock<IEmailHelper>();
-            var password = new Mock<IPasswordHelper>();
-            var userService = new CustomerService(_context, email.Object, password.Object);
+            var passwordMock = new Mock<IPasswordHelper>();
+            var optionsMock = new Mock<IOptions<ConfigurationOptions>>();
+
+            var email = new EmailHelper(_context, optionsMock.Object);
 
             // Act
-            var exception = Assert.ThrowsAsync<CoreException>(() => userService.RegisterAsync("firstName", "lastName", "username", null, "123123123"));
+            var exception = Assert.Throws<ArgumentNullException>(() => email.ValidateEmail(null));
+
+            // Assert
+            Assert.AreEqual("Value cannot be null. (Parameter 'email')", exception.Message);
+        }
+
+        [Test]
+        public void ShouldThrowInvalidEmail()
+        {
+            //Arrange
+            var passwordMock = new Mock<IPasswordHelper>();
+            var optionsMock = new Mock<IOptions<ConfigurationOptions>>();
+
+            var email = new EmailHelper(_context, optionsMock.Object);
+
+            // Act
+            var exception = Assert.Throws<CoreException>(() => email.ValidateEmail("wrongEmail"));
 
             // Assert
             Assert.AreEqual(ErrorCode.InvalidEmail, exception.Code);

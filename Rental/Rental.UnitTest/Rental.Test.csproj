@@ -25,6 +25,7 @@
 
   <ItemGroup>
     <Folder Include="IntegrationTest\" />
+    <Folder Include="Properties\" />
   </ItemGroup>
 
 </Project>
