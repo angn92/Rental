@@ -37,7 +37,7 @@ namespace Rental.Core.Domain
 
         public void SetFirstName(string firstName)
         {
-            ValidationParameter.FailIfNullOrEmpty(firstName);
+            ValidationParameter.FailIfNullOrEmpty(firstName, nameof(FirstName));
             FirstName = firstName;
         }
 

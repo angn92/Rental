@@ -51,6 +51,25 @@ namespace Rental.Test.UnitTest
         }
 
         [Test]
+        public async Task ShouldBReturnFalseWhenGivenCustomerNotExist()
+        {
+            // Arrange
+            var email = new Mock<IEmailHelper>();
+            var password = new Mock<IPasswordHelper>();
+
+            await _context.Customers.AddAsync(new Customer("firstName", "lastName", "username", "test@email.com", "123123123"));
+            await _context.SaveChangesAsync();
+
+            var userService = new CustomerService(_context, email.Object, password.Object);
+
+            // Act
+            var exist = await userService.CheckIfExist("wrong_username");
+
+            // Assert
+            Assert.IsFalse(exist);
+        }
+
+        [Test]
         public async Task ShouldBeAbleGetCustomer()
         {
             // Arrange
@@ -107,6 +126,23 @@ namespace Rental.Test.UnitTest
             // Assert 
             Assert.NotNull(registeredUser);
             Assert.AreEqual("kowal123", registeredUser.Username);
+        }
+
+        [Test]
+        public async Task ShouldNotBeAbleRegisterCustomer_InvalidInputData()
+        {
+            // Arrange
+            var email = new Mock<IEmailHelper>();
+            var password = new Mock<IPasswordHelper>();
+            var userService = new CustomerService(_context, email.Object, password.Object);
+            string FirstName = null;
+
+            // Act
+            var exception = Assert.ThrowsAsync<Exception>(() => userService.RegisterAsync(FirstName, "Kowalski", "kowal123", 
+                                                                    "kowal@email.com", "123123123"));
+
+            // Assert
+            Assert.AreEqual($"Registration is failed. Value cannot be null. (Parameter '{nameof(FirstName)}')", exception.Message);
         }
 
         [Test]

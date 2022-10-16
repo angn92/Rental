@@ -8,10 +8,10 @@ namespace Rental.Core.Validation
         /// Check that given parameter is null, empty or whitespace.
         /// </summary>
         /// <param name="arg"></param>
-        public static void FailIfNullOrEmpty(string arg)
+        public static void FailIfNullOrEmpty(string arg, string parameter = null)
         {
             if (String.IsNullOrWhiteSpace(arg))
-                throw new Exception($"Parameter {nameof(arg)} can not be null or empty.");
+                throw new ArgumentNullException(parameter);
         }
 
         public static void FailIfNull(object arg)
