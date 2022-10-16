@@ -1,38 +1,31 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using NUnit.Framework;
 using Rental.Infrastructure.EF;
+using System;
 
 namespace Rental.Test
 {
-    public class TestBase
+    public abstract class TestBase
     {
-        public DbContextOptions<ApplicationDbContext> _context;
-        public string firstName, lastName, userName, email, password;
+        public DbContextOptions<ApplicationDbContext> _options;
+        public ApplicationDbContext _context;
+
+        public string firstName, lastName, username, email, phone;
 
         [SetUp]
-        public void SetContext()
+        public void SetUp()
         {
-            _context = new DbContextOptionsBuilder<ApplicationDbContext>()
-                        .UseInMemoryDatabase(databaseName: "testDB")
-                        .Options;
+            _options = new DbContextOptionsBuilder<ApplicationDbContext>()
+                .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
+                .Options;
+
+            _context = new ApplicationDbContext(_options);
+
+            firstName = "Jan";
+            lastName = "Kowalski";
+            email = "email@email.com";
+            username = "jan_kowal";
+            phone = "123456789";
         }
-
-        public ApplicationDbContext GetContext() => new(_context);
-
-        [SetUp]
-        public void SetBaseDataUser()
-        {
-            firstName = "Adam";
-            lastName = "Nowak";
-            userName = "adam123";
-            email = "adam@email.com";
-            password = null;
-        }
-
-        //[SetUp]
-        //public void SetServices()
-        //{
-
-        //}
     }
 }

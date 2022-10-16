@@ -1,19 +1,24 @@
 ﻿using JetBrains.Annotations;
 using Rental.Core.Domain;
+using Rental.Core.Enum;
 using Rental.Infrastructure.EF;
+using System;
 
 namespace Rental.Test.Helpers
 {
     public static class CreateSessionTestHelper
     {
-        //public static Session CreateActiveSession([NotNull] ApplicationDbContext context, int sessionId, Customer customer)
-        //{
-        //    //var session = new Session(sessionId, customer);
+        public static Session CreateSession([NotNull] ApplicationDbContext context, int sessionId, Customer customer,
+                        SessionState sessionState, Action<Session> action = null)
+        { 
+            var session = new Session(sessionId, customer, sessionState);
 
-        //    context.Add(session);
-        //    context.SaveChanges();
+            action?.Invoke(session);
 
-        //    return session;
-        //}
+            context.Add(session);
+            context.SaveChanges();
+
+            return session;
+        }
     }
 }
