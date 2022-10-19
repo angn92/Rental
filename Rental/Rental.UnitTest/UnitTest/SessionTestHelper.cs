@@ -1,14 +1,9 @@
 ﻿using NUnit.Framework;
-using Rental.Core.Domain;
 using Rental.Core.Enum;
 using Rental.Infrastructure.Exceptions;
 using Rental.Infrastructure.Helpers;
 using Rental.Test.Helpers;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Rental.Test.UnitTest

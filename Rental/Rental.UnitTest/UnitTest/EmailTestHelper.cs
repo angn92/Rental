@@ -13,21 +13,8 @@ using System;
 namespace Rental.Test.UnitTest
 {
     [TestFixture]
-    public class EmailTestHelper
+    public class EmailTestHelper : TestBase
     {
-        private DbContextOptions<ApplicationDbContext> _options;
-        private ApplicationDbContext _context;
-
-        [SetUp]
-        public void SetUp()
-        {
-            _options = new DbContextOptionsBuilder<ApplicationDbContext>()
-                .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
-                .Options;
-
-            _context = new ApplicationDbContext(_options);
-        }
-
         [Test]
         public void ShouldBeThrowException_EmailParameterIsNull()
         {
