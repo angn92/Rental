@@ -21,7 +21,7 @@ namespace Rental.Test.UnitTest
             var emailMock = new Mock<IEmailHelper>();
             var passwordMock = new Mock<IPasswordHelper>();
 
-            CreateCustomerTestHelper.CreateCustomer(_context, firstName, lastName, username, email, phone, null);
+            CustomerTestHelper.CreateCustomer(_context, firstName, lastName, username, email, phone, null);
             var userService = new CustomerService(_context, emailMock.Object, passwordMock.Object);
 
             // Act
@@ -38,7 +38,7 @@ namespace Rental.Test.UnitTest
             var emailMock = new Mock<IEmailHelper>();
             var passwordMock = new Mock<IPasswordHelper>();
 
-            CreateCustomerTestHelper.CreateCustomer(_context, firstName, lastName, username, email, phone, null);
+            CustomerTestHelper.CreateCustomer(_context, firstName, lastName, username, email, phone, null);
             var userService = new CustomerService(_context, emailMock.Object, passwordMock.Object);
 
             // Act
@@ -55,7 +55,7 @@ namespace Rental.Test.UnitTest
             var emailMock = new Mock<IEmailHelper>();
             var passwordMock = new Mock<IPasswordHelper>();
 
-            CreateCustomerTestHelper.CreateCustomer(_context, firstName, lastName, username, email, null, null);
+            CustomerTestHelper.CreateCustomer(_context, firstName, lastName, username, email, null, null);
             var userService = new CustomerService(_context, emailMock.Object, passwordMock.Object);
 
             // Act
@@ -75,7 +75,7 @@ namespace Rental.Test.UnitTest
             var emailMock = new Mock<IEmailHelper>();
             var passwordMock = new Mock<IPasswordHelper>();
 
-            CreateCustomerTestHelper.CreateCustomer(_context, firstName, lastName, username, email, phone, null);
+            CustomerTestHelper.CreateCustomer(_context, firstName, lastName, username, email, phone, null);
             var userService = new CustomerService(_context, emailMock.Object, passwordMock.Object);
 
             // Act
@@ -127,7 +127,7 @@ namespace Rental.Test.UnitTest
             var emailMock = new Mock<IEmailHelper>();
             var passwordMock = new Mock<IPasswordHelper>();
 
-            var customer = CreateCustomerTestHelper.CreateCustomer(_context, "Jan", "Kowalski", "janek00", "jan@email.com", null, x =>
+            var customer = CustomerTestHelper.CreateCustomer(_context, "Jan", "Kowalski", "janek00", "jan@email.com", null, x =>
             {
                 x.Status = AccountStatus.Blocked;
             });
@@ -149,7 +149,7 @@ namespace Rental.Test.UnitTest
             var emailMock = new Mock<IEmailHelper>();
             var passwordMock = new Mock<IPasswordHelper>();
 
-            var customer = CreateCustomerTestHelper.CreateCustomer(_context, "Jan", "Kowalski", "janek00", "jan@email.com", null, x =>
+            var customer = CustomerTestHelper.CreateCustomer(_context, "Jan", "Kowalski", "janek00", "jan@email.com", null, x =>
             {
                 x.Status = AccountStatus.NotActive;
             });

@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace Rental.Test.UnitTest
 {
     [TestFixture]
-    public class SessionTestHelper : TestBase
+    public class SessionTest : TestBase
     {
         [Test]
         [TestCase(SessionState.Active)]
@@ -19,7 +19,7 @@ namespace Rental.Test.UnitTest
         {
             // Arrange
             var sessioId = 123456;
-            var customer = CreateCustomerTestHelper.CreateCustomer(_context, firstName, lastName, username, email, phone);
+            var customer = CustomerTestHelper.CreateCustomer(_context, firstName, lastName, username, email, phone);
             var session = CreateSessionTestHelper.CreateSession(_context, sessioId, customer, sessionState);
             var sessionHelper = new SessionHelper();
 
@@ -35,7 +35,7 @@ namespace Rental.Test.UnitTest
         {
             // Arrange
             var sessioId = 123456;
-            var customer = CreateCustomerTestHelper.CreateCustomer(_context, firstName, lastName, username, email, phone);
+            var customer = CustomerTestHelper.CreateCustomer(_context, firstName, lastName, username, email, phone);
             var session = CreateSessionTestHelper.CreateSession(_context, sessioId, customer, SessionState.Active, x =>
             {
                 x.GenerationDate = DateTime.UtcNow.AddMinutes(-20);
@@ -56,7 +56,7 @@ namespace Rental.Test.UnitTest
         {
             // Arrange
             var sessioId = 123456;
-            var customer = CreateCustomerTestHelper.CreateCustomer(_context, firstName, lastName, username, email, phone);
+            var customer = CustomerTestHelper.CreateCustomer(_context, firstName, lastName, username, email, phone);
             var session = CreateSessionTestHelper.CreateSession(_context, sessioId, customer, SessionState.Active);
 
             var sessionHelper = new SessionHelper();
@@ -73,7 +73,7 @@ namespace Rental.Test.UnitTest
         {
             // Arrange
             var sessioId = 123456;
-            var customer = CreateCustomerTestHelper.CreateCustomer(_context, firstName, lastName, username, email, phone);
+            var customer = CustomerTestHelper.CreateCustomer(_context, firstName, lastName, username, email, phone);
             var session = CreateSessionTestHelper.CreateSession(_context, sessioId, customer, SessionState.NotAuthorized);
 
             var sessionHelper = new SessionHelper();
@@ -90,7 +90,7 @@ namespace Rental.Test.UnitTest
         {
             // Arrange
             var sessioId = 123456;
-            var customer = CreateCustomerTestHelper.CreateCustomer(_context, firstName, lastName, username, email, phone);
+            var customer = CustomerTestHelper.CreateCustomer(_context, firstName, lastName, username, email, phone);
             var session = CreateSessionTestHelper.CreateSession(_context, sessioId, customer, SessionState.Expired);
 
             var sessionHelper = new SessionHelper();
@@ -107,7 +107,7 @@ namespace Rental.Test.UnitTest
         {
             // Arrange
             var sessioId = 123456;
-            var customer = CreateCustomerTestHelper.CreateCustomer(_context, firstName, lastName, username, email, phone);
+            var customer = CustomerTestHelper.CreateCustomer(_context, firstName, lastName, username, email, phone);
             CreateSessionTestHelper.CreateSession(_context, sessioId, customer, SessionState.Active);
 
             var sessionHelper = new SessionHelper();
@@ -125,7 +125,7 @@ namespace Rental.Test.UnitTest
             // Arrange
             var sessioId = 123456;
             var wrongSessionId = 654321;
-            var customer = CreateCustomerTestHelper.CreateCustomer(_context, firstName, lastName, username, email, phone);
+            var customer = CustomerTestHelper.CreateCustomer(_context, firstName, lastName, username, email, phone);
             CreateSessionTestHelper.CreateSession(_context, sessioId, customer, SessionState.Active);
 
             var sessionHelper = new SessionHelper();

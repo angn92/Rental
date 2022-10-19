@@ -24,8 +24,8 @@ namespace Rental.Core.Domain
         {
         }
 
-        public Customer([NotNull] string firstName, [NotNull] string lastName, [NotNull] string username, 
-                    [NotNull] string email, [NotNull] string phone)
+        public Customer([NotNull] string firstName, [NotNull] string lastName, [NotNull] string username, [NotNull] string email, 
+            [NotNull] string phone)
         {
             SetFirstName(firstName);
             SetLastName(lastName);

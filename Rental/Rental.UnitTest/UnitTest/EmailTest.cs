@@ -13,7 +13,7 @@ using System;
 namespace Rental.Test.UnitTest
 {
     [TestFixture]
-    public class EmailTestHelper : TestBase
+    public class EmailTest : TestBase
     {
         [Test]
         public void ShouldBeThrowException_EmailParameterIsNull()
@@ -52,7 +52,7 @@ namespace Rental.Test.UnitTest
             var optionsMock = new Mock<IOptions<ConfigurationOptions>>();
             var email = new EmailHelper(_context, optionsMock.Object);
 
-            var customer = CreateCustomerTestHelper.CreateCustomer(_context, "Jan", "Kowalski", "janek00", "jan@email.com", null, x =>
+            var customer = CustomerTestHelper.CreateCustomer(_context, "Jan", "Kowalski", "janek00", "jan@email.com", null, x =>
             {
                 x.Status = AccountStatus.NotActive;
             });
