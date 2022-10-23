@@ -165,5 +165,29 @@ namespace Rental.Test.UnitTest
             Assert.AreEqual(PasswordStatus.Active.ToString(), activePassword.Status.ToString());
             Assert.IsNotNull(activePassword);
         }
+
+        [Test]
+        public async Task ShouldBeAbleGetPasswordToAuthorize_WhenExist()
+        {
+            // Arrange
+            var encryptMock = new Mock<IEncrypt>();
+            var passwordHelper = new PasswordHelper(_context, encryptMock.Object);
+            var customer = CustomerTestHelper.CreateCustomer(_context, firstName, lastName, username, email, phone);
+            var newPassword = PasswordTestHelper.CreatePassword(_context, hashPassword, salt, customer, passwordCode);
+
+            // Act
+            var passwordToAuthorize = await passwordHelper.FindPasswordToAuthorize(customer.Username, passwordCode);
+
+            // Assert
+            Assert.IsNotNull(passwordToAuthorize);
+            Assert.That(passwordToAuthorize.NewPassword);
+            Assert.AreEqual(PasswordStatus.NotActive, passwordToAuthorize.Status);
+        }
+
+        [Test]
+        public void ShouldBeAbleComparePassword()
+        {
+            //todo
+        }
     }
 }

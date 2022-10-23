@@ -1,5 +1,6 @@
 ﻿using JetBrains.Annotations;
 using Rental.Core.Base;
+using System;
 using System.Collections.Generic;
 
 namespace Rental.Core.Domain
@@ -15,6 +16,7 @@ namespace Rental.Core.Domain
 
         public Category([NotNull] string name)
         {
+            CategoryId = Guid.NewGuid().ToString();
             Name = name;
         }
     }
