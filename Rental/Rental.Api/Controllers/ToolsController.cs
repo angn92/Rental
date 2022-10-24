@@ -1,5 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using JetBrains.Annotations;
+using Microsoft.AspNetCore.Mvc;
+using Rental.Infrastructure.Handlers.Password.Query;
 using Rental.Infrastructure.Query;
+using System.Threading.Tasks;
 
 namespace Rental.Api.Controllers
 {
@@ -14,6 +17,16 @@ namespace Rental.Api.Controllers
             this.queryDispatcher = queryDispatcher;
         }
 
+        /// <summary>
+        /// Endpoint to calculate hash for password and salt - only for test 
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        [HttpPost("Generate/Hash")]
+        public async Task<PasswordHashResponse> PrepareHashForPassword([NotNull] PasswordHashQuery query)
+        {
+            return await queryDispatcher.DispatchAsync<PasswordHashQuery, PasswordHashResponse>(query);
+        }
          
     }
 }
