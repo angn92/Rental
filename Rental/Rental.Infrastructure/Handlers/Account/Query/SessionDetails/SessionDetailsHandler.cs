@@ -1,5 +1,6 @@
 ﻿using Rental.Core.Validation;
 using Rental.Infrastructure.EF;
+using Rental.Infrastructure.Exceptions;
 using Rental.Infrastructure.Helpers;
 using Rental.Infrastructure.Query;
 using System.Threading;
@@ -24,14 +25,20 @@ namespace Rental.Infrastructure.Handlers.Account.Query.SessionDetails
 
             var session = await sessionHelper.GetSessionByIdAsync(context, query.Session);
 
-            sessionHelper.ValidateSession(session);
+            if (session == null)
+                throw new CoreException(ErrorCode.SessionDoesNotExist, "Session does not exist.");
+
+            if (sessionHelper.SessionExpired(session))
+                throw new CoreException(ErrorCode.SessionExpired, $"Session {query.Session} expired.");
+
+            var statusSession = sessionHelper.CheckSessionStatus(session);
 
             session.UpdateLastAccessDate();
 
             return new SessionDetailsRs
             {
                 SessionId = session.SessionId,
-                SessionStatus = session.State.ToString(),
+                SessionStatus = statusSession.ToString(),
                 ValidTo = session.LastAccessDate.AddMinutes(5) // add parameter to dictionary and replace 
             };
         }
