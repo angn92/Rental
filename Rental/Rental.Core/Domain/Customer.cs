@@ -32,7 +32,7 @@ namespace Rental.Core.Domain
             SetUsername(username);
             SetEmail(email);
             SetPhone(phone);
-            Status = AccountStatus.Active;
+            Status = AccountStatus.NotActive;
         }
 
         public void SetFirstName(string firstName)
