@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Options;
+﻿using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Rental.Core.Validation;
 using Rental.Infrastructure.Command;
 using Rental.Infrastructure.Configuration;
@@ -15,6 +16,7 @@ namespace Rental.Infrastructure.Handlers.Account.Command.CreateAccount
 {
     public class RegisterCustomerHandler : ICommandHandler<RegisterCustomer>
     {
+        private readonly ILogger logger;
         private readonly ICustomerService customerService;
         private readonly IOptions<ConfigurationOptions> options;
         private readonly IEmailHelper emailHelper;
@@ -22,9 +24,10 @@ namespace Rental.Infrastructure.Handlers.Account.Command.CreateAccount
         private readonly ApplicationDbContext context;
         private readonly IPasswordHelper passwordHelper;
 
-        public RegisterCustomerHandler(ICustomerService customerService, IOptions<ConfigurationOptions> options, IEmailHelper emailHelper,
-                                    ISessionService sessionService, ApplicationDbContext context, IPasswordHelper passwordHelper)
+        public RegisterCustomerHandler(ILogger<RegisterCustomerHandler> logger, ICustomerService customerService, IOptions<ConfigurationOptions> options, 
+            IEmailHelper emailHelper, ISessionService sessionService, ApplicationDbContext context, IPasswordHelper passwordHelper)
         {
+            this.logger = logger;
             this.customerService = customerService;
             this.options = options;
             this.emailHelper = emailHelper;
@@ -50,6 +53,8 @@ namespace Rental.Infrastructure.Handlers.Account.Command.CreateAccount
 
                 var code = passwordHelper.GenerateActivationCode();
 
+                logger.LogInformation($"Activation code {code}");
+
                 await passwordHelper.SetPassword(command.Password, customer, code.ToString());
 
                 var prepareEmail = new EmailConfiguration
@@ -61,9 +66,12 @@ namespace Rental.Infrastructure.Handlers.Account.Command.CreateAccount
                 };
 
                 emailHelper.SendEmail(prepareEmail);
+
+                logger.LogInformation("Registration process was successful. Activation code has been sent on given address email.");
             }
             catch (Exception ex)
             {
+                logger.LogError("Process registration new customer is failed.");
                 throw new Exception(ex.Message, ex);
             }
         }

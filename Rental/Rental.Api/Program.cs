@@ -17,6 +17,10 @@ using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
+
+
+builder.Services.AddLogging((x) => x.SetMinimumLevel(LogLevel.Information).AddConsole());
+
 //Defoult middleware logging in .NET 6
 builder.Services.AddHttpLogging(logging =>
 {

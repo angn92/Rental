@@ -8,6 +8,8 @@ using Rental.Infrastructure.EF;
 using System.Security.Cryptography;
 using Rental.Core.Domain;
 using Rental.Core.Enum;
+using System;
+using Microsoft.Extensions.Logging;
 
 namespace Rental.Infrastructure.Handlers.Sessions
 {
@@ -15,10 +17,13 @@ namespace Rental.Infrastructure.Handlers.Sessions
     {
         private readonly ICustomerService _customerService;
         private readonly ISessionService _sessionService;
+        private readonly ILogger<CreateSessionHandler> logger;
         private readonly ApplicationDbContext _context;
 
-        public CreateSessionHandler(ApplicationDbContext context, ICustomerService userService, ISessionService sessionService)
+        public CreateSessionHandler(ILogger<CreateSessionHandler> logger, ApplicationDbContext context, ICustomerService userService, 
+            ISessionService sessionService)
         {
+            this.logger = logger;
             _context = context;
             _customerService = userService;
             _sessionService = sessionService;
@@ -30,10 +35,16 @@ namespace Rental.Infrastructure.Handlers.Sessions
 
             var customer = await _customerService.GetCustomerAsync(command.Username);
 
-            // Do not allow create session if customer has blocked or not active account 
-            _customerService.ValidateCustomerAccount(customer);
-
-            // If customer has assigned other session remove them all
+            try
+            {
+                _customerService.ValidateCustomerAccount(customer);
+            }
+            catch(Exception ex)
+            {
+                logger.LogInformation($"To create session is required active customer account. {ex.Message}.");
+                throw;
+            }
+            
             await _sessionService.RemoveAllSession(command.Username);
 
             var sessionId = GenerateNewSession();
