@@ -1,5 +1,6 @@
 ﻿using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using Rental.Core.Domain;
 using Rental.Core.Enum;
 using Rental.Infrastructure.EF;
@@ -14,12 +15,14 @@ namespace Rental.Infrastructure.Services.SessionService
 {
     public class SessionService : ISessionService
     {
+        private readonly ILogger<SessionService> logger;
         private readonly ApplicationDbContext context;
         private readonly ICustomerService _customerService;
         private readonly IUserHelper _userHelper;
 
-        public SessionService(ApplicationDbContext context, ICustomerService customerService, IUserHelper userHelper)
+        public SessionService(ILogger<SessionService> logger, ApplicationDbContext context, ICustomerService customerService, IUserHelper userHelper)
         {
+            this.logger = logger;
             this.context = context;
             _customerService = customerService;
             _userHelper = userHelper;
@@ -40,15 +43,17 @@ namespace Rental.Infrastructure.Services.SessionService
             return await context.Sessions.FirstOrDefaultAsync(x => x.SessionId == idSession);
         }
 
-        public async Task RemoveAllSession([NotNull] string username)
+        public void RemoveAllSession([NotNull] string username)
         {
-            var session = await context.Sessions.Where(x => x.Customer.Username == username).FirstOrDefaultAsync();
+            var session = context.Sessions.Where(x => x.Customer.Username == username).ToList();
 
             if(session is null)
                 return;
 
+            logger.LogInformation($"Was remove {session.Count} old session for customer {username}.");
+
             context.Remove(session);
-            await context.SaveChangesAsync();
+            context.SaveChangesAsync();
         }
 
         public async Task RemoveSession([NotNull] int idSession)

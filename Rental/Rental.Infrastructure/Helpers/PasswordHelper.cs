@@ -56,10 +56,8 @@ namespace Rental.Infrastructure.Helpers
                                                                         && x.Status == PasswordStatus.Active);
 
             if (password == null)
-            {
                 throw new CoreException(ErrorCode.PasswordNotExist, $"Customer {customer.Username} does not have active password.");
-            }
-
+            
             return password;
         }
 

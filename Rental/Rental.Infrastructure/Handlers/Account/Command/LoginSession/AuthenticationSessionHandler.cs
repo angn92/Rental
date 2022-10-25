@@ -1,4 +1,5 @@
-﻿using Rental.Core.Enum;
+﻿using Microsoft.Extensions.Logging;
+using Rental.Core.Enum;
 using Rental.Core.Validation;
 using Rental.Infrastructure.Command;
 using Rental.Infrastructure.EF;
@@ -13,14 +14,16 @@ namespace Rental.Infrastructure.Handlers.Account.Command.LoginSession
 {
     public class AuthenticationSessionHandler : ICommandHandler<AuthenticationSessionCommand, AuthenticationSessionResponse>
     {
+        private readonly ILogger<AuthenticationSessionHandler> logger;
         private readonly ICustomerService customerService;
         private readonly IPasswordHelper passwordHelper;
         private readonly ISessionService sessionService;
         private readonly ApplicationDbContext context;
 
-        public AuthenticationSessionHandler(ICustomerService customerService, IPasswordHelper passwordHelper, ISessionService sessionService,
-                                            ApplicationDbContext context)
+        public AuthenticationSessionHandler(ILogger<AuthenticationSessionHandler> logger, ICustomerService customerService,
+            IPasswordHelper passwordHelper, ISessionService sessionService, ApplicationDbContext context)
         {
+            this.logger = logger;
             this.customerService = customerService;
             this.passwordHelper = passwordHelper;
             this.sessionService = sessionService;
@@ -32,6 +35,7 @@ namespace Rental.Infrastructure.Handlers.Account.Command.LoginSession
             ValidationParameter.FailIfNull(nameof(command));
 
             AuthenticationSessionResponse authSessionResponse;
+
             try
             {
                 var session = await sessionService.GetSessionAsync(command.SessionId);
@@ -42,7 +46,6 @@ namespace Rental.Infrastructure.Handlers.Account.Command.LoginSession
 
                 var password = await passwordHelper.GetActivePassword(customer);
 
-                //Check input password
                 passwordHelper.ComaprePasswords(password, command.Request.Password);
 
                 password.ChangePasswordMarker();
@@ -57,10 +60,13 @@ namespace Rental.Infrastructure.Handlers.Account.Command.LoginSession
                     ExpirationTime = session.LastAccessDate.AddMinutes(10)
                 };
 
+                logger.LogInformation("Authentication process has beedn successful.");
+
                 await context.SaveChangesAsync(cancellationToken);
             }
             catch (Exception ex)
             {
+                logger.LogError($"Authentication session precess failed.");
                 throw new Exception(ex.Message, ex);
             }
 

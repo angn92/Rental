@@ -5,19 +5,23 @@ using Rental.Infrastructure.Services.CustomerService;
 using System.Threading.Tasks;
 using System.Threading;
 using Rental.Core.Validation;
+using Microsoft.Extensions.Logging;
+using System;
 
 namespace Rental.Infrastructure.Handlers.Password
 {
     public class ChangePasswordHandler : ICommandHandler<ChangePasswordCommand>
     {
+        private readonly ILogger<ChangePasswordHandler> logger;
         private readonly ICustomerService _customerService;
         private readonly ISessionService _sessionService;
         private readonly ISessionHelper _sessionHelper;
         private readonly IPasswordHelper _passwordHelper;
 
-        public ChangePasswordHandler(ICustomerService customerService, ISessionService sessionService,
+        public ChangePasswordHandler(ILogger<ChangePasswordHandler> logger, ICustomerService customerService, ISessionService sessionService,
                                      ISessionHelper sessionHelper, IPasswordHelper passwordHelper)
         {
+            this.logger = logger;
             _customerService = customerService;
             _sessionService = sessionService;
             _sessionHelper = sessionHelper;
@@ -29,19 +33,30 @@ namespace Rental.Infrastructure.Handlers.Password
             ValidationParameter.FailIfNull(command);
 
             // to do get session which will be get from headers, implementation after add headers
+            try
+            {
+                var customer = await _customerService.GetCustomerAsync(command.Username);
 
-            var customer = await _customerService.GetCustomerAsync(command.Username);
+                _customerService.ValidateCustomerAccount(customer);
 
-            _customerService.ValidateCustomerAccount(customer);
-            
-            var activeUserPassword = await _passwordHelper.GetActivePassword(customer);
+                var activeUserPassword = await _passwordHelper.GetActivePassword(customer);
 
-            //compare old password and new password. New password can not be exactly same like old password
-            _passwordHelper.ComaprePasswords(activeUserPassword, command.NewPassword);
+                //compare old password and new password. New password can not be exactly same like old password
+                _passwordHelper.ComaprePasswords(activeUserPassword, command.NewPassword);
 
-            await _passwordHelper.RemoveOldPassword(command.Username);
+                await _passwordHelper.RemoveOldPassword(command.Username);
 
-            await _passwordHelper.SetPassword(command.NewPassword, customer, "123");
+                var activationCode = _passwordHelper.GenerateActivationCode();
+
+                logger.LogInformation($"Preparing activation code. Your code is {activationCode}.");
+
+                await _passwordHelper.SetPassword(command.NewPassword, customer, activationCode.ToString());
+            }
+            catch (Exception ex)
+            {
+                logger.LogError($"Action change password is failed. {ex.Message}.");
+                throw;
+            }
         }
     }
 }

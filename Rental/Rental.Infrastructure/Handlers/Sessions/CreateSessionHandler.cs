@@ -45,16 +45,18 @@ namespace Rental.Infrastructure.Handlers.Sessions
                 throw;
             }
             
-            await _sessionService.RemoveAllSession(command.Username);
+            _sessionService.RemoveAllSession(command.Username);
 
             var sessionId = GenerateNewSession();
 
             var session = new Session(sessionId, customer, SessionState.NotAuthorized);
 
-            await _context.AddAsync(session);
-            await _context.SaveChangesAsync();
+            await _context.AddAsync(session, cancellationToken);
+            await _context.SaveChangesAsync(cancellationToken);
 
             var expirationDate = session.GenerationDate;
+
+            logger.LogInformation($"New session {sessionId} was has beed created.");
 
             return new CreateSessionResponse
             {
