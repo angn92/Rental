@@ -11,7 +11,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Rental.Infrastructure", "Re
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Rental.Test", "Rental.UnitTest\Rental.Test.csproj", "{B77ABF20-F0D7-47E1-B24A-06C366815B22}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RentalCommon", "RentalCommon\RentalCommon.csproj", "{F56EC3EA-863B-4376-AFC3-D7F1837ED9CB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RentalCommon", "RentalCommon\RentalCommon.csproj", "{F56EC3EA-863B-4376-AFC3-D7F1837ED9CB}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{865F6CDC-F52E-4DD6-A0D6-FADFFEA9E0D5}"
+	ProjectSection(SolutionItems) = preProject
+		Dockerfile = Dockerfile
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
