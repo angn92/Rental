@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace Rental.Infrastructure.Handlers.Account.Command.CreateAccount
 {
-    public class RegisterCustomerHandler : ICommandHandler<RegisterCustomer>
+    public class RegisterCustomerHandler : ICommandHandler<RegisterCustomer, RegisterCustomerResponse>
     {
         private readonly ILogger logger;
         private readonly ICustomerService customerService;
@@ -36,7 +36,7 @@ namespace Rental.Infrastructure.Handlers.Account.Command.CreateAccount
             this.passwordHelper = passwordHelper;
         }
 
-        public async ValueTask HandleAsync(RegisterCustomer command, CancellationToken cancellationToken = default)
+        public async ValueTask<RegisterCustomerResponse> HandleAsync(RegisterCustomer command, CancellationToken cancellationToken = default)
         {
             ValidationParameter.FailIfNull(command);
 
@@ -68,6 +68,13 @@ namespace Rental.Infrastructure.Handlers.Account.Command.CreateAccount
                 emailHelper.SendEmail(prepareEmail);
 
                 logger.LogInformation("Registration process was successful. Activation code has been sent on given address email.");
+
+                var response = new RegisterCustomerResponse
+                {
+                    SessionId = customerSession.SessionId.ToString()
+                };
+
+                return new ValueTask<RegisterCustomerResponse>(response).Result; 
             }
             catch (Exception ex)
             {

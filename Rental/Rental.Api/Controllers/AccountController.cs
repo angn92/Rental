@@ -34,11 +34,11 @@ namespace Rental.Api.Controllers
         /// <param name="command">Base information about user account.</param>
         /// <returns></returns>
         [HttpPost("Register/Customer")]
-        public async Task RegisterAccount([FromBody][NotNull] RegisterCustomer command)
+        public async Task<RegisterCustomerResponse> RegisterAccount([FromBody][NotNull] RegisterCustomer command)
         {
             ValidationParameter.FailIfNull(command);
 
-            await _commandDispatcher.DispatchAsync(command);
+            return await _commandDispatcher.DispatchAsync<RegisterCustomer, RegisterCustomerResponse>(command);
         }
 
         /// <summary>
