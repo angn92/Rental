@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Rental.Core.Enum;
 using Rental.Core.Validation;
 using Rental.Infrastructure.Command;
 using Rental.Infrastructure.Configuration;
@@ -16,60 +17,49 @@ namespace Rental.Infrastructure.Handlers.Account.Command.CreateAccount
 {
     public class RegisterCustomerHandler : ICommandHandler<RegisterCustomer, RegisterCustomerResponse>
     {
-        private readonly ILogger logger;
-        private readonly ICustomerService customerService;
-        private readonly IOptions<ConfigurationOptions> options;
-        private readonly IEmailHelper emailHelper;
-        private readonly ISessionService sessionService;
-        private readonly ApplicationDbContext context;
-        private readonly IPasswordHelper passwordHelper;
+        private readonly ILogger _logger;
+        private readonly ICustomerService _customerService;
+        private readonly IEmailHelper _emailHelper;
+        private readonly ISessionService _sessionService;
+        private readonly IPasswordHelper _passwordHelper;
 
-        public RegisterCustomerHandler(ILogger<RegisterCustomerHandler> logger, ICustomerService customerService, 
-            IOptions<ConfigurationOptions> options, IEmailHelper emailHelper, ISessionService sessionService, 
-            ApplicationDbContext context, IPasswordHelper passwordHelper)
+        public RegisterCustomerHandler(ILogger<RegisterCustomerHandler> logger, ICustomerService customerService, IEmailHelper emailHelper, 
+            ISessionService sessionService, IPasswordHelper passwordHelper)
         {
-            this.logger = logger;
-            this.customerService = customerService;
-            this.options = options;
-            this.emailHelper = emailHelper;
-            this.sessionService = sessionService;
-            this.context = context;
-            this.passwordHelper = passwordHelper;
+            _logger = logger;
+            _customerService = customerService;
+            _emailHelper = emailHelper;
+            _sessionService = sessionService;
+            _passwordHelper = passwordHelper;
         }
 
         public async ValueTask<RegisterCustomerResponse> HandleAsync(RegisterCustomer command, CancellationToken cancellationToken = default)
         {
             ValidationParameter.FailIfNull(command);
 
-            var customerExist = await customerService.CheckIfExist(command.Username);
+            var customerExist = await _customerService.CheckIfExist(command.Username);
 
             if (customerExist)
-                throw new CoreException(ErrorCode.UsernameExist, $"This name {command.Username} is use.");
+                throw new CoreException(ErrorCode.UsernameExist, $"This username {command.Username} is in use.");
 
             try
             {
-                var customer = await customerService.RegisterAsync(command.FirstName, command.LastName, command.Username, 
+                var customer = await _customerService.RegisterAsync(command.FirstName, command.LastName, command.Username, 
                     command.Email, command.PhoneNumber);
 
-                var customerSession = await sessionService.CreateNotAuthorizedSession(customer);
+                var customerSession = await _sessionService.CreateNotAuthorizedSession(customer);
 
-                var code = passwordHelper.GenerateActivationCode();
+                var code = _passwordHelper.GenerateActivationCode();
 
-                logger.LogInformation($"Activation code {code}");
+                _logger.LogInformation($"Activation code {code}");
 
-                await passwordHelper.SetPassword(command.Password, customer, code.ToString());
+                await _passwordHelper.SetPassword(command.Password, customer, code.ToString());
 
-                var prepareEmail = new EmailConfiguration
-                {
-                    From = "test@email.com",
-                    To = command.Email,
-                    Subject = "Activate password",
-                    Message = $"You created new account. This is your activation code {code}",
-                };
+                var message = _emailHelper.PrepareEmail(command.Email, SubjectMessage.RegistrationAccount);
 
-                emailHelper.SendEmail(prepareEmail);
+                await _emailHelper.SendEmail(message);
 
-                logger.LogInformation("Registration process was successful. Activation code has been sent on given address email.");
+                _logger.LogInformation("Registration process was successful. Activation code has been sent on given address email.");
 
                 var response = new RegisterCustomerResponse
                 {
@@ -77,12 +67,10 @@ namespace Rental.Infrastructure.Handlers.Account.Command.CreateAccount
                 };
 
                 return response;
-
-                //return new ValueTask<RegisterCustomerResponse>(response).Result; 
             }
             catch (Exception ex)
             {
-                logger.LogError("Process registration new customer is failed.");
+                _logger.LogError("Process registration new customer is failed.");
                 throw new Exception(ex.Message, ex);
             }
         }
