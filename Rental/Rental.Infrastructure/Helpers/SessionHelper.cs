@@ -16,6 +16,7 @@ namespace Rental.Infrastructure.Helpers
         void ValidateSession([NotNull] Session session);
         Task<Session> GetSessionAsync([NotNull] ApplicationDbContext context, [NotNull] Customer customer);
         Task<Session> GetSessionByIdAsync([NotNull] ApplicationDbContext context, [NotNull] int sessionId);
+        string GenerateSessionId();
     }
 
     public class SessionHelper : ISessionHelper
@@ -56,6 +57,19 @@ namespace Rental.Infrastructure.Helpers
         public async Task<Session> GetSessionByIdAsync([NotNull] ApplicationDbContext context, [NotNull] int sessionId)
         {
             return await context.Sessions.SingleOrDefaultAsync(x => x.SessionId == sessionId);
+        }
+
+        /// <summary>
+        /// Generate random string session Id.
+        /// </summary>
+        /// <returns>New ession id</returns>
+        public string GenerateSessionId()
+        {
+            var randomSession = Guid.NewGuid().ToString();
+
+            randomSession = randomSession.Replace("-", "");
+
+            return randomSession;
         }
     }
 }

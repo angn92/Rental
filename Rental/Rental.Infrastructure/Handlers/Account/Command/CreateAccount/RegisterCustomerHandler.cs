@@ -24,8 +24,9 @@ namespace Rental.Infrastructure.Handlers.Account.Command.CreateAccount
         private readonly ApplicationDbContext context;
         private readonly IPasswordHelper passwordHelper;
 
-        public RegisterCustomerHandler(ILogger<RegisterCustomerHandler> logger, ICustomerService customerService, IOptions<ConfigurationOptions> options, 
-            IEmailHelper emailHelper, ISessionService sessionService, ApplicationDbContext context, IPasswordHelper passwordHelper)
+        public RegisterCustomerHandler(ILogger<RegisterCustomerHandler> logger, ICustomerService customerService, 
+            IOptions<ConfigurationOptions> options, IEmailHelper emailHelper, ISessionService sessionService, 
+            ApplicationDbContext context, IPasswordHelper passwordHelper)
         {
             this.logger = logger;
             this.customerService = customerService;
@@ -47,7 +48,8 @@ namespace Rental.Infrastructure.Handlers.Account.Command.CreateAccount
 
             try
             {
-                var customer = await customerService.RegisterAsync(command.FirstName, command.LastName, command.Username, command.Email, command.PhoneNumber);
+                var customer = await customerService.RegisterAsync(command.FirstName, command.LastName, command.Username, 
+                    command.Email, command.PhoneNumber);
 
                 var customerSession = await sessionService.CreateNotAuthorizedSession(customer);
 
@@ -74,7 +76,9 @@ namespace Rental.Infrastructure.Handlers.Account.Command.CreateAccount
                     SessionId = customerSession.SessionId.ToString()
                 };
 
-                return new ValueTask<RegisterCustomerResponse>(response).Result; 
+                return response;
+
+                //return new ValueTask<RegisterCustomerResponse>(response).Result; 
             }
             catch (Exception ex)
             {
