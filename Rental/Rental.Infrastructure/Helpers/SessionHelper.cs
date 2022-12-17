@@ -5,6 +5,9 @@ using Rental.Core.Enum;
 using Rental.Infrastructure.EF;
 using Rental.Infrastructure.Exceptions;
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Security.Cryptography;
 using System.Threading.Tasks;
 
 namespace Rental.Infrastructure.Helpers
@@ -17,6 +20,9 @@ namespace Rental.Infrastructure.Helpers
         Task<Session> GetSessionAsync([NotNull] ApplicationDbContext context, [NotNull] Customer customer);
         Task<Session> GetSessionByIdAsync([NotNull] ApplicationDbContext context, [NotNull] int sessionId);
         string GenerateSessionId();
+        Session CreateNotAuthorizeSession(Customer customer, SessionState notAuthorized);
+        Task<List<Session>> FindOldSession([NotNull] ApplicationDbContext context, [NotNull] string username);
+        void RemoveAllSession([NotNull] ApplicationDbContext context, [NotNull] List<Session> oldSessionCustomer);
     }
 
     public class SessionHelper : ISessionHelper
@@ -70,6 +76,29 @@ namespace Rental.Infrastructure.Helpers
             randomSession = randomSession.Replace("-", "");
 
             return randomSession;
+        }
+
+        private static int GenerateNewIdSession()
+        {
+            return RandomNumberGenerator.GetInt32(100000000, 999999999);
+        }
+
+        public Session CreateNotAuthorizeSession(Customer customer, SessionState sessionState)
+        {
+            return new Session(GenerateNewIdSession(), customer, sessionState);
+        }
+
+        public async Task<List<Session>> FindOldSession(ApplicationDbContext context, string username)
+        {
+            return await context.Sessions.Where(x => x.Customer.Username == username).ToListAsync();
+        }
+
+        public void RemoveAllSession(ApplicationDbContext context, List<Session> oldSessionCustomer)
+        {
+            foreach (var item in oldSessionCustomer)
+            {
+                context.Remove(item);
+            }
         }
     }
 }

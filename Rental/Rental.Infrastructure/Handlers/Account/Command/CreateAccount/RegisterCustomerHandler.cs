@@ -1,10 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using Rental.Core.Enum;
 using Rental.Core.Validation;
 using Rental.Infrastructure.Command;
-using Rental.Infrastructure.Configuration;
-using Rental.Infrastructure.EF;
 using Rental.Infrastructure.Exceptions;
 using Rental.Infrastructure.Helpers;
 using Rental.Infrastructure.Services.CustomerService;
@@ -47,7 +44,7 @@ namespace Rental.Infrastructure.Handlers.Account.Command.CreateAccount
                 var customer = await _customerService.RegisterAsync(command.FirstName, command.LastName, command.Username, 
                     command.Email, command.PhoneNumber);
 
-                var customerSession = await _sessionService.CreateNotAuthorizedSession(customer);
+                var customerSession = await _sessionService.CreateSession(customer);
 
                 var code = _passwordHelper.GenerateActivationCode();
 

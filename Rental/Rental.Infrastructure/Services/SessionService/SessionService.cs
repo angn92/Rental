@@ -8,70 +8,74 @@ using Rental.Infrastructure.Exceptions;
 using Rental.Infrastructure.Helpers;
 using Rental.Infrastructure.Services.CustomerService;
 using System.Linq;
-using System.Security.Cryptography;
 using System.Threading.Tasks;
 
 namespace Rental.Infrastructure.Services.SessionService
 {
     public class SessionService : ISessionService
     {
-        private readonly ILogger<SessionService> logger;
-        private readonly ApplicationDbContext context;
+        private readonly ILogger<SessionService> _logger;
+        private readonly ApplicationDbContext _context;
         private readonly ICustomerService _customerService;
         private readonly IUserHelper _userHelper;
+        private readonly ISessionHelper _sessionHelper;
 
-        public SessionService(ILogger<SessionService> logger, ApplicationDbContext context, ICustomerService customerService, IUserHelper userHelper)
+        public SessionService(ILogger<SessionService> logger, ApplicationDbContext context, ICustomerService customerService, IUserHelper userHelper,
+            ISessionHelper sessionHelper)
         {
-            this.logger = logger;
-            this.context = context;
+            _logger = logger;
+            _context = context;
             _customerService = customerService;
             _userHelper = userHelper;
+            _sessionHelper = sessionHelper;
         }
 
-        public async Task<Session> CreateNotAuthorizedSession([NotNull] Customer customer)
+        public async Task<Session> CreateSession([NotNull] Customer customer)
         {
-            var session = new Session(GenerateNewIdSession(), customer, SessionState.NotAuthorized);
+            var session = _sessionHelper.CreateNotAuthorizeSession(customer, SessionState.NotAuthorized);
+            _context.Add(session);
 
-            context.Add(session);
-            await context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
 
             return session;
         }
 
         public async Task<Session> GetSessionAsync([NotNull] int idSession)
         {
-            return await context.Sessions.FirstOrDefaultAsync(x => x.SessionId == idSession);
+            return await _context.Sessions.FirstOrDefaultAsync(x => x.SessionId == idSession);
         }
 
         public void RemoveAllSession([NotNull] string username)
         {
-            var session = context.Sessions.Where(x => x.Customer.Username == username).ToList();
+            var session = _context.Sessions.Where(x => x.Customer.Username == username).ToList();
 
             if(session is null)
                 return;
 
-            logger.LogInformation($"Was remove {session.Count} old session for customer {username}.");
+            _logger.LogInformation($"Was remove {session.Count} old session for customer {username}.");
 
-            context.Remove(session);
-            context.SaveChangesAsync();
+            _context.Remove(session);
+            _context.SaveChangesAsync();
         }
 
         public async Task RemoveSession([NotNull] int idSession)
         {
-            var sessionToRemove = await context.Sessions.FirstOrDefaultAsync(x => x.SessionId == idSession);
+            var sessionToRemove = await _context.Sessions.FirstOrDefaultAsync(x => x.SessionId == idSession);
 
             if (sessionToRemove == null)
             {
                 throw new CoreException(ErrorCode.SessionDoesNotExist, $"Session {idSession} does not exist.");
             }
 
-            context.Sessions.Remove(sessionToRemove);
-            await context.SaveChangesAsync();
+            _context.Sessions.Remove(sessionToRemove);
+            await _context.SaveChangesAsync();
         }
 
-        private static int GenerateNewIdSession()
+        
+
+        public Task<Session> ChangeSessionStatus([NotNull] int sessionId)
         {
-            return RandomNumberGenerator.GetInt32(100000000, 999999999);
+            throw new System.NotImplementedException();
         }
     }
 }
