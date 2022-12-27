@@ -1,13 +1,19 @@
 ﻿using JetBrains.Annotations;
 using Rental.Core.Domain;
-using Rental.Infrastructure.EF;
-using System.Collections.Generic;
+using Rental.Core.Enum;
 using System.Threading.Tasks;
 
 namespace Rental.Infrastructure.Services.SessionService
 {
     public interface ISessionService : IService
     {
+        /// <summary>
+        /// Create new session for customer
+        /// </summary>
+        /// <param name="username"></param>
+        /// <returns>New customer session</returns>
+        Task<Session> CreateSession([NotNull] Customer username);
+
         /// <summary>
         /// Get session with ID
         /// </summary>
@@ -26,12 +32,11 @@ namespace Rental.Infrastructure.Services.SessionService
         void RemoveAllSession([NotNull] string username);
 
         /// <summary>
-        /// Create new session for customer
+        /// Change current session state
         /// </summary>
-        /// <param name="username"></param>
-        /// <returns>New customer session</returns>
-        Task<Session> CreateSession([NotNull] Customer username);
-
-        Task<Session> ChangeSessionStatus([NotNull] int sessionId);
+        /// <param name="sessionId"></param>
+        /// <param name="sessionState"></param>
+        /// <returns></returns>
+        Task ChangeSessionStatus([NotNull] int sessionId, [NotNull] SessionState sessionState);
     }
 }

@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using Rental.Infrastructure.Command;
 
-namespace Rental.Infrastructure.Handlers.Sessions
+namespace Rental.Infrastructure.Handlers.Account.Command.Sessions
 {
     public class CreateSessionCommand : ICommand
     {

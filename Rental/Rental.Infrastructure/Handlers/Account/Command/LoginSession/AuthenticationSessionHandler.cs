@@ -3,6 +3,7 @@ using Rental.Core.Enum;
 using Rental.Core.Validation;
 using Rental.Infrastructure.Command;
 using Rental.Infrastructure.EF;
+using Rental.Infrastructure.Exceptions;
 using Rental.Infrastructure.Helpers;
 using Rental.Infrastructure.Services.CustomerService;
 using Rental.Infrastructure.Services.SessionService;
@@ -14,20 +15,22 @@ namespace Rental.Infrastructure.Handlers.Account.Command.LoginSession
 {
     public class AuthenticationSessionHandler : ICommandHandler<AuthenticationSessionCommand, AuthenticationSessionResponse>
     {
-        private readonly ILogger<AuthenticationSessionHandler> logger;
-        private readonly ICustomerService customerService;
-        private readonly IPasswordHelper passwordHelper;
-        private readonly ISessionService sessionService;
-        private readonly ApplicationDbContext context;
-
-        public AuthenticationSessionHandler(ILogger<AuthenticationSessionHandler> logger, ICustomerService customerService,
-            IPasswordHelper passwordHelper, ISessionService sessionService, ApplicationDbContext context)
+        private readonly ILogger<AuthenticationSessionHandler> _logger;
+        private readonly ICustomerService _customerService;
+        private readonly IPasswordHelper _passwordHelper;
+        private readonly ISessionService _sessionService;
+        private readonly ICustomerHelper _customerHelper;
+        private readonly ApplicationDbContext _context;
+        
+        public AuthenticationSessionHandler(ILogger<AuthenticationSessionHandler> logger, ApplicationDbContext context, ICustomerService customerService,
+            IPasswordHelper passwordHelper, ISessionService sessionService, ICustomerHelper customerHelper)
         {
-            this.logger = logger;
-            this.customerService = customerService;
-            this.passwordHelper = passwordHelper;
-            this.sessionService = sessionService;
-            this.context = context;
+            _logger = logger;
+            _customerService = customerService;
+            _passwordHelper = passwordHelper;
+            _sessionService = sessionService;
+            _customerHelper = customerHelper;
+            _context = context;
         }
 
         public async ValueTask<AuthenticationSessionResponse> HandleAsync(AuthenticationSessionCommand command, CancellationToken cancellationToken = default)
@@ -38,17 +41,20 @@ namespace Rental.Infrastructure.Handlers.Account.Command.LoginSession
 
             try
             {
-                var session = await sessionService.GetSessionAsync(command.SessionId);
+                _logger.LogInformation("Starting login process...");
 
-                var customer = await customerService.GetCustomerAsync(command.Request.Username);
+                var session = await _sessionService.GetSessionAsync(command.SessionId);
 
-                customerService.ValidateCustomerAccount(customer);
+                var customer = await _customerService.GetCustomerAsync(command.Request.Username);
 
-                var password = await passwordHelper.GetActivePassword(customer);
+                _customerHelper.ValidateCustomerAccount(customer);
 
-                passwordHelper.ComaprePasswords(password, command.Request.Password);
+                var password = await _passwordHelper.GetActivePassword(customer);
 
-                password.ChangePasswordMarker();
+                _passwordHelper.ComaprePasswords(password, command.Request.Password);
+
+                if(password.NewPassword)
+                    password.ChangePasswordMarker();
 
                 session.State = SessionState.Active;
                 session.UpdateLastAccessDate();
@@ -60,13 +66,13 @@ namespace Rental.Infrastructure.Handlers.Account.Command.LoginSession
                     ExpirationTime = session.LastAccessDate.AddMinutes(10)
                 };
 
-                logger.LogInformation("Authentication process has beedn successful.");
+                _logger.LogInformation("Authentication process has been successful.");
 
-                await context.SaveChangesAsync(cancellationToken);
+                await _context.SaveChangesAsync(cancellationToken);
             }
             catch (Exception ex)
             {
-                logger.LogError($"Authentication session precess failed.");
+                _logger.LogError($"Authentication session precess failed.");
                 throw new Exception(ex.Message, ex);
             }
 

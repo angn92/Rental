@@ -5,22 +5,19 @@ namespace Rental.Infrastructure.Handlers.Account.Command.CreateAccount
 {
     public class RegisterCustomer : ICommand
     {
-        [JsonProperty("firstName", Required = Required.Always)]
+        [JsonProperty("FirstName", Required = Required.Always)]
         public string FirstName { get; set; }
 
-        [JsonProperty("lastName", Required = Required.Always)]
+        [JsonProperty("LastName", Required = Required.Always)]
         public string LastName { get; set; }
 
-        [JsonProperty("username", Required = Required.Always)]
+        [JsonProperty("Username", Required = Required.Always)]
         public string Username { get; set; }
 
-        [JsonProperty("email", Required = Required.Always)]
+        [JsonProperty("Email", Required = Required.Always)]
         public string Email { get; set; }
 
-        [JsonProperty("phoneNumber", Required = Required.AllowNull)]
-        public string PhoneNumber { get; set; }
-
-        [JsonProperty("password", Required = Required.Always)]
+        [JsonProperty("Password", Required = Required.Always)]
         public string Password { get; set; }
     }
 }

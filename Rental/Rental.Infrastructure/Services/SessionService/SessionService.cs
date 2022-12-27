@@ -6,9 +6,9 @@ using Rental.Core.Enum;
 using Rental.Infrastructure.EF;
 using Rental.Infrastructure.Exceptions;
 using Rental.Infrastructure.Helpers;
-using Rental.Infrastructure.Services.CustomerService;
 using System.Linq;
 using System.Threading.Tasks;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace Rental.Infrastructure.Services.SessionService
 {
@@ -16,17 +16,12 @@ namespace Rental.Infrastructure.Services.SessionService
     {
         private readonly ILogger<SessionService> _logger;
         private readonly ApplicationDbContext _context;
-        private readonly ICustomerService _customerService;
-        private readonly IUserHelper _userHelper;
         private readonly ISessionHelper _sessionHelper;
 
-        public SessionService(ILogger<SessionService> logger, ApplicationDbContext context, ICustomerService customerService, IUserHelper userHelper,
-            ISessionHelper sessionHelper)
+        public SessionService(ILogger<SessionService> logger, ApplicationDbContext context, ISessionHelper sessionHelper)
         {
             _logger = logger;
             _context = context;
-            _customerService = customerService;
-            _userHelper = userHelper;
             _sessionHelper = sessionHelper;
         }
 
@@ -42,20 +37,12 @@ namespace Rental.Infrastructure.Services.SessionService
 
         public async Task<Session> GetSessionAsync([NotNull] int idSession)
         {
-            return await _context.Sessions.FirstOrDefaultAsync(x => x.SessionId == idSession);
-        }
+            var session = await _context.Sessions.FirstOrDefaultAsync(x => x.SessionId == idSession);
 
-        public void RemoveAllSession([NotNull] string username)
-        {
-            var session = _context.Sessions.Where(x => x.Customer.Username == username).ToList();
+            if (session is null)
+                throw new CoreException(ErrorCode.SessionDoesNotExist, $"Session {idSession} does not exist.");
 
-            if(session is null)
-                return;
-
-            _logger.LogInformation($"Was remove {session.Count} old session for customer {username}.");
-
-            _context.Remove(session);
-            _context.SaveChangesAsync();
+            return session;
         }
 
         public async Task RemoveSession([NotNull] int idSession)
@@ -71,11 +58,29 @@ namespace Rental.Infrastructure.Services.SessionService
             await _context.SaveChangesAsync();
         }
 
-        
-
-        public Task<Session> ChangeSessionStatus([NotNull] int sessionId)
+        public void RemoveAllSession([NotNull] string username)
         {
-            throw new System.NotImplementedException();
+            var session = _context.Sessions.Where(x => x.Customer.Username == username).ToList();
+
+            if(!session.Any())
+                return;
+
+            _logger.LogInformation($"Was remove {session.Count} old session for customer {username}.");
+
+            _context.Remove(session);
+            _context.SaveChangesAsync();
+        }
+
+        public async Task ChangeSessionStatus([NotNull] int sessionId, [NotNull] SessionState sessionState)
+        {
+            var session = await GetSessionAsync(sessionId);
+
+            if (session.State.Equals(sessionState))
+                return;
+
+            session.ChangeState(sessionState);
+
+            await _context.SaveChangesAsync();
         }
     }
 }

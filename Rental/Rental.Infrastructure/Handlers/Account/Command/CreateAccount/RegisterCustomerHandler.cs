@@ -34,15 +34,14 @@ namespace Rental.Infrastructure.Handlers.Account.Command.CreateAccount
         {
             ValidationParameter.FailIfNull(command);
 
-            var customerExist = await _customerService.CheckIfExist(command.Username);
-
-            if (customerExist)
-                throw new CoreException(ErrorCode.UsernameExist, $"This username {command.Username} is in use.");
-
             try
             {
-                var customer = await _customerService.RegisterAsync(command.FirstName, command.LastName, command.Username, 
-                    command.Email, command.PhoneNumber);
+                var customerExist = await _customerService.CheckIfExist(command.Username);
+
+                if (customerExist)
+                    throw new CoreException(ErrorCode.UsernameExist, $"This username {command.Username} is in use.");
+
+                var customer = await _customerService.RegisterAsync(command.FirstName, command.LastName, command.Username, command.Email);
 
                 var customerSession = await _sessionService.CreateSession(customer);
 

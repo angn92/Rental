@@ -2,20 +2,21 @@
 using Rental.Core.Domain;
 using Rental.Core.Enum;
 using Rental.Infrastructure.EF;
+using Rental.Infrastructure.Exceptions;
 using Rental.Infrastructure.Services;
-using System;
 
 using System.Threading.Tasks;
 
 namespace Rental.Infrastructure.Helpers
 {
-    public interface IUserHelper : IService
+    public interface ICustomerHelper : IService
     {
         string CheckAccountStatus(Customer user);
-        Task ChangeAccountStatus([NotNull] ApplicationDbContext context, [NotNull] Customer customer, AccountStatus status); 
+        Task ChangeAccountStatus([NotNull] ApplicationDbContext context, [NotNull] Customer customer, AccountStatus status);
+        void ValidateCustomerAccount([NotNull] Customer customer);
     }
 
-    public class UserHelper : IUserHelper
+    public class CustomerHelper : ICustomerHelper
     {
         //Customer can change status only on NotActive
         public async Task ChangeAccountStatus([NotNull] ApplicationDbContext context, [NotNull] Customer customer, AccountStatus status)
@@ -44,6 +45,15 @@ namespace Rental.Infrastructure.Helpers
                     break;
             }
             return status;
+        }
+
+        public void ValidateCustomerAccount([NotNull] Customer customer)
+        {
+            if (customer.Status == AccountStatus.Blocked)
+                throw new CoreException(ErrorCode.AccountBlocked, $"Account for customer {customer.Username} is blocked.");
+
+            if (customer.Status == AccountStatus.NotActive)
+                throw new CoreException(ErrorCode.AccountNotActive, $"Account for customer {customer.Username} is not active.");
         }
     }
 }

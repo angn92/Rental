@@ -24,14 +24,12 @@ namespace Rental.Core.Domain
         {
         }
 
-        public Customer([NotNull] string firstName, [NotNull] string lastName, [NotNull] string username, [NotNull] string email, 
-            [NotNull] string phone)
+        public Customer([NotNull] string firstName, [NotNull] string lastName, [NotNull] string username, [NotNull] string email)
         {
             SetFirstName(firstName);
             SetLastName(lastName);
             SetUsername(username);
             SetEmail(email);
-            SetPhone(phone);
             Status = AccountStatus.NotActive;
         }
 

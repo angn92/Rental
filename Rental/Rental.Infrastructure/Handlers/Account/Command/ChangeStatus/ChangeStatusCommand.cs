@@ -16,13 +16,13 @@ namespace Rental.Infrastructure.Handlers.Account.Commmand.ChangeStatus
 
     public class ChangeStatusRequest
     {
-        [JsonProperty("username", Required = Required.Always)]
+        [JsonProperty("Username", Required = Required.Always)]
         public string Username { get; set; }
 
-        [JsonProperty("accountStatus", Required = Required.Always)]
+        [JsonProperty("AccountStatus", Required = Required.Always)]
         public AccountStatus Status { get; set; }
 
-        [JsonProperty("reason", Required = Required.Always)]
+        [JsonProperty("Reason", Required = Required.Always)]
         public string Reason { get; set; }
     }
 }

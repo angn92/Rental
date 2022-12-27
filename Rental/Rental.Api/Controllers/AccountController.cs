@@ -9,7 +9,7 @@ using Rental.Infrastructure.Handlers.Account.Commmand.ChangeStatus;
 using Rental.Infrastructure.Handlers.Account.Query.AccountDetails;
 using Rental.Infrastructure.Handlers.Account.Query.SessionDetails;
 using Rental.Infrastructure.Handlers.Password;
-using Rental.Infrastructure.Handlers.Sessions;
+using Rental.Infrastructure.Handlers.Account.Command.Sessions;
 using Rental.Infrastructure.Query;
 using System.Threading.Tasks;
 

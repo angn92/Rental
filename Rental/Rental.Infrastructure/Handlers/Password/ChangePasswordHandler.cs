@@ -17,15 +17,17 @@ namespace Rental.Infrastructure.Handlers.Password
         private readonly ISessionService _sessionService;
         private readonly ISessionHelper _sessionHelper;
         private readonly IPasswordHelper _passwordHelper;
+        private readonly ICustomerHelper _customerHelper;
 
         public ChangePasswordHandler(ILogger<ChangePasswordHandler> logger, ICustomerService customerService, ISessionService sessionService,
-                                     ISessionHelper sessionHelper, IPasswordHelper passwordHelper)
+                                     ISessionHelper sessionHelper, IPasswordHelper passwordHelper, ICustomerHelper customerHelper)
         {
             this.logger = logger;
             _customerService = customerService;
             _sessionService = sessionService;
             _sessionHelper = sessionHelper;
             _passwordHelper = passwordHelper;
+            _customerHelper = customerHelper;
         }
 
         public async ValueTask HandleAsync(ChangePasswordCommand command, CancellationToken cancellationToken = default)
@@ -37,7 +39,7 @@ namespace Rental.Infrastructure.Handlers.Password
             {
                 var customer = await _customerService.GetCustomerAsync(command.Username);
 
-                _customerService.ValidateCustomerAccount(customer);
+                _customerHelper.ValidateCustomerAccount(customer);
 
                 var activeUserPassword = await _passwordHelper.GetActivePassword(customer);
 

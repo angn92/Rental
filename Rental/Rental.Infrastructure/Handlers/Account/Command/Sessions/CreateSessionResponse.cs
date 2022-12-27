@@ -2,7 +2,7 @@
 using Rental.Core.Enum;
 using System;
 
-namespace Rental.Infrastructure.Handlers.Sessions
+namespace Rental.Infrastructure.Handlers.Account.Command.Sessions
 {
     public class CreateSessionResponse
     {

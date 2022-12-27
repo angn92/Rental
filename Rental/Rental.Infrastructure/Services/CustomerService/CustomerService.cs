@@ -1,7 +1,6 @@
 ﻿using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
 using Rental.Core.Domain;
-using Rental.Core.Enum;
 using Rental.Infrastructure.EF;
 using Rental.Infrastructure.Exceptions;
 using Rental.Infrastructure.Helpers;
@@ -52,14 +51,13 @@ namespace Rental.Infrastructure.Services.CustomerService
         /// <param name="email"></param>
         /// <param name="phoneNumber"></param>
         /// <returns></returns>
-        public async Task<Customer> RegisterAsync([NotNull] string firstName, [NotNull] string lastName, [NotNull] string username,
-                                        [NotNull] string email, [CanBeNull] string phoneNumber)
+        public async Task<Customer> RegisterAsync([NotNull] string firstName, [NotNull] string lastName, [NotNull] string username, [NotNull] string email)
         {
             Customer customer;
             try
             {
                 _emailValidator.ValidateEmail(email);
-                customer = new Customer(firstName, lastName, username, email, phoneNumber);
+                customer = new Customer(firstName, lastName, username, email);
                 await _context.AddAsync(customer);
             }
             catch (Exception ex)
@@ -80,15 +78,6 @@ namespace Rental.Infrastructure.Services.CustomerService
                 return false;
 
             return true;
-        }
-
-        public void ValidateCustomerAccount([NotNull] Customer customer)
-        {
-            if (customer.Status == AccountStatus.Blocked)
-                throw new CoreException(ErrorCode.AccountBlocked, "Account is blocked.");
-
-            if (customer.Status == AccountStatus.NotActive)
-                throw new CoreException(ErrorCode.AccountNotActive, "Account is not active.");
         }
     }
 }

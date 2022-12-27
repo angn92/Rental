@@ -64,5 +64,10 @@ namespace Rental.Core.Domain
         {
             State = SessionState.Expired;
         }
+
+        public void ChangeState(SessionState sessionState)
+        {
+            State = sessionState;
+        }
     }
 }
