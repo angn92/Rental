@@ -6,7 +6,7 @@ namespace Rental.Infrastructure.Handlers.Orders.Query.ActiveOrders
 {
     public class ActiveOrdersRs
     {
-        [JsonProperty("orderDetailDtoList")]
+        [JsonProperty("OrderDetailDtoList")]
         public List<OrderDetailDto> OrderDetailDtoList { get; set; }
     }
 }

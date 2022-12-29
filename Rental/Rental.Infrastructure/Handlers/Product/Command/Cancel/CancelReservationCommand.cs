@@ -6,19 +6,19 @@ namespace Rental.Infrastructure.Handlers.Product.Command.Cancel
 {
     public class CancelReservationCommand : ICommand
     {
-        [JsonProperty("productId", Required = Required.Always)]
+        [JsonProperty("ProductId", Required = Required.Always)]
         public string ProductId { get; set; }
 
         /// <summary>
         /// User name who canceled reservation
         /// </summary>
-        [JsonProperty("username", Required = Required.Always)]
+        [JsonProperty("Username", Required = Required.Always)]
         public string Username { get; set; }
 
-        [JsonProperty("reason")]
+        [JsonProperty("Reason")]
         public string Reason { get; set; }
 
-        [JsonProperty("cancelTime", Required = Required.Always)]
+        [JsonProperty("CancelTime", Required = Required.Always)]
         public DateTime? CancelationTime { get; set; }
     }
 }

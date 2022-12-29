@@ -10,22 +10,22 @@ namespace Rental.Infrastructure.Handlers.Product.Query.ProductDetails
 
     public class ProductDetail
     {
-        [JsonProperty("name")]
+        [JsonProperty("Name")]
         public string Name { get; set; }
 
-        [JsonProperty("quantity")]
+        [JsonProperty("Quantity")]
         public int Quantity { get; set; }
 
-        [JsonProperty("availableQuantity")]
+        [JsonProperty("AvailableQuantity")]
         public int AvailableQuantity { get; set; }
 
-        [JsonProperty("category")]
+        [JsonProperty("Category")]
         public string Category { get; set; }
 
-        [JsonProperty("owner")]
+        [JsonProperty("Owner")]
         public string Owner { get; set; }
 
-        [JsonProperty("status")]
+        [JsonProperty("Status")]
         public ProductStatus Status { get; set; }
     }
 }

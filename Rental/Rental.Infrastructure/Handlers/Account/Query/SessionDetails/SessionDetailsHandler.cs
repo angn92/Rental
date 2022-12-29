@@ -10,28 +10,28 @@ namespace Rental.Infrastructure.Handlers.Account.Query.SessionDetails
 {
     public class SessionDetailsHandler : IQueryHandler<SessionDetailsRq, SessionDetailsRs>
     {
-        private readonly ApplicationDbContext context;
-        private readonly ISessionHelper sessionHelper;
+        private readonly ApplicationDbContext _context;
+        private readonly ISessionHelper _sessionHelper;
 
         public SessionDetailsHandler(ApplicationDbContext context, ISessionHelper sessionHelper)
         {
-            this.context = context;
-            this.sessionHelper = sessionHelper;
+            _context = context;
+            _sessionHelper = sessionHelper;
         }
 
         public async ValueTask<SessionDetailsRs> HandleAsync(SessionDetailsRq query, CancellationToken cancellationToken = default)
         {
             ValidationParameter.FailIfNullOrEmpty(query.Session.ToString());
 
-            var session = await sessionHelper.GetSessionByIdAsync(context, query.Session);
+            var session = await _sessionHelper.GetSessionByIdAsync(_context, query.Session);
 
             if (session == null)
                 throw new CoreException(ErrorCode.SessionDoesNotExist, "Session does not exist.");
 
-            if (sessionHelper.SessionExpired(session))
+            if (_sessionHelper.SessionExpired(session))
                 throw new CoreException(ErrorCode.SessionExpired, $"Session {query.Session} expired.");
 
-            var statusSession = sessionHelper.CheckSessionStatus(session);
+            var statusSession = _sessionHelper.CheckSessionStatus(session);
 
             session.UpdateLastAccessDate();
 

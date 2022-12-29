@@ -5,16 +5,16 @@ namespace Rental.Infrastructure.Handlers.Account.Query.AccountDetails
 {
     public class GetCustomerDetailsRs
     {
-        [JsonProperty("fullName")]
+        [JsonProperty("FullName")]
         public string Fullname { get; set; }
 
-        [JsonProperty("email")]
+        [JsonProperty("Email")]
         public string Email { get; set; }
 
-        [JsonProperty("username")]
+        [JsonProperty("Username")]
         public string Username { get; set; }
 
-        [JsonProperty("status")]
+        [JsonProperty("Status")]
         public AccountStatus Status { get; set; }
     }
 }

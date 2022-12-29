@@ -5,7 +5,7 @@ namespace Rental.Infrastructure.Handlers.Account.Query.AccountDetails
 {
     public class GetCustomerDetailsRq : IQuery
     {
-        [JsonProperty("username")]
+        [JsonProperty("Username")]
         public string Username { get; set; }
     }
 }

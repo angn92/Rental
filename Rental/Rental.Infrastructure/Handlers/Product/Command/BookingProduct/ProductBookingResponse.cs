@@ -5,22 +5,22 @@ namespace Rental.Infrastructure.Handlers.Product.Command.BookingProduct
 {
     public class ProductBookingResponse
     {
-        [JsonProperty("orderId")]
+        [JsonProperty("OrderId")]
         public string OrderId { get; set; }
 
-        [JsonProperty("orderTime")]
+        [JsonProperty("OrderTime")]
         public DateTime? OrderTime { get; set; }
 
-        [JsonProperty("productName")]
+        [JsonProperty("ProductName")]
         public string ProductName { get; set; }
 
-        [JsonProperty("amount")]
+        [JsonProperty("Amount")]
         public int Amount { get; set; }
 
-        [JsonProperty("numberDays")]
+        [JsonProperty("NumberDays")]
         public TimeSpan? NumberDays { get; set; }
 
-        [JsonProperty("owner")]
+        [JsonProperty("Owner")]
         public string Owner { get; set; }
     }
 }

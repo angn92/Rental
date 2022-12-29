@@ -2,8 +2,9 @@
 using Microsoft.Extensions.Logging;
 using Rental.Core.Domain;
 using Rental.Core.Validation;
+using Rental.Infrastructure.EF;
+using Rental.Infrastructure.Helpers;
 using Rental.Infrastructure.Query;
-using Rental.Infrastructure.Services.CustomerService;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -13,12 +14,14 @@ namespace Rental.Infrastructure.Handlers.Account.Query.AccountDetails
     public class GetCustomerDetailsHandler : IQueryHandler<GetCustomerDetailsRq, GetCustomerDetailsRs>
     {
         private readonly ILogger<GetCustomerDetailsHandler> logger;
-        private readonly ICustomerService _customerService;
+        private readonly ApplicationDbContext _context;
+        private readonly ICustomerHelper _customerHelper;
 
-        public GetCustomerDetailsHandler(ILogger<GetCustomerDetailsHandler> logger, ICustomerService customerService)
+        public GetCustomerDetailsHandler(ILogger<GetCustomerDetailsHandler> logger, ApplicationDbContext context, ICustomerHelper customerHelper)
         {
             this.logger = logger;
-            _customerService = customerService;
+            _context = context;
+            _customerHelper = customerHelper;
         }
 
         public async ValueTask<GetCustomerDetailsRs> HandleAsync([NotNull] GetCustomerDetailsRq command, CancellationToken cancellationToken = default)
@@ -28,7 +31,7 @@ namespace Rental.Infrastructure.Handlers.Account.Query.AccountDetails
             Customer customerAccount;
             try
             {
-                customerAccount = await _customerService.GetCustomerAsync(command.Username);
+                customerAccount = await _customerHelper.GetCustomerAsync(_context, command.Username);
             }
             catch (Exception ex)
             {

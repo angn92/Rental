@@ -17,25 +17,25 @@ namespace Rental.Infrastructure.Handlers.Product.Command.NewProduct
         /// <summary>
         /// Product name
         /// </summary>
-        [JsonProperty("name")]
+        [JsonProperty("Name")]
         public string Name { get; set; }
 
         /// <summary>
         /// Short product description
         /// </summary>
-        [JsonProperty("description")]
+        [JsonProperty("Description")]
         public string Description { get; set; }
 
-        [JsonProperty("amount")]
+        [JsonProperty("Amount")]
         public int Amount { get; set; }
 
-        [JsonProperty("categoryName")]
+        [JsonProperty("CategoryName")]
         public string CategoryName { get; set; }
 
         /// <summary>
         /// User for who's this product belongs
         /// </summary>
-        [JsonProperty("username")]
+        [JsonProperty("Username")]
         public string Username { get; set; }
     }
 }

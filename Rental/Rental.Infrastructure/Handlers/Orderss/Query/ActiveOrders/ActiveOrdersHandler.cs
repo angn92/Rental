@@ -15,15 +15,18 @@ namespace Rental.Infrastructure.Handlers.Orderss.Query.ActiveOrders
 {
     public class ActiveOrdersHandler : IQueryHandler<ActiveOrdersRq, ActiveOrdersRs>
     {
-        private readonly ApplicationDbContext context;
-        private readonly ICustomerService customerService;
-        private readonly ISessionHelper sessionHelper;
+        private readonly ApplicationDbContext _context;
+        private readonly ICustomerService _customerService;
+        private readonly ISessionHelper _sessionHelper;
+        private readonly ICustomerHelper _customerHelper;
 
-        public ActiveOrdersHandler(ApplicationDbContext context, ICustomerService customerService, ISessionHelper sessionHelper)
+        public ActiveOrdersHandler(ApplicationDbContext context, ICustomerService customerService, ISessionHelper sessionHelper, 
+            ICustomerHelper customerHelper)
         {
-            this.context = context;
-            this.customerService = customerService;
-            this.sessionHelper = sessionHelper;
+            _context = context;
+            _customerService = customerService;
+            _sessionHelper = sessionHelper;
+            _customerHelper = customerHelper;
         }
 
         public async ValueTask<ActiveOrdersRs> HandleAsync(ActiveOrdersRq query, CancellationToken cancellationToken = default)
@@ -34,20 +37,20 @@ namespace Rental.Infrastructure.Handlers.Orderss.Query.ActiveOrders
             var orderDetailDtoList = new List<OrderDetailDto>();
 
             //Get session by id
-            var session = await sessionHelper.GetSessionByIdAsync(context, query.SessionId);
+            var session = await _sessionHelper.GetSessionByIdAsync(_context, query.SessionId);
 
-            var isExpired = sessionHelper.SessionExpired(session);
+            var isExpired = _sessionHelper.SessionExpired(session);
 
             if (isExpired)
                 throw new CoreException(ErrorCode.SessionExpired, $"Given session {session.SessionId} expired.");
 
             //Check session status, we can get order only when session is active
-            sessionHelper.ValidateSession(session);
+            _sessionHelper.ValidateSession(session);
 
-            var customer = await customerService.GetCustomerAsync(query.Username);
+            var customer = await _customerHelper.GetCustomerAsync(_context, query.Username);
 
-            var orderActiveList = from order in context.Orders
-                     join product in context.Products
+            var orderActiveList = from order in _context.Orders
+                     join product in _context.Products
                      on order.ProductId equals product.ProductId
                      select new 
                      {

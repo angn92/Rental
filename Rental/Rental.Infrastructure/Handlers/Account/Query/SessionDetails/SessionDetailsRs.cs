@@ -5,13 +5,13 @@ namespace Rental.Infrastructure.Handlers.Account.Query.SessionDetails
 {
     public class SessionDetailsRs
     {
-        [JsonProperty("sessionStatus")]
+        [JsonProperty("SessionStatus")]
         public string SessionStatus { get; set; }
 
-        [JsonProperty("sessionId")]
+        [JsonProperty("SessionId")]
         public int SessionId { get; set; }
 
-        [JsonProperty("validTo")]
+        [JsonProperty("ValidTo")]
         public DateTime ValidTo { get; set; }
     }
 }

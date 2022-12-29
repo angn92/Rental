@@ -5,10 +5,10 @@ namespace Rental.Infrastructure.Handlers.Orders.Query.ActiveOrders
 {
     public class ActiveOrdersRq : IQuery
     {
-        [JsonProperty("username", Required = Required.Always)]
+        [JsonProperty("Username", Required = Required.Always)]
         public string Username { get; set; }
 
-        [JsonProperty("sessionId", Required = Required.Always)]
+        [JsonProperty("SessionId", Required = Required.Always)]
         public int SessionId { get; set; }
     }
 }

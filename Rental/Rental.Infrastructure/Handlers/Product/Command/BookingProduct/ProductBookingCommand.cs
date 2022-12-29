@@ -16,19 +16,19 @@ namespace Rental.Infrastructure.Handlers.Product.Command.BookingProduct
 
     public class ProductBookingRequest
     {
-        [JsonProperty("productId")]
+        [JsonProperty("ProductId")]
         public string ProductId { get; set; }
 
-        [JsonProperty("amount")]
+        [JsonProperty("Amount")]
         public int Amount { get; set; }
 
-        [JsonProperty("username")]
+        [JsonProperty("Username")]
         public string Username { get; set; }
 
-        [JsonProperty("from")]
+        [JsonProperty("From")]
         public DateTime? From { get; set; }
 
-        [JsonProperty("to")]
+        [JsonProperty("To")]
         public DateTime? To { get; set; }
     }
 }
