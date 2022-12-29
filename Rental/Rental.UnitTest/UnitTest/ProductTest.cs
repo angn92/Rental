@@ -21,7 +21,7 @@ namespace Rental.Test.UnitTest
         public async Task ShouldBeAbleAddNewProduct()
         {
             // Arrange
-            var productHelperMock = new Mock<IProductHelper>();
+            var productHelperMock = new Mock<ProductHelper>();
             var customer = CustomerTestHelper.CreateCustomer(_context, firstName, lastName, username, email, phone);
             var category = CategoryTestHelper.CreateNewCategory(_context, "Electronics");
 
@@ -39,7 +39,7 @@ namespace Rental.Test.UnitTest
         public async Task VerifyThatGivenProductExist()
         {
             // Arrange
-            var productHelperMock = new Mock<IProductHelper>();
+            var productHelperMock = new Mock<ProductHelper>();
             var customer = CustomerTestHelper.CreateCustomer(_context, firstName, lastName, username, email, phone);
             var category = CategoryTestHelper.CreateNewCategory(_context, "Electronics");
             var existingProduct = ProductTestHelper.AddProduct(_context, "Iphone", 1, category, customer);
@@ -57,7 +57,7 @@ namespace Rental.Test.UnitTest
         public void ShouldBeAbleChangeProductStatusAfterMadeReservation()
         {
             // Arrange
-            var productHelperMock = new Mock<IProductHelper>();
+            var productHelperMock = new Mock<ProductHelper>();
             var customer = CustomerTestHelper.CreateCustomer(_context, firstName, lastName, username, email, phone);
             var category = CategoryTestHelper.CreateNewCategory(_context, "Electronics");
             var existingProduct = ProductTestHelper.AddProduct(_context, "Iphone", 1, category, customer);
@@ -75,7 +75,7 @@ namespace Rental.Test.UnitTest
         public async Task ShouldBeAbleGetProduct()
         {
             // Arrange
-            var productHelperMock = new Mock<IProductHelper>();
+            var productHelperMock = new Mock<ProductHelper>();
             var customer = CustomerTestHelper.CreateCustomer(_context, firstName, lastName, username, email, phone);
             var category = CategoryTestHelper.CreateNewCategory(_context, "Electronics");
             var existingProduct = ProductTestHelper.AddProduct(_context, "Iphone", 1, category, customer);

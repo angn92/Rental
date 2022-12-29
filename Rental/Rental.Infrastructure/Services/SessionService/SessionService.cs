@@ -8,7 +8,6 @@ using Rental.Infrastructure.Exceptions;
 using Rental.Infrastructure.Helpers;
 using System.Linq;
 using System.Threading.Tasks;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace Rental.Infrastructure.Services.SessionService
 {
@@ -28,8 +27,8 @@ namespace Rental.Infrastructure.Services.SessionService
         public async Task<Session> CreateSession([NotNull] Customer customer)
         {
             var session = _sessionHelper.CreateNotAuthorizeSession(customer, SessionState.NotAuthorized);
-            _context.Add(session);
 
+            await _context.AddAsync(session);
             await _context.SaveChangesAsync();
 
             return session;
@@ -60,14 +59,17 @@ namespace Rental.Infrastructure.Services.SessionService
 
         public void RemoveAllSession([NotNull] string username)
         {
-            var session = _context.Sessions.Where(x => x.Customer.Username == username).ToList();
+            var sessionList = _context.Sessions.Where(x => x.Customer.Username == username).ToList();
 
-            if(!session.Any())
+            if(!sessionList.Any())
                 return;
 
-            _logger.LogInformation($"Was remove {session.Count} old session for customer {username}.");
+            foreach (var item in sessionList)
+                _context.Remove(item);
+            
 
-            _context.Remove(session);
+            _logger.LogInformation($"Was remove {sessionList.Count} old session for customer {username}.");
+
             _context.SaveChangesAsync();
         }
 

@@ -11,25 +11,28 @@ using Microsoft.Extensions.Logging;
 using Rental.Infrastructure.Exceptions;
 using Rental.Infrastructure.Helpers;
 using System.Linq;
+using Rental.Infrastructure.Services.SessionService;
 
 namespace Rental.Infrastructure.Handlers.Account.Command.Sessions
 {
     public class CreateSessionHandler : ICommandHandler<CreateSessionCommand, CreateSessionResponse>
     {
         private readonly ICustomerService _customerService;
-        private readonly ISessionHelper _sessionHelper;
+        private readonly ISessionService _sessionService;
         private readonly ICustomerHelper _customerHelper;
+        private readonly ISessionHelper _sessionHelper;
         private readonly ILogger<CreateSessionHandler> _logger;
         private readonly ApplicationDbContext _context;
 
         public CreateSessionHandler(ILogger<CreateSessionHandler> logger, ApplicationDbContext context, ICustomerService userService, 
-            ISessionHelper sessionHelper, ICustomerHelper customerHelper)
+            ISessionService sessionService, ICustomerHelper customerHelper, ISessionHelper sessionHelper)
         {
             _logger = logger;
             _context = context;
             _customerService = userService;
-            _sessionHelper = sessionHelper;
+            _sessionService = sessionService;
             _customerHelper = customerHelper;
+            _sessionHelper = sessionHelper;
         }
 
         public async ValueTask<CreateSessionResponse> HandleAsync(CreateSessionCommand command, CancellationToken cancellationToken = default)
@@ -45,7 +48,7 @@ namespace Rental.Infrastructure.Handlers.Account.Command.Sessions
                 var oldSessionCustomer = await _sessionHelper.FindOldSession(_context, customer.Username);
 
                 if (oldSessionCustomer.Any())
-                    _sessionHelper.RemoveAllSession(_context, oldSessionCustomer);
+                    _sessionService.RemoveAllSession(customer.Username);
 
                 var sessionId = GenerateNewSession();
 

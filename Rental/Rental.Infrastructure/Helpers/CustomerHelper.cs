@@ -1,33 +1,25 @@
 ﻿using JetBrains.Annotations;
+using Microsoft.EntityFrameworkCore;
 using Rental.Core.Domain;
 using Rental.Core.Enum;
 using Rental.Infrastructure.EF;
 using Rental.Infrastructure.Exceptions;
 using Rental.Infrastructure.Services;
-
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Rental.Infrastructure.Helpers
 {
     public interface ICustomerHelper : IService
     {
-        string CheckAccountStatus(Customer user);
-        Task ChangeAccountStatus([NotNull] ApplicationDbContext context, [NotNull] Customer customer, AccountStatus status);
+        string CheckAccountStatus([NotNull] Customer user);
+        Task<Customer> GetCustomerAsync([NotNull] ApplicationDbContext context, [NotNull] string username);
         void ValidateCustomerAccount([NotNull] Customer customer);
+        bool CheckIfExist([NotNull] ApplicationDbContext context, [NotNull] string username);
     }
 
     public class CustomerHelper : ICustomerHelper
     {
-        //Customer can change status only on NotActive
-        public async Task ChangeAccountStatus([NotNull] ApplicationDbContext context, [NotNull] Customer customer, AccountStatus status)
-        {
-            if (customer.Status == status)
-                return;
-
-            customer.Status = status;
-            await context.SaveChangesAsync();
-        }
-
         public string CheckAccountStatus([NotNull] Customer customer)
         {
             string status = null;
@@ -47,6 +39,16 @@ namespace Rental.Infrastructure.Helpers
             return status;
         }
 
+        public async Task<Customer> GetCustomerAsync([NotNull] ApplicationDbContext context, [NotNull] string username)
+        {
+            var customer = await context.Customers.SingleOrDefaultAsync(x => x.Username == username);
+
+            if (customer is null)
+                throw new CoreException(ErrorCode.UserNotExist, $"User {username} does not exist.");
+
+            return customer;
+        }
+
         public void ValidateCustomerAccount([NotNull] Customer customer)
         {
             if (customer.Status == AccountStatus.Blocked)
@@ -54,6 +56,16 @@ namespace Rental.Infrastructure.Helpers
 
             if (customer.Status == AccountStatus.NotActive)
                 throw new CoreException(ErrorCode.AccountNotActive, $"Account for customer {customer.Username} is not active.");
+        }
+
+        public bool CheckIfExist([NotNull] ApplicationDbContext context, [NotNull] string username)
+        {
+            var customer = context.Customers.SingleOrDefault(x => x.Username == username);
+
+            if (customer is null)
+                return false;
+
+            return true;
         }
     }
 }

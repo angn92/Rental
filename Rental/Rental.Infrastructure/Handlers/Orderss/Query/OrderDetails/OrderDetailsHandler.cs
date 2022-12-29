@@ -14,10 +14,10 @@ namespace Rental.Infrastructure.Handlers.Orders.Query.OrderDetails
         private readonly ApplicationDbContext context;
         private readonly ISessionHelper sessionHelper;
         private readonly IOrderHelper orderHelper;
-        private readonly IProductHelper productHelper;
+        private readonly ProductHelper productHelper;
 
         public OrderDetailsHandler(ApplicationDbContext context, ISessionHelper sessionHelper, IOrderHelper orderHelper,
-                                    IProductHelper productHelper)
+                                    ProductHelper productHelper)
         {
             this.context = context;
             this.sessionHelper = sessionHelper;

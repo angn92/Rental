@@ -12,9 +12,9 @@ namespace Rental.Infrastructure.Handlers.Product.Query.ProductDetails
     public class ProductDetailsHandler : IQueryHandler<ProductDetailRequest, ProductDetailsResponse>
     {
         private readonly ApplicationDbContext context;
-        private readonly IProductHelper productHelper;
+        private readonly ProductHelper productHelper;
 
-        public ProductDetailsHandler([NotNull] ApplicationDbContext context, IProductHelper productHelper)
+        public ProductDetailsHandler([NotNull] ApplicationDbContext context, ProductHelper productHelper)
         {
             this.context = context;
             this.productHelper = productHelper;

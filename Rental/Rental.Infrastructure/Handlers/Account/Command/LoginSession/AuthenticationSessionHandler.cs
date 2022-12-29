@@ -20,16 +20,18 @@ namespace Rental.Infrastructure.Handlers.Account.Command.LoginSession
         private readonly IPasswordHelper _passwordHelper;
         private readonly ISessionService _sessionService;
         private readonly ICustomerHelper _customerHelper;
+        private readonly ISessionHelper _sessionHelper;
         private readonly ApplicationDbContext _context;
         
         public AuthenticationSessionHandler(ILogger<AuthenticationSessionHandler> logger, ApplicationDbContext context, ICustomerService customerService,
-            IPasswordHelper passwordHelper, ISessionService sessionService, ICustomerHelper customerHelper)
+            IPasswordHelper passwordHelper, ISessionService sessionService, ICustomerHelper customerHelper, ISessionHelper sessionHelper)
         {
             _logger = logger;
             _customerService = customerService;
             _passwordHelper = passwordHelper;
             _sessionService = sessionService;
             _customerHelper = customerHelper;
+            _sessionHelper = sessionHelper;
             _context = context;
         }
 
@@ -43,9 +45,9 @@ namespace Rental.Infrastructure.Handlers.Account.Command.LoginSession
             {
                 _logger.LogInformation("Starting login process...");
 
-                var session = await _sessionService.GetSessionAsync(command.SessionId);
+                var session = await _sessionHelper.GetSessionByIdAsync(_context, command.SessionId);
 
-                var customer = await _customerService.GetCustomerAsync(command.Request.Username);
+                var customer = await _customerHelper.GetCustomerAsync(_context, command.Request.Username);
 
                 _customerHelper.ValidateCustomerAccount(customer);
 

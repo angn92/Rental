@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using Rental.Core.Enum;
 using Rental.Core.Validation;
 using Rental.Infrastructure.Command;
@@ -14,20 +15,22 @@ namespace Rental.Infrastructure.Handlers.Account.Command.AuthorizePassword
 {
     public class AuthorizePasswordHandler : ICommandHandler<AuthorizePasswordCommand>
     {
-        private readonly ILogger<AuthorizePasswordHandler> logger;
-        private readonly ApplicationDbContext context;
-        private readonly ISessionHelper sessionHelper;
-        private readonly ICustomerService customerService;
-        private readonly IPasswordHelper passwordHelper;
+        private readonly ILogger<AuthorizePasswordHandler> _logger;
+        private readonly ApplicationDbContext _context;
+        private readonly ISessionHelper _sessionHelper;
+        private readonly ICustomerService _customerService;
+        private readonly IPasswordHelper _passwordHelper;
+        private readonly ICustomerHelper _customerHelper;
 
         public AuthorizePasswordHandler(ILogger<AuthorizePasswordHandler> logger, ApplicationDbContext context, ISessionHelper sessionHelper, 
-            ICustomerService customerService, IPasswordHelper passwordHelper)
+            ICustomerService customerService, IPasswordHelper passwordHelper, ICustomerHelper customerHelper)
         {
-            this.logger = logger;
-            this.context = context;
-            this.sessionHelper = sessionHelper;
-            this.customerService = customerService;
-            this.passwordHelper = passwordHelper;
+            _logger = logger;
+            _context = context;
+            _sessionHelper = sessionHelper;
+            _customerService = customerService;
+            _passwordHelper = passwordHelper;
+            _customerHelper = customerHelper;
         }
 
         public async ValueTask HandleAsync(AuthorizePasswordCommand command, CancellationToken cancellationToken = default)
@@ -37,31 +40,30 @@ namespace Rental.Infrastructure.Handlers.Account.Command.AuthorizePassword
 
             try
             {
-                var customer = await customerService.GetCustomerAsync(command.Request.Username);
+                var customer = await _customerHelper.GetCustomerAsync(_context, command.Request.Username);
 
-                var session = await sessionHelper.GetSessionAsync(context, customer);
+                var session = await _sessionHelper.GetSessionAsync(_context, customer);
 
-                if (sessionHelper.CheckSessionStatus(session) != SessionState.NotAuthorized)
+                if (_sessionHelper.CheckSessionStatus(session) != SessionState.NotAuthorized)
                     throw new CoreException(ErrorCode.WrongSessionState, $"Session {session.SessionId} has incorrect state for authorize password.");
 
-                if (sessionHelper.SessionExpired(session))
+                if (_sessionHelper.SessionExpired(session))
                     throw new CoreException(ErrorCode.SessionExpired, "Session expired");
 
                 //Find password for given user to authorize
-                var password = await passwordHelper.FindPasswordToAuthorize(customer.Username, command.Request.Code);
+                var password = await _passwordHelper.FindPasswordToAuthorize(customer.Username, command.Request.Code);
 
                 if (password != null)
                 {
                     password.ActivatePassword();
-                    await context.SaveChangesAsync(cancellationToken);
+                    await _context.SaveChangesAsync(cancellationToken);
                 }
             }
             catch (Exception ex)
             {
-                logger.LogError($"Authorize process is failed. {ex.Message}.");
+                _logger.LogError($"Authorize process is failed. {ex.Message}.");
                 throw;
             }
-            
         }
     }
 }

@@ -16,9 +16,9 @@ namespace Rental.Infrastructure.Handlers.Product.Command.BookingProduct
     {
         private readonly ApplicationDbContext context;
         private readonly ICustomerService customerService;
-        private readonly IProductHelper productHelper;
+        private readonly ProductHelper productHelper;
 
-        public ProductBookingHandler(ApplicationDbContext context, ICustomerService customerService, IProductHelper productHelper)
+        public ProductBookingHandler(ApplicationDbContext context, ICustomerService customerService, ProductHelper productHelper)
         {
             this.context = context;
             this.customerService = customerService;

@@ -22,7 +22,6 @@ namespace Rental.Infrastructure.Helpers
         string GenerateSessionId();
         Session CreateNotAuthorizeSession(Customer customer, SessionState notAuthorized);
         Task<List<Session>> FindOldSession([NotNull] ApplicationDbContext context, [NotNull] string username);
-        void RemoveAllSession([NotNull] ApplicationDbContext context, [NotNull] List<Session> oldSessionCustomer);
     }
 
     public class SessionHelper : ISessionHelper
@@ -91,14 +90,6 @@ namespace Rental.Infrastructure.Helpers
         public async Task<List<Session>> FindOldSession(ApplicationDbContext context, string username)
         {
             return await context.Sessions.Where(x => x.Customer.Username == username).ToListAsync();
-        }
-
-        public void RemoveAllSession(ApplicationDbContext context, List<Session> oldSessionCustomer)
-        {
-            foreach (var item in oldSessionCustomer)
-            {
-                context.Remove(item);
-            }
         }
     }
 }

@@ -13,12 +13,12 @@ namespace Rental.Infrastructure.Handlers.Product.Command.NewProduct
 {
     public class ProductCommandHandler : ICommandHandler<ProductCommand>
     {
-        private readonly IProductHelper productHelper;
+        private readonly ProductHelper productHelper;
         private readonly ICustomerService customerService;
         private readonly ISessionHelper sessionHelper;
         private readonly ApplicationDbContext context;
 
-        public ProductCommandHandler([NotNull] ApplicationDbContext context, IProductHelper productHelper, ICustomerService customerService,
+        public ProductCommandHandler([NotNull] ApplicationDbContext context, ProductHelper productHelper, ICustomerService customerService,
                     ISessionHelper sessionHelper)
         {
             this.context = context;

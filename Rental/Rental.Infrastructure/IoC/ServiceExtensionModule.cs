@@ -64,7 +64,7 @@ namespace Rental.Infrastructure.IoC
                 .InstancePerLifetimeScope();
 
             builder.RegisterAssemblyTypes(ThisAssembly)
-                .Where(x => x.IsAssignableTo<IProductHelper>())
+                .Where(x => x.IsAssignableTo<ProductHelper>())
                 .AsImplementedInterfaces()
                 .InstancePerLifetimeScope();
 

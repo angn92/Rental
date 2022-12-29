@@ -1,8 +1,7 @@
 ﻿using JetBrains.Annotations;
-using Microsoft.EntityFrameworkCore;
 using Rental.Core.Domain;
+using Rental.Core.Enum;
 using Rental.Infrastructure.EF;
-using Rental.Infrastructure.Exceptions;
 using Rental.Infrastructure.Helpers;
 using System;
 using System.Threading.Tasks;
@@ -13,45 +12,15 @@ namespace Rental.Infrastructure.Services.CustomerService
     {
         private readonly ApplicationDbContext _context;
         private readonly IEmailHelper _emailValidator;
-        private readonly IPasswordHelper _passwordHelper;
 
-        public CustomerService(ApplicationDbContext context, IEmailHelper emailValidator, IPasswordHelper passwordHelper)
+        public CustomerService(ApplicationDbContext context, IEmailHelper emailValidator)
         {
             _context = context;
             _emailValidator = emailValidator;
-            _passwordHelper = passwordHelper;
         }
 
-        /// <summary>
-        /// Get details customer from database with given username in argument 
-        /// </summary>
-        /// <param name="username"></param>
-        /// <returns></returns>
-        public async Task<Customer> GetCustomerAsync([NotNull] string username)
-        {
-            var customer = await _context.Customers.SingleOrDefaultAsync(x => x.Username == username);
-
-            if (customer is null)
-                throw new CoreException(ErrorCode.UserNotExist, $"User {username} does not exist.");
-
-            return customer;
-        }
-
-        public Task<Customer> LoginAsync([NotNull] string username, [NotNull] string password)
-        {
-            throw new NotImplementedException();
-        }
-
-        /// <summary>
-        /// Register new customer
-        /// </summary>
-        /// <param name="firstName"></param>
-        /// <param name="lastName"></param>
-        /// <param name="username"></param>
-        /// <param name="email"></param>
-        /// <param name="phoneNumber"></param>
-        /// <returns></returns>
-        public async Task<Customer> RegisterAsync([NotNull] string firstName, [NotNull] string lastName, [NotNull] string username, [NotNull] string email)
+        public async Task<Customer> RegisterAsync([NotNull] string firstName, [NotNull] string lastName, [NotNull] string username, 
+            [NotNull] string email)
         {
             Customer customer;
             try
@@ -70,14 +39,9 @@ namespace Rental.Infrastructure.Services.CustomerService
             return customer;
         }
 
-        public async Task<bool> CheckIfExist([NotNull] string username)
+        public void ChangeAccountStatus([NotNull] Customer customer, AccountStatus status)
         {
-            var customer = await _context.Customers.SingleOrDefaultAsync(x => x.Username == username);
-
-            if (customer is null)
-                return false;
-
-            return true;
+            customer.Status = status;
         }
     }
 }

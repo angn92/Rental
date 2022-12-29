@@ -13,10 +13,10 @@ namespace Rental.Infrastructure.Handlers.Product.Command.Cancel
     public class CancelReservationHandler : ICommandHandler<CancelReservationCommand>
     {
         private readonly ApplicationDbContext context;
-        private readonly IProductHelper productHelper;
+        private readonly ProductHelper productHelper;
         private readonly IOrderHelper orderHelper;
 
-        public CancelReservationHandler([NotNull] ApplicationDbContext context, IProductHelper productHelper, IOrderHelper orderHelper)
+        public CancelReservationHandler([NotNull] ApplicationDbContext context, ProductHelper productHelper, IOrderHelper orderHelper)
         {
             this.context = context;
             this.productHelper = productHelper;
