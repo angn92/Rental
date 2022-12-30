@@ -1,32 +1,29 @@
 ﻿using Rental.Infrastructure.Exceptions;
 using Rental.Infrastructure.Helpers;
 using Rental.Infrastructure.Query;
-using Rental.Infrastructure.Services.SessionService;
-using Rental.Infrastructure.Services.CustomerService;
 using System.Threading.Tasks;
 using System.Threading;
-using Rental.Core.Domain;
+using Rental.Infrastructure.EF;
 
 namespace Rental.Infrastructure.Handlers.Users.Queries.AccountInfo
 {
     public class GetAccountStatusHandler : IQueryHandler<GetAccountStatusRq, GetAccountStatusRs>
     {
-        private readonly ISessionService _sessionService;
+        private readonly ApplicationDbContext _context;
         private readonly ISessionHelper _sessionHelper;
-        private readonly ICustomerService _customerService;
+        private readonly ICustomerHelper _customerHelper;
 
-        public GetAccountStatusHandler(ISessionService sessionService, ISessionHelper sessionHelper,
-                                        ICustomerService customerService)
+        public GetAccountStatusHandler(ApplicationDbContext context, ISessionHelper sessionHelper, ICustomerHelper customerHelper)
         {
-            _sessionService = sessionService;
+            _context = context;
             _sessionHelper = sessionHelper;
-            _customerService = customerService;
+            _customerHelper = customerHelper;
         }
 
         public async ValueTask<GetAccountStatusRs> HandleAsync(GetAccountStatusRq query, CancellationToken cancellationToken = default)
         {
 
-            var session = await _sessionService.GetSessionAsync(query.SessionId);
+            var session = await _sessionHelper.GetSessionByIdAsync(_context, query.SessionId);
             if (session is null)
             {
                 throw new CoreException(ErrorCode.SessionDoesNotExist, $"Session not created.");
@@ -35,7 +32,7 @@ namespace Rental.Infrastructure.Handlers.Users.Queries.AccountInfo
             _sessionHelper.CheckSessionStatus(session);
             _sessionHelper.SessionExpired(session);
 
-            var userAccount = await _customerService.GetCustomerAsync(query.Username);
+            var userAccount = await _customerHelper.GetCustomerAsync(_context, query.Username);
 
             return new GetAccountStatusRs
             {

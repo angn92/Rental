@@ -5,7 +5,6 @@ using Rental.Infrastructure.Command;
 using Rental.Infrastructure.EF;
 using Rental.Infrastructure.Exceptions;
 using Rental.Infrastructure.Helpers;
-using Rental.Infrastructure.Services.CustomerService;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -14,15 +13,15 @@ namespace Rental.Infrastructure.Handlers.Product.Command.BookingProduct
 {
     public class ProductBookingHandler : ICommandHandler<ProductBookingCommand, ProductBookingResponse>
     {
-        private readonly ApplicationDbContext context;
-        private readonly ICustomerService customerService;
-        private readonly ProductHelper productHelper;
+        private readonly ApplicationDbContext _context;
+        private readonly ICustomerHelper _customerHelper;
+        private readonly IProductHelper _productHelper;
 
-        public ProductBookingHandler(ApplicationDbContext context, ICustomerService customerService, ProductHelper productHelper)
+        public ProductBookingHandler(ApplicationDbContext context, ICustomerHelper customerHelper, IProductHelper productHelper)
         {
-            this.context = context;
-            this.customerService = customerService;
-            this.productHelper = productHelper;
+            _context = context;
+            _customerHelper = customerHelper;
+            _productHelper = productHelper;
         }
 
         public async ValueTask<ProductBookingResponse> HandleAsync(ProductBookingCommand command, CancellationToken cancellationToken = default)
@@ -31,14 +30,14 @@ namespace Rental.Infrastructure.Handlers.Product.Command.BookingProduct
 
             var request = command.Request;
 
-            var customer = await customerService.GetCustomerAsync(command.Request.Username);
+            var customer = await _customerHelper.GetCustomerAsync(_context, command.Request.Username);
 
-            var product = await productHelper.GetProductAsync(context, request.ProductId);
+            var product = await _productHelper.GetProductAsync(_context, request.ProductId);
 
             if (product.Status != ProductStatus.Available)
                 throw new CoreException(ErrorCode.ProductNotAvailable, $"{product.Name} is not available now.");
 
-            productHelper.MakeReservationProduct(product);
+            _productHelper.MakeReservationProduct(product);
 
             var order = new Order
             {
@@ -52,8 +51,8 @@ namespace Rental.Infrastructure.Handlers.Product.Command.BookingProduct
                 OrderHash = Guid.NewGuid().ToString()
             };
 
-            await context.AddAsync(order, cancellationToken);
-            await context.SaveChangesAsync(cancellationToken);
+            await _context.AddAsync(order, cancellationToken);
+            await _context.SaveChangesAsync(cancellationToken);
 
             var response = new ProductBookingResponse
             {

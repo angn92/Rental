@@ -4,7 +4,6 @@ using Rental.Infrastructure.Command;
 using Rental.Infrastructure.EF;
 using Rental.Infrastructure.Handlers.Account.Commmand.ChangeStatus;
 using Rental.Infrastructure.Helpers;
-using Rental.Infrastructure.Services.CustomerService;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -15,15 +14,12 @@ namespace Rental.Infrastructure.Handlers.Account.Command.ChangeStatus
     {
         private readonly ILogger<ChangeStatusHandler> _logger;
         private readonly ApplicationDbContext _context;
-        private readonly ICustomerService _customerService;
         private readonly ICustomerHelper _customerHelper;
 
-        public ChangeStatusHandler(ILogger<ChangeStatusHandler> logger, ApplicationDbContext context, ICustomerService customerService,
-            ICustomerHelper customerHelper)
+        public ChangeStatusHandler(ILogger<ChangeStatusHandler> logger, ApplicationDbContext context, ICustomerHelper customerHelper)
         {
             _logger = logger;
             _context = context;
-            _customerService = customerService;
             _customerHelper = customerHelper;
         }
 
@@ -41,7 +37,7 @@ namespace Rental.Infrastructure.Handlers.Account.Command.ChangeStatus
                 if (customer.Status.Equals(request.Status))
                     return;
 
-                _customerService.ChangeAccountStatus(customer, request.Status);
+                _customerHelper.ChangeAccountStatus(customer, request.Status);
 
                 await _context.SaveChangesAsync(cancellationToken);
             }

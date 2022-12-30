@@ -5,8 +5,6 @@ using Rental.Infrastructure.Command;
 using Rental.Infrastructure.EF;
 using Rental.Infrastructure.Exceptions;
 using Rental.Infrastructure.Helpers;
-using Rental.Infrastructure.Services.CustomerService;
-using Rental.Infrastructure.Services.SessionService;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -17,22 +15,17 @@ namespace Rental.Infrastructure.Handlers.Account.Command.CreateAccount
     {
         private readonly ILogger _logger;
         private readonly ApplicationDbContext _context;
-        private readonly ICustomerService _customerService;
         private readonly IEmailHelper _emailHelper;
-        private readonly ISessionService _sessionService;
         private readonly IPasswordHelper _passwordHelper;
         private readonly ISessionHelper _sessionHelper;
         private readonly ICustomerHelper _customerHelper;
 
-        public RegisterCustomerHandler(ILogger<RegisterCustomerHandler> logger, ApplicationDbContext context, ICustomerService customerService, 
-            IEmailHelper emailHelper, ISessionService sessionService, IPasswordHelper passwordHelper, ISessionHelper sessionHelper,
-            ICustomerHelper customerHelper)
+        public RegisterCustomerHandler(ILogger<RegisterCustomerHandler> logger, ApplicationDbContext context, IEmailHelper emailHelper, 
+            IPasswordHelper passwordHelper, ISessionHelper sessionHelper, ICustomerHelper customerHelper)
         {
             _logger = logger;
             _context = context;
-            _customerService = customerService;
             _emailHelper = emailHelper;
-            _sessionService = sessionService;
             _passwordHelper = passwordHelper;
             _sessionHelper = sessionHelper;
             _customerHelper = customerHelper;
@@ -49,11 +42,11 @@ namespace Rental.Infrastructure.Handlers.Account.Command.CreateAccount
                 if (customerExist)
                     throw new CoreException(ErrorCode.UsernameExist, $"This username {command.Username} is in use.");
 
-                var customer = await _customerService.RegisterAsync(command.FirstName, command.LastName, command.Username, command.Email);
+                var customer = await _customerHelper.RegisterAsync(command.FirstName, command.LastName, command.Username, command.Email);
 
-                _sessionService.RemoveAllSession(customer.Username);
+                _sessionHelper.RemoveAllSession(customer.Username);
 
-                var customerSession = await _sessionService.CreateSession(customer);
+                var customerSession = await _sessionHelper.CreateSession(customer);
 
                 var code = _passwordHelper.GenerateActivationCode();
 

@@ -1,5 +1,4 @@
 ﻿using Rental.Infrastructure.Command;
-using Rental.Infrastructure.Services.CustomerService;
 using System.Threading.Tasks;
 using System.Threading;
 using Rental.Core.Validation;
@@ -11,26 +10,21 @@ using Microsoft.Extensions.Logging;
 using Rental.Infrastructure.Exceptions;
 using Rental.Infrastructure.Helpers;
 using System.Linq;
-using Rental.Infrastructure.Services.SessionService;
 
 namespace Rental.Infrastructure.Handlers.Account.Command.Sessions
 {
     public class CreateSessionHandler : ICommandHandler<CreateSessionCommand, CreateSessionResponse>
     {
-        private readonly ICustomerService _customerService;
-        private readonly ISessionService _sessionService;
         private readonly ICustomerHelper _customerHelper;
         private readonly ISessionHelper _sessionHelper;
         private readonly ILogger<CreateSessionHandler> _logger;
         private readonly ApplicationDbContext _context;
 
-        public CreateSessionHandler(ILogger<CreateSessionHandler> logger, ApplicationDbContext context, ICustomerService userService, 
-            ISessionService sessionService, ICustomerHelper customerHelper, ISessionHelper sessionHelper)
+        public CreateSessionHandler(ILogger<CreateSessionHandler> logger, ApplicationDbContext context, ICustomerHelper customerHelper, 
+            ISessionHelper sessionHelper)
         {
             _logger = logger;
             _context = context;
-            _customerService = userService;
-            _sessionService = sessionService;
             _customerHelper = customerHelper;
             _sessionHelper = sessionHelper;
         }
@@ -41,14 +35,14 @@ namespace Rental.Infrastructure.Handlers.Account.Command.Sessions
 
             try
             {
-                var customer = await _customerService.GetCustomerAsync(command.Username);
+                var customer = await _customerHelper.GetCustomerAsync(_context, command.Username);
 
                 _customerHelper.ValidateCustomerAccount(customer);
 
                 var oldSessionCustomer = await _sessionHelper.FindOldSession(_context, customer.Username);
 
                 if (oldSessionCustomer.Any())
-                    _sessionService.RemoveAllSession(customer.Username);
+                    _sessionHelper.RemoveAllSession(customer.Username);
 
                 var sessionId = GenerateNewSession();
 

@@ -5,7 +5,6 @@ using Rental.Infrastructure.Exceptions;
 using Rental.Infrastructure.Handlers.Orders.Query.ActiveOrders;
 using Rental.Infrastructure.Helpers;
 using Rental.Infrastructure.Query;
-using Rental.Infrastructure.Services.CustomerService;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -16,15 +15,13 @@ namespace Rental.Infrastructure.Handlers.Orderss.Query.ActiveOrders
     public class ActiveOrdersHandler : IQueryHandler<ActiveOrdersRq, ActiveOrdersRs>
     {
         private readonly ApplicationDbContext _context;
-        private readonly ICustomerService _customerService;
         private readonly ISessionHelper _sessionHelper;
         private readonly ICustomerHelper _customerHelper;
 
-        public ActiveOrdersHandler(ApplicationDbContext context, ICustomerService customerService, ISessionHelper sessionHelper, 
+        public ActiveOrdersHandler(ApplicationDbContext context, ISessionHelper sessionHelper, 
             ICustomerHelper customerHelper)
         {
             _context = context;
-            _customerService = customerService;
             _sessionHelper = sessionHelper;
             _customerHelper = customerHelper;
         }

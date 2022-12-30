@@ -1,12 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 using Rental.Core.Enum;
 using Rental.Core.Validation;
 using Rental.Infrastructure.Command;
 using Rental.Infrastructure.EF;
 using Rental.Infrastructure.Exceptions;
 using Rental.Infrastructure.Helpers;
-using Rental.Infrastructure.Services.CustomerService;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -18,17 +16,15 @@ namespace Rental.Infrastructure.Handlers.Account.Command.AuthorizePassword
         private readonly ILogger<AuthorizePasswordHandler> _logger;
         private readonly ApplicationDbContext _context;
         private readonly ISessionHelper _sessionHelper;
-        private readonly ICustomerService _customerService;
         private readonly IPasswordHelper _passwordHelper;
         private readonly ICustomerHelper _customerHelper;
 
         public AuthorizePasswordHandler(ILogger<AuthorizePasswordHandler> logger, ApplicationDbContext context, ISessionHelper sessionHelper, 
-            ICustomerService customerService, IPasswordHelper passwordHelper, ICustomerHelper customerHelper)
+             IPasswordHelper passwordHelper, ICustomerHelper customerHelper)
         {
             _logger = logger;
             _context = context;
             _sessionHelper = sessionHelper;
-            _customerService = customerService;
             _passwordHelper = passwordHelper;
             _customerHelper = customerHelper;
         }

@@ -3,10 +3,7 @@ using Rental.Core.Enum;
 using Rental.Core.Validation;
 using Rental.Infrastructure.Command;
 using Rental.Infrastructure.EF;
-using Rental.Infrastructure.Exceptions;
 using Rental.Infrastructure.Helpers;
-using Rental.Infrastructure.Services.CustomerService;
-using Rental.Infrastructure.Services.SessionService;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -16,20 +13,16 @@ namespace Rental.Infrastructure.Handlers.Account.Command.LoginSession
     public class AuthenticationSessionHandler : ICommandHandler<AuthenticationSessionCommand, AuthenticationSessionResponse>
     {
         private readonly ILogger<AuthenticationSessionHandler> _logger;
-        private readonly ICustomerService _customerService;
         private readonly IPasswordHelper _passwordHelper;
-        private readonly ISessionService _sessionService;
         private readonly ICustomerHelper _customerHelper;
         private readonly ISessionHelper _sessionHelper;
         private readonly ApplicationDbContext _context;
         
-        public AuthenticationSessionHandler(ILogger<AuthenticationSessionHandler> logger, ApplicationDbContext context, ICustomerService customerService,
-            IPasswordHelper passwordHelper, ISessionService sessionService, ICustomerHelper customerHelper, ISessionHelper sessionHelper)
+        public AuthenticationSessionHandler(ILogger<AuthenticationSessionHandler> logger, ApplicationDbContext context,
+            IPasswordHelper passwordHelper, ICustomerHelper customerHelper, ISessionHelper sessionHelper)
         {
             _logger = logger;
-            _customerService = customerService;
             _passwordHelper = passwordHelper;
-            _sessionService = sessionService;
             _customerHelper = customerHelper;
             _sessionHelper = sessionHelper;
             _context = context;

@@ -5,6 +5,7 @@ using Rental.Core.Enum;
 using Rental.Infrastructure.EF;
 using Rental.Infrastructure.Exceptions;
 using Rental.Infrastructure.Services;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -16,10 +17,22 @@ namespace Rental.Infrastructure.Helpers
         Task<Customer> GetCustomerAsync([NotNull] ApplicationDbContext context, [NotNull] string username);
         void ValidateCustomerAccount([NotNull] Customer customer);
         bool CheckIfExist([NotNull] ApplicationDbContext context, [NotNull] string username);
+        Task<Customer> RegisterAsync([NotNull] string firstName, [NotNull] string lastName, [NotNull] string username, [NotNull] string email);
+
+        void ChangeAccountStatus([NotNull] Customer customer, AccountStatus status);
     }
 
     public class CustomerHelper : ICustomerHelper
     {
+        public ApplicationDbContext _context { get; }
+        public IEmailHelper _emailValidator { get; }
+
+        public CustomerHelper(ApplicationDbContext context, IEmailHelper emailValidator)
+        {
+            _context = context;
+            _emailValidator = emailValidator;
+        }
+
         public string CheckAccountStatus([NotNull] Customer customer)
         {
             string status = null;
@@ -66,6 +79,29 @@ namespace Rental.Infrastructure.Helpers
                 return false;
 
             return true;
+        }
+        public async Task<Customer> RegisterAsync([NotNull] string firstName, [NotNull] string lastName, [NotNull] string username, [NotNull] string email)
+        {
+            Customer customer;
+            try
+            {
+                _emailValidator.ValidateEmail(email);
+                customer = new Customer(firstName, lastName, username, email);
+                await _context.AddAsync(customer);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Registration is failed. " + ex.Message);
+            }
+
+            await _context.SaveChangesAsync();
+
+            return customer;
+        }
+
+        public void ChangeAccountStatus([NotNull] Customer customer, AccountStatus status)
+        {
+            customer.Status = status;
         }
     }
 }
