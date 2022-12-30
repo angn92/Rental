@@ -30,7 +30,7 @@ namespace Rental.Infrastructure.Handlers.Product.Command.BookingProduct
 
             var request = command.Request;
 
-            var customer = await _customerHelper.GetCustomerAsync(_context, command.Request.Username);
+            var customer = await _customerHelper.GetCustomerAsync(command.Request.Username);
 
             var product = await _productHelper.GetProductAsync(_context, request.ProductId);
 

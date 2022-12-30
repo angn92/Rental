@@ -9,6 +9,8 @@ namespace Rental.Test
     {
         public DbContextOptions<ApplicationDbContext> _options;
         public ApplicationDbContext _context;
+        
+
 
         public string firstName, lastName, username, email, phone;
 

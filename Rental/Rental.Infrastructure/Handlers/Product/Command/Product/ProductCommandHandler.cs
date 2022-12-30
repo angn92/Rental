@@ -33,7 +33,7 @@ namespace Rental.Infrastructure.Handlers.Product.Command.NewProduct
             if (string.IsNullOrWhiteSpace(command.Request.Name))
                 throw new CoreException(ErrorCode.IncorrectArgument, $"Value of {nameof(command.Request.Name)} is invalid.");
 
-            var customer = await _customerHelper.GetCustomerAsync(_context, command.Request.Username);
+            var customer = await _customerHelper.GetCustomerAsync(command.Request.Username);
 
             var session = await _sessionHelper.GetSessionAsync(_context, customer);
 

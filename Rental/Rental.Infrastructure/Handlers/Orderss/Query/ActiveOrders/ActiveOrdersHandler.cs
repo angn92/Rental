@@ -44,7 +44,7 @@ namespace Rental.Infrastructure.Handlers.Orderss.Query.ActiveOrders
             //Check session status, we can get order only when session is active
             _sessionHelper.ValidateSession(session);
 
-            var customer = await _customerHelper.GetCustomerAsync(_context, query.Username);
+            var customer = await _customerHelper.GetCustomerAsync(query.Username);
 
             var orderActiveList = from order in _context.Orders
                      join product in _context.Products

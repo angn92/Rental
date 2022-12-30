@@ -4,7 +4,6 @@ using NUnit.Framework;
 using Rental.Core.Enum;
 using Rental.Infrastructure.Exceptions;
 using Rental.Infrastructure.Helpers;
-using Rental.Infrastructure.Services.CustomerService;
 using Rental.Test.Helpers;
 using System;
 using System.Threading.Tasks;
@@ -12,36 +11,35 @@ using System.Threading.Tasks;
 namespace Rental.Test.UnitTest
 {
     [TestFixture]
-    public class CustomerServicesTest : TestBase
+    public class CustomerTest : TestBase
     {
         [Test]
-        public async Task ShouldBeAbleCheckThatGivenUsernameExist()
+        public void ShouldBeAbleCheckThatGivenUsernameExist()
         {
             // Arrange
             var emailMock = new Mock<IEmailHelper>();
 
             CustomerTestHelper.CreateCustomer(_context, firstName, lastName, username, email, null);
-            var userService = new CustomerService(_context, emailMock.Object);
+            var customerHelper = new CustomerHelper(_context, emailMock.Object);
 
             // Act
-            var exist = await userService.CheckIfExist(username);
+            var exist = customerHelper.CheckIfExist(username);
 
             // Assert
             Assert.IsTrue(exist);
         }
 
         [Test]
-        public async Task ShouldBReturnFalseWhenGivenCustomerNotExist()
+        public void ShouldBReturnFalseWhenGivenCustomerNotExist()
         {
             // Arrange
             var emailMock = new Mock<IEmailHelper>();
-            var passwordMock = new Mock<IPasswordHelper>();
 
             CustomerTestHelper.CreateCustomer(_context, firstName, lastName, username, email, null);
-            var userService = new CustomerService(_context, emailMock.Object, passwordMock.Object);
+            var customerHelper = new CustomerHelper(_context, emailMock.Object);
 
             // Act
-            var exist = await userService.CheckIfExist("wrong_username");
+            var exist = customerHelper.CheckIfExist(username);
 
             // Assert
             Assert.IsFalse(exist);
@@ -52,13 +50,12 @@ namespace Rental.Test.UnitTest
         {
             // Arrange
             var emailMock = new Mock<IEmailHelper>();
-            var passwordMock = new Mock<IPasswordHelper>();
 
             CustomerTestHelper.CreateCustomer(_context, firstName, lastName, username, email, null);
-            var userService = new CustomerService(_context, emailMock.Object, passwordMock.Object);
+            var customerHelper = new CustomerHelper(_context, emailMock.Object);
 
             // Act
-            var user = await userService.GetCustomerAsync(username);
+            var user = await customerHelper.GetCustomerAsync(username);
 
             // Assert
             Assert.IsNotNull(user);
@@ -72,13 +69,12 @@ namespace Rental.Test.UnitTest
         {
             // Arrange
             var emailMock = new Mock<IEmailHelper>();
-            var passwordMock = new Mock<IPasswordHelper>();
 
             CustomerTestHelper.CreateCustomer(_context, firstName, lastName, username, email, null);
-            var userService = new CustomerService(_context, emailMock.Object, passwordMock.Object);
+            var customerHelper = new CustomerHelper(_context, emailMock.Object);
 
             // Act
-            var exception = Assert.ThrowsAsync<CoreException>(() => userService.GetCustomerAsync("wrong_username"));
+            var exception = Assert.ThrowsAsync<CoreException>(() => customerHelper.GetCustomerAsync("wrong_username"));
 
             // Assert
             Assert.AreEqual(ErrorCode.UserNotExist, exception.Code);
@@ -89,10 +85,10 @@ namespace Rental.Test.UnitTest
         {
             // Arrange
             var emailMock = new Mock<IEmailHelper>();
-            var userService = new CustomerService(_context, emailMock.Object);
+            var customerHelper = new CustomerHelper(_context, emailMock.Object);
 
             // Act
-            await userService.RegisterAsync("Jan", "Kowalski", "kowal123", "kowal@email.com");
+            await customerHelper.RegisterAsync("Jan", "Kowalski", "kowal123", "kowal@email.com");
 
             var registeredUser = await _context.Customers.FirstOrDefaultAsync(x => x.Username == "kowal123");
 
@@ -107,11 +103,11 @@ namespace Rental.Test.UnitTest
             // Arrange
             var emailMock = new Mock<IEmailHelper>();
            
-            var userService = new CustomerService(_context, emailMock.Object);
+            var customerHelper = new CustomerHelper(_context, emailMock.Object);
             string FirstName = null;
 
             // Act
-            var exception = Assert.ThrowsAsync<Exception>(() => userService.RegisterAsync(FirstName, "Kowalski", "kowal123", 
+            var exception = Assert.ThrowsAsync<Exception>(() => customerHelper.RegisterAsync(FirstName, "Kowalski", "kowal123", 
                                                                     "kowal@email.com"));
 
             // Assert
@@ -123,17 +119,16 @@ namespace Rental.Test.UnitTest
         {
             // Arrange
             var emailMock = new Mock<IEmailHelper>();
-            var passwordMock = new Mock<IPasswordHelper>();
 
             var customer = CustomerTestHelper.CreateCustomer(_context, "Jan", "Kowalski", "janek00", "jan@email.com", x =>
             {
                 x.Status = AccountStatus.Blocked;
             });
 
-            var userService = new CustomerService(_context, emailMock.Object, passwordMock.Object);
+            var customerHelper = new CustomerHelper(_context, emailMock.Object);
 
             // Act
-            var result = Assert.Throws<CoreException>(() => userService.ValidateCustomerAccount(customer));
+            var result = Assert.Throws<CoreException>(() => customerHelper.ValidateCustomerAccount(customer));
 
             // Assert
             Assert.AreEqual(ErrorCode.AccountBlocked, result.Code);
@@ -145,17 +140,16 @@ namespace Rental.Test.UnitTest
         {
             // Arrange
             var emailMock = new Mock<IEmailHelper>();
-            var passwordMock = new Mock<IPasswordHelper>();
 
-            var customer = CustomerTestHelper.CreateCustomer(_context, "Jan", "Kowalski", "janek00", "jan@email.com", null, x =>
+            var customer = CustomerTestHelper.CreateCustomer(_context, "Jan", "Kowalski", "janek00", "jan@email.com", x =>
             {
                 x.Status = AccountStatus.NotActive;
             });
 
-            var userService = new CustomerService(_context, emailMock.Object, passwordMock.Object);
+            var customerHelper = new CustomerHelper(_context, emailMock.Object);
 
             // Act
-            var result = Assert.Throws<CoreException>(() => userService.ValidateCustomerAccount(customer));
+            var result = Assert.Throws<CoreException>(() => customerHelper.ValidateCustomerAccount(customer));
 
             // Assert
             Assert.AreEqual(ErrorCode.AccountNotActive, result.Code);

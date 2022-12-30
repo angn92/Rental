@@ -47,7 +47,7 @@ namespace Rental.Test.UnitTest
             // Arrange
             var encryptMock = new Mock<IEncrypt>();
             var passwordHelper = new PasswordHelper(_context, encryptMock.Object);
-            var customer = CustomerTestHelper.CreateCustomer(_context, firstName, lastName, username, email, phone);
+            var customer = CustomerTestHelper.CreateCustomer(_context, firstName, lastName, username, email);
             var oldPassword = PasswordTestHelper.CreatePassword(_context, hashPassword, salt, customer, passwordCode, x =>
             {
                 x.ActivatePassword();
@@ -67,13 +67,13 @@ namespace Rental.Test.UnitTest
             // Arrange
             var encryptMock = new Mock<IEncrypt>();
             var passwordHelper = new PasswordHelper(_context, encryptMock.Object);
-            var customer1 = CustomerTestHelper.CreateCustomer(_context, firstName, lastName, username, email, phone);
+            var customer1 = CustomerTestHelper.CreateCustomer(_context, firstName, lastName, username, email);
             var oldPassword = PasswordTestHelper.CreatePassword(_context, hashPassword, salt, customer1, passwordCode, x =>
             {
                 x.ActivatePassword();
             });
 
-            var customer2 = CustomerTestHelper.CreateCustomer(_context, "Adam", "Nowak", "adam_n","adam@email.com", "746577477");
+            var customer2 = CustomerTestHelper.CreateCustomer(_context, "Adam", "Nowak", "adam_n","adam@email.com");
 
             // Act
             await passwordHelper.RemoveOldPassword(customer2.Username);
@@ -95,7 +95,7 @@ namespace Rental.Test.UnitTest
             encryptMock.Setup(x => x.GenerateHash(password, salt)).Returns(hashPassword);
 
             var passwordHelper = new PasswordHelper(_context, encryptMock.Object);
-            var customer = CustomerTestHelper.CreateCustomer(_context, firstName, lastName, username, email, phone);
+            var customer = CustomerTestHelper.CreateCustomer(_context, firstName, lastName, username, email);
 
             // Act
             await passwordHelper.SetPassword(password, customer, passwordCode);
@@ -152,7 +152,7 @@ namespace Rental.Test.UnitTest
             // Arrange
             var encryptMock = new Mock<IEncrypt>();
             var passwordHelper = new PasswordHelper(_context, encryptMock.Object);
-            var customer = CustomerTestHelper.CreateCustomer(_context, firstName, lastName, username, email, phone);
+            var customer = CustomerTestHelper.CreateCustomer(_context, firstName, lastName, username, email);
             var oldPassword = PasswordTestHelper.CreatePassword(_context, hashPassword, salt, customer, passwordCode, x =>
             {
                 x.ActivatePassword();
@@ -172,7 +172,7 @@ namespace Rental.Test.UnitTest
             // Arrange
             var encryptMock = new Mock<IEncrypt>();
             var passwordHelper = new PasswordHelper(_context, encryptMock.Object);
-            var customer = CustomerTestHelper.CreateCustomer(_context, firstName, lastName, username, email, phone);
+            var customer = CustomerTestHelper.CreateCustomer(_context, firstName, lastName, username, email);
             var newPassword = PasswordTestHelper.CreatePassword(_context, hashPassword, salt, customer, passwordCode);
 
             // Act

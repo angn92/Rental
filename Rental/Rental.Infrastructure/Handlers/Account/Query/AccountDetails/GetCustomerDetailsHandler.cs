@@ -31,7 +31,7 @@ namespace Rental.Infrastructure.Handlers.Account.Query.AccountDetails
             Customer customerAccount;
             try
             {
-                customerAccount = await _customerHelper.GetCustomerAsync(_context, command.Username);
+                customerAccount = await _customerHelper.GetCustomerAsync(command.Username);
             }
             catch (Exception ex)
             {

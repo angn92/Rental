@@ -40,7 +40,7 @@ namespace Rental.Infrastructure.Handlers.Account.Command.LoginSession
 
                 var session = await _sessionHelper.GetSessionByIdAsync(_context, command.SessionId);
 
-                var customer = await _customerHelper.GetCustomerAsync(_context, command.Request.Username);
+                var customer = await _customerHelper.GetCustomerAsync(command.Request.Username);
 
                 _customerHelper.ValidateCustomerAccount(customer);
 

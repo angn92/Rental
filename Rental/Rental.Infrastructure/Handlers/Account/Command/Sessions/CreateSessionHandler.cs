@@ -35,7 +35,7 @@ namespace Rental.Infrastructure.Handlers.Account.Command.Sessions
 
             try
             {
-                var customer = await _customerHelper.GetCustomerAsync(_context, command.Username);
+                var customer = await _customerHelper.GetCustomerAsync(command.Username);
 
                 _customerHelper.ValidateCustomerAccount(customer);
 

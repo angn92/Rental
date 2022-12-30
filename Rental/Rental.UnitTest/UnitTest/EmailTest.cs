@@ -52,7 +52,7 @@ namespace Rental.Test.UnitTest
             var optionsMock = new Mock<IOptions<ConfigurationOptions>>();
             var email = new EmailHelper(_context, optionsMock.Object);
 
-            var customer = CustomerTestHelper.CreateCustomer(_context, "Jan", "Kowalski", "janek00", "jan@email.com", null, x =>
+            var customer = CustomerTestHelper.CreateCustomer(_context, "Jan", "Kowalski", "janek00", "jan@email.com", x =>
             {
                 x.Status = AccountStatus.NotActive;
             });

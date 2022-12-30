@@ -32,7 +32,7 @@ namespace Rental.Infrastructure.Handlers.Account.Command.ChangeStatus
 
             try
             {
-                var customer = await _customerHelper.GetCustomerAsync(_context, request.Username);
+                var customer = await _customerHelper.GetCustomerAsync(request.Username);
 
                 if (customer.Status.Equals(request.Status))
                     return;

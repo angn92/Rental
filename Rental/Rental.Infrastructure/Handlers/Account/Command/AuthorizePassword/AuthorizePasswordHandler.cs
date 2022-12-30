@@ -36,7 +36,7 @@ namespace Rental.Infrastructure.Handlers.Account.Command.AuthorizePassword
 
             try
             {
-                var customer = await _customerHelper.GetCustomerAsync(_context, command.Request.Username);
+                var customer = await _customerHelper.GetCustomerAsync(command.Request.Username);
 
                 var session = await _sessionHelper.GetSessionAsync(_context, customer);
 

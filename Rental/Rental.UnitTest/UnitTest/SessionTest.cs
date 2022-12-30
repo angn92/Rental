@@ -1,4 +1,6 @@
-﻿using NUnit.Framework;
+﻿using Microsoft.Extensions.Logging;
+using Moq;
+using NUnit.Framework;
 using Rental.Core.Enum;
 using Rental.Infrastructure.Exceptions;
 using Rental.Infrastructure.Helpers;
@@ -19,9 +21,9 @@ namespace Rental.Test.UnitTest
         {
             // Arrange
             var sessioId = 123456;
-            var customer = CustomerTestHelper.CreateCustomer(_context, firstName, lastName, username, email, phone);
+            var customer = CustomerTestHelper.CreateCustomer(_context, firstName, lastName, username, email);
             var session = CreateSessionTestHelper.CreateSession(_context, sessioId, customer, sessionState);
-            var sessionHelper = new SessionHelper();
+            var sessionHelper = new SessionHelper(new Mock<ILogger<SessionHelper>>().Object, _context);
 
             // Act
             var sessionStatusResult = sessionHelper.CheckSessionStatus(session);
@@ -35,14 +37,14 @@ namespace Rental.Test.UnitTest
         {
             // Arrange
             var sessioId = 123456;
-            var customer = CustomerTestHelper.CreateCustomer(_context, firstName, lastName, username, email, phone);
+            var customer = CustomerTestHelper.CreateCustomer(_context, firstName, lastName, username, email);
             var session = CreateSessionTestHelper.CreateSession(_context, sessioId, customer, SessionState.Active, x =>
             {
                 x.GenerationDate = DateTime.UtcNow.AddMinutes(-20);
                 x.LastAccessDate = DateTime.UtcNow.AddMinutes(-10);
             });
 
-            var sessionHelper = new SessionHelper();
+            var sessionHelper = new SessionHelper(new Mock<ILogger<SessionHelper>>().Object, _context);
 
             // Act
             var sessionStatusResult = sessionHelper.SessionExpired(session);
@@ -56,10 +58,10 @@ namespace Rental.Test.UnitTest
         {
             // Arrange
             var sessioId = 123456;
-            var customer = CustomerTestHelper.CreateCustomer(_context, firstName, lastName, username, email, phone);
+            var customer = CustomerTestHelper.CreateCustomer(_context, firstName, lastName, username, email);
             var session = CreateSessionTestHelper.CreateSession(_context, sessioId, customer, SessionState.Active);
 
-            var sessionHelper = new SessionHelper();
+            var sessionHelper = new SessionHelper(new Mock<ILogger<SessionHelper>>().Object, _context);
 
             // Act
             var exception = Assert.Throws<CoreException>(() => sessionHelper.ValidateSession(null));
@@ -73,10 +75,10 @@ namespace Rental.Test.UnitTest
         {
             // Arrange
             var sessioId = 123456;
-            var customer = CustomerTestHelper.CreateCustomer(_context, firstName, lastName, username, email, phone);
+            var customer = CustomerTestHelper.CreateCustomer(_context, firstName, lastName, username, email);
             var session = CreateSessionTestHelper.CreateSession(_context, sessioId, customer, SessionState.NotAuthorized);
 
-            var sessionHelper = new SessionHelper();
+            var sessionHelper = new SessionHelper(new Mock<ILogger<SessionHelper>>().Object, _context);
 
             // Act
             var exception = Assert.Throws<CoreException>(() => sessionHelper.ValidateSession(session));
@@ -90,10 +92,10 @@ namespace Rental.Test.UnitTest
         {
             // Arrange
             var sessioId = 123456;
-            var customer = CustomerTestHelper.CreateCustomer(_context, firstName, lastName, username, email, phone);
+            var customer = CustomerTestHelper.CreateCustomer(_context, firstName, lastName, username, email);
             var session = CreateSessionTestHelper.CreateSession(_context, sessioId, customer, SessionState.Expired);
 
-            var sessionHelper = new SessionHelper();
+            var sessionHelper = new SessionHelper(new Mock<ILogger<SessionHelper>>().Object, _context);
 
             // Act
             var exception = Assert.Throws<CoreException>(() => sessionHelper.ValidateSession(session));
@@ -107,10 +109,10 @@ namespace Rental.Test.UnitTest
         {
             // Arrange
             var sessioId = 123456;
-            var customer = CustomerTestHelper.CreateCustomer(_context, firstName, lastName, username, email, phone);
+            var customer = CustomerTestHelper.CreateCustomer(_context, firstName, lastName, username, email);
             CreateSessionTestHelper.CreateSession(_context, sessioId, customer, SessionState.Active);
 
-            var sessionHelper = new SessionHelper();
+            var sessionHelper = new SessionHelper(new Mock<ILogger<SessionHelper>>().Object, _context);
 
             // Act
             var currentSession = await sessionHelper.GetSessionByIdAsync(_context, sessioId);
@@ -125,10 +127,10 @@ namespace Rental.Test.UnitTest
             // Arrange
             var sessioId = 123456;
             var wrongSessionId = 654321;
-            var customer = CustomerTestHelper.CreateCustomer(_context, firstName, lastName, username, email, phone);
+            var customer = CustomerTestHelper.CreateCustomer(_context, firstName, lastName, username, email);
             CreateSessionTestHelper.CreateSession(_context, sessioId, customer, SessionState.Active);
 
-            var sessionHelper = new SessionHelper();
+            var sessionHelper = new SessionHelper(new Mock<ILogger<SessionHelper>>().Object, _context);
 
             // Act
             var currentSession = await sessionHelper.GetSessionByIdAsync(_context, wrongSessionId);

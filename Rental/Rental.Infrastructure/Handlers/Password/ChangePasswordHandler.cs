@@ -1,7 +1,5 @@
 ﻿using Rental.Infrastructure.Command;
 using Rental.Infrastructure.Helpers;
-using Rental.Infrastructure.Services.SessionService;
-using Rental.Infrastructure.Services.CustomerService;
 using System.Threading.Tasks;
 using System.Threading;
 using Rental.Core.Validation;
@@ -15,19 +13,15 @@ namespace Rental.Infrastructure.Handlers.Password
     {
         private readonly ILogger<ChangePasswordHandler> _logger;
         private readonly ApplicationDbContext _context;
-        private readonly ICustomerService _customerService;
-        private readonly ISessionService _sessionService;
         private readonly ISessionHelper _sessionHelper;
         private readonly IPasswordHelper _passwordHelper;
         private readonly ICustomerHelper _customerHelper;
 
-        public ChangePasswordHandler(ILogger<ChangePasswordHandler> logger, ApplicationDbContext context, ICustomerService customerService, 
-            ISessionService sessionService, ISessionHelper sessionHelper, IPasswordHelper passwordHelper, ICustomerHelper customerHelper)
+        public ChangePasswordHandler(ILogger<ChangePasswordHandler> logger, ApplicationDbContext context, ISessionHelper sessionHelper, 
+            IPasswordHelper passwordHelper, ICustomerHelper customerHelper)
         {
             _logger = logger;
             _context = context;
-            _customerService = customerService;
-            _sessionService = sessionService;
             _sessionHelper = sessionHelper;
             _passwordHelper = passwordHelper;
             _customerHelper = customerHelper;
@@ -40,7 +34,7 @@ namespace Rental.Infrastructure.Handlers.Password
             // to do get session which will be get from headers, implementation after add headers
             try
             {
-                var customer = await _customerHelper.GetCustomerAsync(_context, command.Username);
+                var customer = await _customerHelper.GetCustomerAsync(command.Username);
 
                 _customerHelper.ValidateCustomerAccount(customer);
 

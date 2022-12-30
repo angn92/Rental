@@ -5,7 +5,6 @@ using Rental.Core.Domain;
 using Rental.Core.Enum;
 using Rental.Infrastructure.EF;
 using Rental.Infrastructure.Exceptions;
-using Rental.Infrastructure.Services.SessionService;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,6 +15,10 @@ namespace Rental.Infrastructure.Helpers
 {
     public interface ISessionHelper
     {
+        Task<Session> CreateSession([NotNull] Customer username);
+        Task RemoveSession([NotNull] int session);
+        void RemoveAllSession([NotNull] string username);
+        Task ChangeSessionStatus([NotNull] int sessionId, [NotNull] SessionState sessionState);
         SessionState CheckSessionStatus([NotNull] Session session);
         bool SessionExpired([NotNull] Session session);
         void ValidateSession([NotNull] Session session);
@@ -24,23 +27,78 @@ namespace Rental.Infrastructure.Helpers
         string GenerateSessionId();
         Session CreateNotAuthorizeSession(Customer customer, SessionState notAuthorized);
         Task<List<Session>> FindOldSession([NotNull] ApplicationDbContext context, [NotNull] string username);
-        Task<Session> CreateSession([NotNull] Customer username);
-        Task RemoveSession([NotNull] int session);
-        void RemoveAllSession([NotNull] string username);
-        Task ChangeSessionStatus([NotNull] int sessionId, [NotNull] SessionState sessionState);
     }
 
     public class SessionHelper : ISessionHelper
     {
-        public ILogger<SessionService> _logger { get; }
-        public ApplicationDbContext _context { get; }
-        public ISessionHelper _sessionHelper { get; }
+        private readonly ILogger<SessionHelper> _logger;
+        private readonly ApplicationDbContext _context;
 
-        public SessionHelper(ILogger<SessionService> logger, ApplicationDbContext context, ISessionHelper sessionHelper)
+        public SessionHelper(ILogger<SessionHelper> logger, ApplicationDbContext context)
         {
             _logger = logger;
-            _context = context;
-            _sessionHelper = sessionHelper;
+            _context = context;  
+        }
+
+        public async Task<Session> CreateSession([NotNull] Customer customer)
+        {
+            var session = CreateNotAuthorizeSession(customer, SessionState.NotAuthorized);
+
+            await _context.AddAsync(session);
+            await _context.SaveChangesAsync();
+
+            return session;
+        }
+
+        public async Task<Session> GetSessionAsync([NotNull] int idSession)
+        {
+            var session = await _context.Sessions.FirstOrDefaultAsync(x => x.SessionId == idSession);
+
+            if (session is null)
+                throw new CoreException(ErrorCode.SessionDoesNotExist, $"Session {idSession} does not exist.");
+
+            return session;
+        }
+
+        public async Task RemoveSession([NotNull] int idSession)
+        {
+            var sessionToRemove = await _context.Sessions.FirstOrDefaultAsync(x => x.SessionId == idSession);
+
+            if (sessionToRemove == null)
+            {
+                throw new CoreException(ErrorCode.SessionDoesNotExist, $"Session {idSession} does not exist.");
+            }
+
+            _context.Sessions.Remove(sessionToRemove);
+            await _context.SaveChangesAsync();
+        }
+
+        public void RemoveAllSession([NotNull] string username)
+        {
+            var sessionList = _context.Sessions.Where(x => x.Customer.Username == username).ToList();
+
+            if (!sessionList.Any())
+                return;
+
+            foreach (var item in sessionList)
+                _context.Remove(item);
+
+
+            _logger.LogInformation($"Was remove {sessionList.Count} old session for customer {username}.");
+
+            _context.SaveChangesAsync();
+        }
+
+        public async Task ChangeSessionStatus([NotNull] int sessionId, [NotNull] SessionState sessionState)
+        {
+            var session = await GetSessionAsync(sessionId);
+
+            if (session.State.Equals(sessionState))
+                return;
+
+            session.ChangeState(sessionState);
+
+            await _context.SaveChangesAsync();
         }
 
         public SessionState CheckSessionStatus([NotNull] Session session)
@@ -107,67 +165,6 @@ namespace Rental.Infrastructure.Helpers
         public async Task<List<Session>> FindOldSession(ApplicationDbContext context, string username)
         {
             return await context.Sessions.Where(x => x.Customer.Username == username).ToListAsync();
-        }
-
-        public async Task<Session> CreateSession([NotNull] Customer customer)
-        {
-            var session = _sessionHelper.CreateNotAuthorizeSession(customer, SessionState.NotAuthorized);
-
-            await _context.AddAsync(session);
-            await _context.SaveChangesAsync();
-
-            return session;
-        }
-
-        public async Task<Session> GetSessionAsync([NotNull] int idSession)
-        {
-            var session = await _context.Sessions.FirstOrDefaultAsync(x => x.SessionId == idSession);
-
-            if (session is null)
-                throw new CoreException(ErrorCode.SessionDoesNotExist, $"Session {idSession} does not exist.");
-
-            return session;
-        }
-
-        public async Task RemoveSession([NotNull] int idSession)
-        {
-            var sessionToRemove = await _context.Sessions.FirstOrDefaultAsync(x => x.SessionId == idSession);
-
-            if (sessionToRemove == null)
-            {
-                throw new CoreException(ErrorCode.SessionDoesNotExist, $"Session {idSession} does not exist.");
-            }
-
-            _context.Sessions.Remove(sessionToRemove);
-            await _context.SaveChangesAsync();
-        }
-
-        public void RemoveAllSession([NotNull] string username)
-        {
-            var sessionList = _context.Sessions.Where(x => x.Customer.Username == username).ToList();
-
-            if (!sessionList.Any())
-                return;
-
-            foreach (var item in sessionList)
-                _context.Remove(item);
-
-
-            _logger.LogInformation($"Was remove {sessionList.Count} old session for customer {username}.");
-
-            _context.SaveChangesAsync();
-        }
-
-        public async Task ChangeSessionStatus([NotNull] int sessionId, [NotNull] SessionState sessionState)
-        {
-            var session = await GetSessionAsync(sessionId);
-
-            if (session.State.Equals(sessionState))
-                return;
-
-            session.ChangeState(sessionState);
-
-            await _context.SaveChangesAsync();
         }
     }
 }

@@ -37,7 +37,7 @@ namespace Rental.Infrastructure.Handlers.Account.Command.CreateAccount
 
             try
             {
-                var customerExist = _customerHelper.CheckIfExist(_context, command.Username);
+                var customerExist = _customerHelper.CheckIfExist(command.Username);
 
                 if (customerExist)
                     throw new CoreException(ErrorCode.UsernameExist, $"This username {command.Username} is in use.");
