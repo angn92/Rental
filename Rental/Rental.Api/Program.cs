@@ -53,7 +53,7 @@ builder.Services.AddSwaggerGen(options =>
     options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
 });
 
-builder.Configuration.GetSection("Registration").Get<ConfigurationOptions>();
+builder.Services.Configure<ConfigurationOptions>(builder.Configuration.GetSection("ConfigurationOptions"));
 
 var app = builder.Build();
 
@@ -73,5 +73,6 @@ app.UseMiddleware<ResponseMiddleware>();
 app.UseRouting();
 app.UseAuthorization();
 app.UseEndpoints(endpoints => endpoints.MapControllers());
+
 
 app.Run();
