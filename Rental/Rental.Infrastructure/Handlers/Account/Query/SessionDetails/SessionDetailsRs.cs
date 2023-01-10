@@ -8,8 +8,8 @@ namespace Rental.Infrastructure.Handlers.Account.Query.SessionDetails
         [JsonProperty("SessionStatus")]
         public string SessionStatus { get; set; }
 
-        [JsonProperty("SessionId")]
-        public int SessionId { get; set; }
+        [JsonProperty("SessionIdentifier")]
+        public string SessionId { get; set; }
 
         [JsonProperty("ValidTo")]
         public DateTime ValidTo { get; set; }

@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using MimeKit;
 using Rental.Core.Domain;
 using System;
 using System.Linq;
@@ -25,6 +26,9 @@ namespace Rental.Infrastructure.EF
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Session>()
+                .HasKey(x => x.SessionIdentifier);
+
             //Relationships for Customer entity
             modelBuilder.Entity<Customer>()
                     .HasMany<Password>(p => p.Passwords)

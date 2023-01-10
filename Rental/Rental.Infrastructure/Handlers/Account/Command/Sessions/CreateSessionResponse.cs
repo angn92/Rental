@@ -7,7 +7,7 @@ namespace Rental.Infrastructure.Handlers.Account.Command.Sessions
     public class CreateSessionResponse
     {
         [JsonProperty("IdSession")]
-        public int IdSession { get; set; }
+        public string IdSession { get; set; }
 
         [JsonProperty("Status")]
         public SessionState Status { get; set; }

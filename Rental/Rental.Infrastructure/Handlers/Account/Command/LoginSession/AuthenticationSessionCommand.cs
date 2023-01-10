@@ -8,8 +8,8 @@ namespace Rental.Infrastructure.Handlers.Account.Command.LoginSession
     {
         public AuthenticationSessionRequest Request { get; set; }
 
-        [JsonProperty("SessionId")]
-        public int SessionId { get; set; }
+        [JsonProperty("SessionIdentifier")]
+        public string SessionId { get; set; }
     }
 
     public class AuthenticationSessionRequest

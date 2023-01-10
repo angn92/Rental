@@ -44,7 +44,7 @@ namespace Rental.Infrastructure.Handlers.Account.Command.Sessions
                 if (oldSessionCustomer.Any())
                     _sessionHelper.RemoveAllSession(customer.Username);
 
-                var sessionId = GenerateNewSession();
+                var sessionId = _sessionHelper.GenerateSessionId();
 
                 var session = new Session(sessionId, customer, SessionState.NotAuthorized);
 
@@ -57,7 +57,7 @@ namespace Rental.Infrastructure.Handlers.Account.Command.Sessions
 
                 return new CreateSessionResponse
                 {
-                    IdSession = session.SessionId,
+                    IdSession = session.SessionIdentifier,
                     Status = session.State,
                     ExpirationTime = expirationDate
                 };
@@ -67,11 +67,6 @@ namespace Rental.Infrastructure.Handlers.Account.Command.Sessions
                 _logger.LogInformation($"To create session is required active customer account. {ex.Message}.");
                 throw;
             } 
-        }
-
-        private static int GenerateNewSession()
-        {
-            return RandomNumberGenerator.GetInt32(100000000, 999999999);
         }
     }
 }

@@ -56,7 +56,7 @@ namespace Rental.Infrastructure.Handlers.Account.Command.LoginSession
 
                 authSessionResponse = new AuthenticationSessionResponse
                 {
-                    SessionId = session.SessionId,
+                    SessionId = session.SessionIdentifier,
                     SessionState = session.State.ToString(),
                     ExpirationTime = session.LastAccessDate.AddMinutes(10)
                 };

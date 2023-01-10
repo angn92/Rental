@@ -8,7 +8,7 @@ namespace Rental.Infrastructure.Handlers.Orders.Query.ActiveOrders
         [JsonProperty("Username", Required = Required.Always)]
         public string Username { get; set; }
 
-        [JsonProperty("SessionId", Required = Required.Always)]
-        public int SessionId { get; set; }
+        [JsonProperty("SessionIdentifier", Required = Required.Always)]
+        public string SessionId { get; set; }
     }
 }

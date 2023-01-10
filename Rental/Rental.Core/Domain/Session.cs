@@ -10,7 +10,7 @@ namespace Rental.Core.Domain
         /// <summary>
         /// Session identifier
         /// </summary>
-        public virtual int SessionId { get; set; }
+        public virtual string SessionIdentifier { get; set; }
 
         /// <summary>
         /// Session state 
@@ -41,9 +41,9 @@ namespace Rental.Core.Domain
         {
         }
 
-        public Session([NotNull] int sessionId, [NotNull] Customer customer, [NotNull] SessionState sessionState)
+        public Session([NotNull] string sessionId, [NotNull] Customer customer, [NotNull] SessionState sessionState)
         {
-            SessionId = sessionId;
+            SessionIdentifier = sessionId;
             State = sessionState;
             UpdateLastAccessDate();
             GenerationDate = DateTime.UtcNow;

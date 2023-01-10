@@ -8,7 +8,7 @@ namespace Rental.Test.Helpers
 {
     public static class CreateSessionTestHelper
     {
-        public static Session CreateSession([NotNull] ApplicationDbContext context, int sessionId, Customer customer,
+        public static Session CreateSession([NotNull] ApplicationDbContext context, string sessionId, Customer customer,
                         SessionState sessionState, Action<Session> action = null)
         { 
             var session = new Session(sessionId, customer, sessionState);

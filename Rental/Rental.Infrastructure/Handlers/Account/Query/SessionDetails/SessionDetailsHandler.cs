@@ -37,7 +37,7 @@ namespace Rental.Infrastructure.Handlers.Account.Query.SessionDetails
 
             return new SessionDetailsRs
             {
-                SessionId = session.SessionId,
+                SessionId = session.SessionIdentifier,
                 SessionStatus = statusSession.ToString(),
                 ValidTo = session.LastAccessDate.AddMinutes(5) // add parameter to dictionary and replace 
             };

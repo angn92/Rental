@@ -20,7 +20,7 @@ namespace Rental.Test.UnitTest
         public void ShouldVerifySessionStatus(SessionState sessionState)
         {
             // Arrange
-            var sessioId = 123456;
+            var sessioId = "123456";
             var customer = CustomerTestHelper.CreateCustomer(_context, firstName, lastName, username, email);
             var session = CreateSessionTestHelper.CreateSession(_context, sessioId, customer, sessionState);
             var sessionHelper = new SessionHelper(new Mock<ILogger<SessionHelper>>().Object, _context);
@@ -36,7 +36,7 @@ namespace Rental.Test.UnitTest
         public void ShouldBeAbleVerifySessionIsExpired()
         {
             // Arrange
-            var sessioId = 123456;
+            var sessioId = "123456";
             var customer = CustomerTestHelper.CreateCustomer(_context, firstName, lastName, username, email);
             var session = CreateSessionTestHelper.CreateSession(_context, sessioId, customer, SessionState.Active, x =>
             {
@@ -57,7 +57,7 @@ namespace Rental.Test.UnitTest
         public void ShouldBeAbleValidateGivenSession_WhenSessionNotExist()
         {
             // Arrange
-            var sessioId = 123456;
+            var sessioId = "123456";
             var customer = CustomerTestHelper.CreateCustomer(_context, firstName, lastName, username, email);
             var session = CreateSessionTestHelper.CreateSession(_context, sessioId, customer, SessionState.Active);
 
@@ -74,7 +74,7 @@ namespace Rental.Test.UnitTest
         public void ShouldReturnSessionNotAuthorized()
         {
             // Arrange
-            var sessioId = 123456;
+            var sessioId = "123456";
             var customer = CustomerTestHelper.CreateCustomer(_context, firstName, lastName, username, email);
             var session = CreateSessionTestHelper.CreateSession(_context, sessioId, customer, SessionState.NotAuthorized);
 
@@ -91,7 +91,7 @@ namespace Rental.Test.UnitTest
         public void ShouldReturnSessionExpired()
         {
             // Arrange
-            var sessioId = 123456;
+            var sessioId = "123456";
             var customer = CustomerTestHelper.CreateCustomer(_context, firstName, lastName, username, email);
             var session = CreateSessionTestHelper.CreateSession(_context, sessioId, customer, SessionState.Expired);
 
@@ -108,7 +108,7 @@ namespace Rental.Test.UnitTest
         public async Task ShouldBeAbleGetOnlyOneSession_WithGivenId()
         {
             // Arrange
-            var sessioId = 123456;
+            var sessioId = "123456";
             var customer = CustomerTestHelper.CreateCustomer(_context, firstName, lastName, username, email);
             CreateSessionTestHelper.CreateSession(_context, sessioId, customer, SessionState.Active);
 
@@ -125,8 +125,8 @@ namespace Rental.Test.UnitTest
         public async Task ShouldNotBeAbleGetSession_WrongGivenId()
         {
             // Arrange
-            var sessioId = 123456;
-            var wrongSessionId = 654321;
+            var sessioId = "123456";
+            var wrongSessionId = "654321";
             var customer = CustomerTestHelper.CreateCustomer(_context, firstName, lastName, username, email);
             CreateSessionTestHelper.CreateSession(_context, sessioId, customer, SessionState.Active);
 

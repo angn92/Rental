@@ -91,7 +91,7 @@ namespace Rental.Api.Controllers
         /// <param name="request"></param>
         /// <returns></returns>
         [HttpPut("Session/Authentication/{sessionId}")]
-        public async Task<AuthenticationSessionResponse> LogInSession([FromRoute] int sessionId, [NotNull] AuthenticationSessionRequest request)
+        public async Task<AuthenticationSessionResponse> LogInSession([FromRoute] string sessionId, [NotNull] AuthenticationSessionRequest request)
         {
             var command = new AuthenticationSessionCommand
             {
@@ -108,7 +108,7 @@ namespace Rental.Api.Controllers
         /// <param name="sessionId"></param>
         /// <returns></returns>
         [HttpGet("Details/Session/{sessionId}")]
-        public async Task<SessionDetailsRs> VerifySessionDetails([FromRoute][NotNull] int sessionId)
+        public async Task<SessionDetailsRs> VerifySessionDetails([FromRoute][NotNull] string sessionId)
         {
             var request = new SessionDetailsRq
             {

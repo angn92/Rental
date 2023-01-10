@@ -39,7 +39,7 @@ namespace Rental.Infrastructure.Handlers.Orderss.Query.ActiveOrders
             var isExpired = _sessionHelper.SessionExpired(session);
 
             if (isExpired)
-                throw new CoreException(ErrorCode.SessionExpired, $"Given session {session.SessionId} expired.");
+                throw new CoreException(ErrorCode.SessionExpired, $"Given session {session.SessionIdentifier} expired.");
 
             //Check session status, we can get order only when session is active
             _sessionHelper.ValidateSession(session);

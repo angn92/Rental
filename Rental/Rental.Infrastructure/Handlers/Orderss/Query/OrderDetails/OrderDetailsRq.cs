@@ -9,6 +9,6 @@ namespace Rental.Infrastructure.Handlers.Orders.Query.OrderDetails
         public string OrderId { get; set; }
 
         [JsonProperty("sessionId", Required = Required.Always)]
-        public int SessionId { get; set; }
+        public string SessionId { get; set; }
     }
 }

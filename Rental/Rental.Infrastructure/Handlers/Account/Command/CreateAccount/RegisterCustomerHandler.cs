@@ -62,7 +62,7 @@ namespace Rental.Infrastructure.Handlers.Account.Command.CreateAccount
 
                 var response = new RegisterCustomerResponse
                 {
-                    SessionId = customerSession.SessionId.ToString()
+                    SessionId = customerSession.SessionIdentifier.ToString()
                 };
 
                 return response;

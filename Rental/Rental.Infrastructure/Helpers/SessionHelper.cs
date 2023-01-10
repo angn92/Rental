@@ -16,14 +16,14 @@ namespace Rental.Infrastructure.Helpers
     public interface ISessionHelper
     {
         Task<Session> CreateSession([NotNull] Customer username);
-        Task RemoveSession([NotNull] int session);
+        Task RemoveSession([NotNull] string session);
         void RemoveAllSession([NotNull] string username);
-        Task ChangeSessionStatus([NotNull] int sessionId, [NotNull] SessionState sessionState);
+        Task ChangeSessionStatus([NotNull] string sessionId, [NotNull] SessionState sessionState);
         SessionState CheckSessionStatus([NotNull] Session session);
         bool SessionExpired([NotNull] Session session);
         void ValidateSession([NotNull] Session session);
         Task<Session> GetSessionAsync([NotNull] ApplicationDbContext context, [NotNull] Customer customer);
-        Task<Session> GetSessionByIdAsync([NotNull] ApplicationDbContext context, [NotNull] int sessionId);
+        Task<Session> GetSessionByIdAsync([NotNull] ApplicationDbContext context, [NotNull] string sessionId);
         string GenerateSessionId();
         Session CreateNotAuthorizeSession(Customer customer, SessionState notAuthorized);
         Task<List<Session>> FindOldSession([NotNull] ApplicationDbContext context, [NotNull] string username);
@@ -50,9 +50,9 @@ namespace Rental.Infrastructure.Helpers
             return session;
         }
 
-        public async Task<Session> GetSessionAsync([NotNull] int idSession)
+        public async Task<Session> GetSessionAsync([NotNull] string idSession)
         {
-            var session = await _context.Sessions.FirstOrDefaultAsync(x => x.SessionId == idSession);
+            var session = await _context.Sessions.FirstOrDefaultAsync(x => x.SessionIdentifier == idSession);
 
             if (session is null)
                 throw new CoreException(ErrorCode.SessionDoesNotExist, $"Session {idSession} does not exist.");
@@ -60,9 +60,9 @@ namespace Rental.Infrastructure.Helpers
             return session;
         }
 
-        public async Task RemoveSession([NotNull] int idSession)
+        public async Task RemoveSession([NotNull] string idSession)
         {
-            var sessionToRemove = await _context.Sessions.FirstOrDefaultAsync(x => x.SessionId == idSession);
+            var sessionToRemove = await _context.Sessions.FirstOrDefaultAsync(x => x.SessionIdentifier == idSession);
 
             if (sessionToRemove == null)
             {
@@ -89,7 +89,7 @@ namespace Rental.Infrastructure.Helpers
             _context.SaveChangesAsync();
         }
 
-        public async Task ChangeSessionStatus([NotNull] int sessionId, [NotNull] SessionState sessionState)
+        public async Task ChangeSessionStatus([NotNull] string sessionId, [NotNull] SessionState sessionState)
         {
             var session = await GetSessionAsync(sessionId);
 
@@ -123,10 +123,10 @@ namespace Rental.Infrastructure.Helpers
                 throw new CoreException(ErrorCode.SessionDoesNotExist, "Session does not exist.");
 
             if (session.State == SessionState.NotAuthorized)
-                throw new CoreException(ErrorCode.SessionNotAuthorized, $"Session {session.SessionId} is not authorized.");
+                throw new CoreException(ErrorCode.SessionNotAuthorized, $"Session {session.SessionIdentifier} is not authorized.");
 
             if (session.State == SessionState.Expired)
-                throw new CoreException(ErrorCode.SessionExpired, $"Session {session.SessionId} is expired.");
+                throw new CoreException(ErrorCode.SessionExpired, $"Session {session.SessionIdentifier} is expired.");
         }
 
         public async Task<Session> GetSessionAsync([NotNull] ApplicationDbContext context, [NotNull] Customer customer)
@@ -134,9 +134,9 @@ namespace Rental.Infrastructure.Helpers
             return await context.Sessions.SingleOrDefaultAsync(x => x.IdCustomer == customer.CustomerId);
         }
 
-        public async Task<Session> GetSessionByIdAsync([NotNull] ApplicationDbContext context, [NotNull] int sessionId)
+        public async Task<Session> GetSessionByIdAsync([NotNull] ApplicationDbContext context, [NotNull] string sessionId)
         {
-            return await context.Sessions.SingleOrDefaultAsync(x => x.SessionId == sessionId);
+            return await context.Sessions.SingleOrDefaultAsync(x => x.SessionIdentifier == sessionId);
         }
 
         /// <summary>
@@ -159,7 +159,7 @@ namespace Rental.Infrastructure.Helpers
 
         public Session CreateNotAuthorizeSession(Customer customer, SessionState sessionState)
         {
-            return new Session(GenerateNewIdSession(), customer, sessionState);
+            return new Session(GenerateSessionId(), customer, sessionState);
         }
 
         public async Task<List<Session>> FindOldSession(ApplicationDbContext context, string username)

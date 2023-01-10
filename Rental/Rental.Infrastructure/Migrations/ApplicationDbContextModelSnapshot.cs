@@ -235,11 +235,8 @@ namespace Rental.Infrastructure.Migrations
 
             modelBuilder.Entity("Rental.Core.Domain.Session", b =>
                 {
-                    b.Property<int>("SessionId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("SessionId"));
+                    b.Property<string>("SessionIdentifier")
+                        .HasColumnType("text");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
@@ -259,7 +256,7 @@ namespace Rental.Infrastructure.Migrations
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.HasKey("SessionId");
+                    b.HasKey("SessionIdentifier");
 
                     b.HasIndex("IdCustomer")
                         .IsUnique();

@@ -25,7 +25,7 @@ namespace Rental.Api.Controllers
         /// <param name="sessionId"></param>
         /// <returns></returns>
         [HttpGet("detail/{id}")]
-        public async Task<OrderDetailsRs> DisplayOrderDetails([FromRoute][NotNull] string id, [FromBody] int sessionId)
+        public async Task<OrderDetailsRs> DisplayOrderDetails([FromRoute][NotNull] string id, [FromBody] string sessionId)
         {
             var query = new OrderDetailsRq
             {
@@ -43,7 +43,7 @@ namespace Rental.Api.Controllers
         /// <param name="sessionId"></param>
         /// <returns></returns>
         [HttpGet("activeOrders")]
-        public async Task<ActiveOrdersRs> GetAllActiveOrders([FromBody][NotNull] string username, [NotNull] int sessionId)
+        public async Task<ActiveOrdersRs> GetAllActiveOrders([FromBody][NotNull] string username, [NotNull] string sessionId)
         {
             var query = new ActiveOrdersRq
             {

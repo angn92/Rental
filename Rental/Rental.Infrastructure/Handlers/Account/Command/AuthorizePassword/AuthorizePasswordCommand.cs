@@ -7,7 +7,7 @@ namespace Rental.Infrastructure.Handlers.Account.Command.AuthorizePassword
     {
         public AuthorizePasswordRequest Request { get; set; }
 
-        [JsonProperty("SessionId")]
+        [JsonProperty("SessionIdentifier")]
         public int SessionId { get; set; }
     }
 

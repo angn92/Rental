@@ -12,8 +12,8 @@ using Rental.Infrastructure.EF;
 namespace Rental.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20221002141206_ChangePropertyNameInOrderTable")]
-    partial class ChangePropertyNameInOrderTable
+    [Migration("20230110213243_updateSchemaDB")]
+    partial class updateSchemaDB
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -237,11 +237,8 @@ namespace Rental.Infrastructure.Migrations
 
             modelBuilder.Entity("Rental.Core.Domain.Session", b =>
                 {
-                    b.Property<int>("SessionId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("SessionId"));
+                    b.Property<string>("SessionIdentifier")
+                        .HasColumnType("text");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
@@ -261,7 +258,7 @@ namespace Rental.Infrastructure.Migrations
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.HasKey("SessionId");
+                    b.HasKey("SessionIdentifier");
 
                     b.HasIndex("IdCustomer")
                         .IsUnique();

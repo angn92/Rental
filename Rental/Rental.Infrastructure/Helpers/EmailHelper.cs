@@ -32,17 +32,16 @@ namespace Rental.Infrastructure.Helpers
 
         public async Task SendEmail([NotNull] EmailConfiguration emailConfiguration)
         {
+            if (!_options.Value.SendRealEmail)
+                return;
+
+            // Implementation for sending real email 
             var emailMessage = new MimeMessage();
 
             emailMessage.From.Add(MailboxAddress.Parse(emailConfiguration.From));
             emailMessage.To.Add(MailboxAddress.Parse(emailConfiguration.To));
             emailMessage.Subject = emailConfiguration.Subject;
             emailMessage.Body = new TextPart(MimeKit.Text.TextFormat.Text) { Text = emailConfiguration.Message };
-
-            if (!_options.Value.SendRealEmail)
-                return;
-
-            //Send real email
         }
 
         public void ValidateEmail([NotNull] string email)

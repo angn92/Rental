@@ -2,9 +2,11 @@
 using Microsoft.EntityFrameworkCore.Migrations;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
+#nullable disable
+
 namespace Rental.Infrastructure.Migrations
 {
-    public partial class initDb : Migration
+    public partial class updateSchemaDB : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -14,8 +16,8 @@ namespace Rental.Infrastructure.Migrations
                 {
                     CategoryId = table.Column<string>(type: "text", nullable: false),
                     Name = table.Column<string>(type: "text", nullable: true),
-                    UpdatedAt = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "timestamp without time zone", nullable: false)
+                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -34,12 +36,49 @@ namespace Rental.Infrastructure.Migrations
                     Email = table.Column<string>(type: "text", nullable: true),
                     Status = table.Column<int>(type: "integer", nullable: false),
                     Phone = table.Column<string>(type: "text", nullable: true),
-                    UpdatedAt = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "timestamp without time zone", nullable: false)
+                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Customers", x => x.CustomerId);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Dictionaries",
+                columns: table => new
+                {
+                    DictionaryId = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Name = table.Column<string>(type: "text", nullable: true),
+                    Value = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: true),
+                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Dictionaries", x => x.DictionaryId);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Orders",
+                columns: table => new
+                {
+                    OrderId = table.Column<string>(type: "text", nullable: false),
+                    ProductId = table.Column<string>(type: "text", nullable: true),
+                    CustomerId = table.Column<string>(type: "text", nullable: true),
+                    ProductName = table.Column<string>(type: "text", nullable: true),
+                    OrderHash = table.Column<string>(type: "text", nullable: true),
+                    ValidFrom = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    ValidTo = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    Amount = table.Column<int>(type: "integer", nullable: false),
+                    OrderStatus = table.Column<int>(type: "integer", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Orders", x => x.OrderId);
                 });
 
             migrationBuilder.CreateTable(
@@ -51,8 +90,14 @@ namespace Rental.Infrastructure.Migrations
                     Salt = table.Column<string>(type: "text", nullable: true),
                     Status = table.Column<int>(type: "integer", nullable: false),
                     CustomerId = table.Column<int>(type: "integer", nullable: true),
-                    UpdatedAt = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "timestamp without time zone", nullable: false)
+                    LastChangeDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    ExpirationDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    LastSuccessfulLoginDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    FailedLoginDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    NewPassword = table.Column<bool>(type: "boolean", nullable: false),
+                    ActivationCode = table.Column<string>(type: "text", nullable: true),
+                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -61,8 +106,7 @@ namespace Rental.Infrastructure.Migrations
                         name: "FK_Passwords_Customers_CustomerId",
                         column: x => x.CustomerId,
                         principalTable: "Customers",
-                        principalColumn: "CustomerId",
-                        onDelete: ReferentialAction.Restrict);
+                        principalColumn: "CustomerId");
                 });
 
             migrationBuilder.CreateTable(
@@ -77,8 +121,8 @@ namespace Rental.Infrastructure.Migrations
                     Status = table.Column<int>(type: "integer", nullable: false),
                     CategoryId = table.Column<string>(type: "text", nullable: true),
                     CustomerId = table.Column<int>(type: "integer", nullable: true),
-                    UpdatedAt = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "timestamp without time zone", nullable: false)
+                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -87,32 +131,29 @@ namespace Rental.Infrastructure.Migrations
                         name: "FK_Products_Categories_CategoryId",
                         column: x => x.CategoryId,
                         principalTable: "Categories",
-                        principalColumn: "CategoryId",
-                        onDelete: ReferentialAction.Restrict);
+                        principalColumn: "CategoryId");
                     table.ForeignKey(
                         name: "FK_Products_Customers_CustomerId",
                         column: x => x.CustomerId,
                         principalTable: "Customers",
-                        principalColumn: "CustomerId",
-                        onDelete: ReferentialAction.Restrict);
+                        principalColumn: "CustomerId");
                 });
 
             migrationBuilder.CreateTable(
                 name: "Sessions",
                 columns: table => new
                 {
-                    SessionId = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    SessionIdentifier = table.Column<string>(type: "text", nullable: false),
                     State = table.Column<int>(type: "integer", nullable: false),
-                    GenerationDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
-                    LastAccessDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    GenerationDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    LastAccessDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     IdCustomer = table.Column<int>(type: "integer", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "timestamp without time zone", nullable: false)
+                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Sessions", x => x.SessionId);
+                    table.PrimaryKey("PK_Sessions", x => x.SessionIdentifier);
                     table.ForeignKey(
                         name: "FK_Sessions_Customers_IdCustomer",
                         column: x => x.IdCustomer,
@@ -145,6 +186,12 @@ namespace Rental.Infrastructure.Migrations
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "Dictionaries");
+
+            migrationBuilder.DropTable(
+                name: "Orders");
+
             migrationBuilder.DropTable(
                 name: "Passwords");
 

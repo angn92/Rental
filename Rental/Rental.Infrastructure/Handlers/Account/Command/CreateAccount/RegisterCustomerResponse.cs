@@ -4,7 +4,7 @@ namespace Rental.Infrastructure.Handlers.Account.Command.CreateAccount
 {
     public class RegisterCustomerResponse
     {
-        [JsonProperty("SessionId")]
+        [JsonProperty("SessionIdentifier")]
         public string SessionId { get; set; }
     }
 }
