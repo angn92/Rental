@@ -12,6 +12,9 @@ using Rental.Infrastructure.Handlers.Password;
 using Rental.Infrastructure.Handlers.Account.Command.Sessions;
 using Rental.Infrastructure.Query;
 using System.Threading.Tasks;
+using RentalCommon.Headers;
+using Rental.Core.Domain;
+using MailKit;
 
 namespace Rental.Api.Controllers
 {
@@ -73,7 +76,7 @@ namespace Rental.Api.Controllers
         /// </summary>
         /// <param name="username">Username parameter for who sessione will be create.</param>
         /// <returns></returns>
-        [HttpPost("Session/{username}")]
+        [HttpPost("SessionIdentifier/{username}")]
         public async Task<CreateSessionResponse> CreateSeesion([FromRoute] [NotNull] string username)
         {
             var command = new CreateSessionCommand
@@ -90,7 +93,7 @@ namespace Rental.Api.Controllers
         /// <param name="sessionId"></param>
         /// <param name="request"></param>
         /// <returns></returns>
-        [HttpPut("Session/Authentication/{sessionId}")]
+        [HttpPut("SessionIdentifier/Authentication/{sessionId}")]
         public async Task<AuthenticationSessionResponse> LogInSession([FromRoute] string sessionId, [NotNull] AuthenticationSessionRequest request)
         {
             var command = new AuthenticationSessionCommand
@@ -105,14 +108,16 @@ namespace Rental.Api.Controllers
         /// <summary>
         /// Check session details and update LastAccessDate
         /// </summary>
-        /// <param name="sessionId"></param>
+        /// <param name=""></param>
         /// <returns></returns>
-        [HttpGet("Details/Session/{sessionId}")]
-        public async Task<SessionDetailsRs> VerifySessionDetails([FromRoute][NotNull] string sessionId)
+        [HttpGet("Session/Details")]
+        public async Task<SessionDetailsRs> VerifySessionDetails()
         {
+            Request.Headers.TryGetValue("SessionId", out var headerValue);
+
             var request = new SessionDetailsRq
             {
-                Session = sessionId
+                SessionIdentifier = headerValue
             };
 
             return await _queryDispatcher.DispatchAsync<SessionDetailsRq, SessionDetailsRs>(request); 

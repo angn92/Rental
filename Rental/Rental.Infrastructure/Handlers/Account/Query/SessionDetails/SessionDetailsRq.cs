@@ -5,7 +5,7 @@ namespace Rental.Infrastructure.Handlers.Account.Query.SessionDetails
 {
     public class SessionDetailsRq : IQuery
     {
-        [JsonProperty("Session", Required = Required.Always)]
-        public string Session { get; set; }
+        [JsonProperty("SessionIdentifier", Required = Required.Always)]
+        public string SessionIdentifier { get; set; }
     }
 }

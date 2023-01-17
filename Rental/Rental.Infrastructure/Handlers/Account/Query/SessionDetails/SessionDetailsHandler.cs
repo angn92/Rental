@@ -21,15 +21,15 @@ namespace Rental.Infrastructure.Handlers.Account.Query.SessionDetails
 
         public async ValueTask<SessionDetailsRs> HandleAsync(SessionDetailsRq query, CancellationToken cancellationToken = default)
         {
-            ValidationParameter.FailIfNullOrEmpty(query.Session.ToString());
+            ValidationParameter.FailIfNullOrEmpty(query.SessionIdentifier.ToString());
 
-            var session = await _sessionHelper.GetSessionByIdAsync(_context, query.Session);
+            var session = await _sessionHelper.GetSessionByIdAsync(_context, query.SessionIdentifier);
 
             if (session == null)
-                throw new CoreException(ErrorCode.SessionDoesNotExist, "Session does not exist.");
+                throw new CoreException(ErrorCode.SessionDoesNotExist, "SessionIdentifier does not exist.");
 
             if (_sessionHelper.SessionExpired(session))
-                throw new CoreException(ErrorCode.SessionExpired, $"Session {query.Session} expired.");
+                throw new CoreException(ErrorCode.SessionExpired, $"SessionIdentifier {query.SessionIdentifier} expired.");
 
             var statusSession = _sessionHelper.CheckSessionStatus(session);
 

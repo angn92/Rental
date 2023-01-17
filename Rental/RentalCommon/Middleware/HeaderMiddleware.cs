@@ -6,25 +6,22 @@ namespace RentalCommon.Headers
     {
         private readonly RequestDelegate _next;
 
-        public HeaderMiddleware(RequestDelegate requestDelegate)
+        public HeaderMiddleware(RequestDelegate requestDelegate) => _next = requestDelegate;
+
+        public Task InvokeAsync(HttpContext httpContext)
         {
-            _next = requestDelegate;
+            httpContext.Response.Headers.Add("X-AppName", "Rental");
+            httpContext.Response.Headers.Add("X-TraceId", GetTraceId(httpContext));
+            httpContext.Response.Headers.Add("X-AppVersion", "1.0.0");
+            httpContext.Response.Headers.Add("X-AcceptLanguage", "en-US");
+
+            return _next(httpContext);
         }
 
-        public Task InvokeAsync(HttpContext context)
+        public string GetTraceId(HttpContext httpContext)
         {
-            context.Response.Headers.Add("X-AppName", "Rental");
-            context.Response.Headers.Add("X-TraceId", GetTraceId(context));
-            context.Response.Headers.Add("X-AppVersion", "1.0.0");
-            context.Response.Headers.Add("X-AcceptLanguage", "en-US");
-
-            return _next(context);
-        }
-
-        public string GetTraceId(HttpContext context)
-        {
-            context.TraceIdentifier = Guid.NewGuid().ToString();
-            return context.TraceIdentifier;
+            httpContext.TraceIdentifier = Guid.NewGuid().ToString();
+            return httpContext.TraceIdentifier;
         }
     }
 }

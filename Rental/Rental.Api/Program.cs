@@ -7,10 +7,12 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Rental.Api.CustomHeaders;
 using Rental.Infrastructure.Configuration;
 using Rental.Infrastructure.EF;
 using Rental.Infrastructure.IoC;
 using RentalCommon.Headers;
+using RentalCommon.Middleware;
 using System;
 using System.IO;
 using System.Reflection;
@@ -51,6 +53,7 @@ builder.Services.AddSwaggerGen(options =>
 {
     var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
     options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
+    options.OperationFilter<HeaderParametersFilter>();
 });
 
 builder.Services.Configure<ConfigurationOptions>(builder.Configuration.GetSection("ConfigurationOptions"));
@@ -70,6 +73,7 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseMiddleware<HeaderMiddleware>();
+app.UseMiddleware<CheckHeaderMiddleware>();
 app.UseRouting();
 app.UseAuthorization();
 app.UseEndpoints(endpoints => endpoints.MapControllers());

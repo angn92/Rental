@@ -26,7 +26,7 @@ namespace Rental.Infrastructure.Handlers.Users.Queries.AccountInfo
             var session = await _sessionHelper.GetSessionByIdAsync(_context, query.SessionId);
             if (session is null)
             {
-                throw new CoreException(ErrorCode.SessionDoesNotExist, $"Session not created.");
+                throw new CoreException(ErrorCode.SessionDoesNotExist, $"SessionIdentifier not created.");
             }
 
             _sessionHelper.CheckSessionStatus(session);

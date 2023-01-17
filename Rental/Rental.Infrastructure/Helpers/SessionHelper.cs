@@ -55,7 +55,7 @@ namespace Rental.Infrastructure.Helpers
             var session = await _context.Sessions.FirstOrDefaultAsync(x => x.SessionIdentifier == idSession);
 
             if (session is null)
-                throw new CoreException(ErrorCode.SessionDoesNotExist, $"Session {idSession} does not exist.");
+                throw new CoreException(ErrorCode.SessionDoesNotExist, $"SessionIdentifier {idSession} does not exist.");
 
             return session;
         }
@@ -66,7 +66,7 @@ namespace Rental.Infrastructure.Helpers
 
             if (sessionToRemove == null)
             {
-                throw new CoreException(ErrorCode.SessionDoesNotExist, $"Session {idSession} does not exist.");
+                throw new CoreException(ErrorCode.SessionDoesNotExist, $"SessionIdentifier {idSession} does not exist.");
             }
 
             _context.Sessions.Remove(sessionToRemove);
@@ -120,13 +120,13 @@ namespace Rental.Infrastructure.Helpers
         public void ValidateSession([NotNull] Session session)
         {
             if (session == null)
-                throw new CoreException(ErrorCode.SessionDoesNotExist, "Session does not exist.");
+                throw new CoreException(ErrorCode.SessionDoesNotExist, "SessionIdentifier does not exist.");
 
             if (session.State == SessionState.NotAuthorized)
-                throw new CoreException(ErrorCode.SessionNotAuthorized, $"Session {session.SessionIdentifier} is not authorized.");
+                throw new CoreException(ErrorCode.SessionNotAuthorized, $"SessionIdentifier {session.SessionIdentifier} is not authorized.");
 
             if (session.State == SessionState.Expired)
-                throw new CoreException(ErrorCode.SessionExpired, $"Session {session.SessionIdentifier} is expired.");
+                throw new CoreException(ErrorCode.SessionExpired, $"SessionIdentifier {session.SessionIdentifier} is expired.");
         }
 
         public async Task<Session> GetSessionAsync([NotNull] ApplicationDbContext context, [NotNull] Customer customer)

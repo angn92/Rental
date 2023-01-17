@@ -233,7 +233,7 @@ namespace Rental.Infrastructure.Migrations
                     b.ToTable("Products");
                 });
 
-            modelBuilder.Entity("Rental.Core.Domain.Session", b =>
+            modelBuilder.Entity("Rental.Core.Domain.SessionIdentifier", b =>
                 {
                     b.Property<string>("SessionIdentifier")
                         .HasColumnType("text");
@@ -288,11 +288,11 @@ namespace Rental.Infrastructure.Migrations
                     b.Navigation("Customer");
                 });
 
-            modelBuilder.Entity("Rental.Core.Domain.Session", b =>
+            modelBuilder.Entity("Rental.Core.Domain.SessionIdentifier", b =>
                 {
                     b.HasOne("Rental.Core.Domain.Customer", "Customer")
-                        .WithOne("Session")
-                        .HasForeignKey("Rental.Core.Domain.Session", "IdCustomer")
+                        .WithOne("SessionIdentifier")
+                        .HasForeignKey("Rental.Core.Domain.SessionIdentifier", "IdCustomer")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -310,7 +310,7 @@ namespace Rental.Infrastructure.Migrations
 
                     b.Navigation("Products");
 
-                    b.Navigation("Session");
+                    b.Navigation("SessionIdentifier");
                 });
 #pragma warning restore 612, 618
         }
