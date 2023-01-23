@@ -5,6 +5,7 @@ using Rental.Core.Validation;
 using Rental.Infrastructure.Command;
 using Rental.Infrastructure.EF;
 using Rental.Infrastructure.Helpers;
+using Rental.Infrastructure.Wrapper;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -17,15 +18,17 @@ namespace Rental.Infrastructure.Handlers.Account.Command.LoginSession
         private readonly IPasswordHelper _passwordHelper;
         private readonly ICustomerHelper _customerHelper;
         private readonly ISessionHelper _sessionHelper;
+        private readonly IHttpContextWrapper _httpContextWrapper;
         private readonly ApplicationDbContext _context;
         
         public AuthenticationSessionHandler(ILogger<AuthenticationSessionHandler> logger, ApplicationDbContext context,
-            IPasswordHelper passwordHelper, ICustomerHelper customerHelper, ISessionHelper sessionHelper)
+            IPasswordHelper passwordHelper, ICustomerHelper customerHelper, ISessionHelper sessionHelper, IHttpContextWrapper httpContextWrapper)
         {
             _logger = logger;
             _passwordHelper = passwordHelper;
             _customerHelper = customerHelper;
             _sessionHelper = sessionHelper;
+            _httpContextWrapper = httpContextWrapper;
             _context = context;
         }
 
@@ -39,7 +42,7 @@ namespace Rental.Infrastructure.Handlers.Account.Command.LoginSession
             {
                 _logger.LogInformation("Starting login process...");
 
-                var session = await _sessionHelper.GetSessionByIdAsync(_context, "");
+                var session = await _sessionHelper.GetSessionByIdAsync(_context, _httpContextWrapper.GetValueFromRequestHeader("SessionId"));
 
                 var customer = await _customerHelper.GetCustomerAsync(command.Request.Username);
 

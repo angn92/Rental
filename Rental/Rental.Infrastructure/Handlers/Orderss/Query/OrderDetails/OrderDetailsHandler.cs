@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Rental.Infrastructure.Handlers.Orders.Query.OrderDetails
 {
-    public class OrderDetailsHandler : IQueryHandler<OrderDetailsRq, OrderDetailsRs>
+    public class OrderDetailsHandler : IQueryHandler<OrderDetailsRequest, OrderDetailsResponse>
     {
         private readonly ApplicationDbContext context;
         private readonly ISessionHelper sessionHelper;
@@ -25,7 +25,7 @@ namespace Rental.Infrastructure.Handlers.Orders.Query.OrderDetails
             this.productHelper = productHelper;
         }
 
-        public async ValueTask<OrderDetailsRs> HandleAsync(OrderDetailsRq query, CancellationToken cancellationToken = default)
+        public async ValueTask<OrderDetailsResponse> HandleAsync(OrderDetailsRequest query, CancellationToken cancellationToken = default)
         {
             ValidationParameter.FailIfNullOrEmpty(query.OrderId);
             ValidationParameter.FailIfNullOrEmpty(query.SessionId.ToString());
@@ -48,7 +48,7 @@ namespace Rental.Infrastructure.Handlers.Orders.Query.OrderDetails
 
             var product = await productHelper.GetProductAsync(context, order.ProductId);
 
-            var response = new OrderDetailsRs
+            var response = new OrderDetailsResponse
             {
                 OrderDetailDto = new OrderDetailDto
                 {

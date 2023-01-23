@@ -41,10 +41,10 @@ namespace Rental.Infrastructure.Handlers.Account.Command.AuthorizePassword
                 var session = await _sessionHelper.GetSessionAsync(_context, customer);
 
                 if (_sessionHelper.CheckSessionStatus(session) != SessionState.NotAuthorized)
-                    throw new CoreException(ErrorCode.WrongSessionState, $"SessionIdentifier {session.SessionIdentifier} has incorrect state for authorize password.");
+                    throw new CoreException(ErrorCode.WrongSessionState, $"SessionId {session.SessionIdentifier} has incorrect state for authorize password.");
 
                 if (_sessionHelper.SessionExpired(session))
-                    throw new CoreException(ErrorCode.SessionExpired, "SessionIdentifier expired");
+                    throw new CoreException(ErrorCode.SessionExpired, "SessionId expired");
 
                 //Find password for given user to authorize
                 var password = await _passwordHelper.FindPasswordToAuthorize(customer.Username, command.Request.Code);

@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Rental.Infrastructure.Handlers.Orderss.Query.ActiveOrders
 {
-    public class ActiveOrdersHandler : IQueryHandler<ActiveOrdersRq, ActiveOrdersRs>
+    public class ActiveOrdersHandler : IQueryHandler<ActiveOrdersRequest, ActiveOrdersResponse>
     {
         private readonly ApplicationDbContext _context;
         private readonly ISessionHelper _sessionHelper;
@@ -26,7 +26,7 @@ namespace Rental.Infrastructure.Handlers.Orderss.Query.ActiveOrders
             _customerHelper = customerHelper;
         }
 
-        public async ValueTask<ActiveOrdersRs> HandleAsync(ActiveOrdersRq query, CancellationToken cancellationToken = default)
+        public async ValueTask<ActiveOrdersResponse> HandleAsync(ActiveOrdersRequest query, CancellationToken cancellationToken = default)
         {
             ValidationParameter.FailIfNullOrEmpty(query.Username);
             ValidationParameter.FailIfNullOrEmpty(query.SessionId.ToString());
@@ -73,7 +73,7 @@ namespace Rental.Infrastructure.Handlers.Orderss.Query.ActiveOrders
                 });
             }
 
-            return new ActiveOrdersRs
+            return new ActiveOrdersResponse
             {
                 OrderDetailDtoList = orderDetailDtoList
             };

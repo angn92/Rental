@@ -3,7 +3,7 @@ using Rental.Infrastructure.DTO;
 
 namespace Rental.Infrastructure.Handlers.Orders.Query.OrderDetails
 {
-    public class OrderDetailsRs
+    public class OrderDetailsResponse
     {
         [JsonProperty("orderDetailDto")]
         public OrderDetailDto OrderDetailDto { get; set; }

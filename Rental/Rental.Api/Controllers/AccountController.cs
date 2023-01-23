@@ -48,14 +48,14 @@ namespace Rental.Api.Controllers
         /// <returns></returns>
         [HttpGet("Customer/Details/{username}")]
 
-        public async Task<GetCustomerDetailsRs> GetUserDetails([FromRoute][NotNull] string username)
+        public async Task<GetCustomerDetailsResponse> GetUserDetails([FromRoute][NotNull] string username)
         {
-            var query = new GetCustomerDetailsRq
+            var query = new GetCustomerDetailsRequest
             {
                 Username = username
             };
 
-            return await _queryDispatcher.DispatchAsync<GetCustomerDetailsRq, GetCustomerDetailsRs>(query);
+            return await _queryDispatcher.DispatchAsync<GetCustomerDetailsRequest, GetCustomerDetailsResponse>(query);
         }
 
         /// <summary>
@@ -73,7 +73,7 @@ namespace Rental.Api.Controllers
         /// </summary>
         /// <param name="username">Username parameter for who sessione will be create.</param>
         /// <returns></returns>
-        [HttpPost("SessionIdentifier/{username}")]
+        [HttpPost("SessionId/{username}")]
         public async Task<CreateSessionResponse> CreateSession([FromRoute] [NotNull] string username)
         {
             var command = new CreateSessionCommand
@@ -90,7 +90,7 @@ namespace Rental.Api.Controllers
         /// <param name="sessionId"></param>
         /// <param name="request"></param>
         /// <returns></returns>
-        [HttpPut("SessionIdentifier/Authentication")]
+        [HttpPut("SessionId/Authentication")]
         public async Task<AuthenticationSessionResponse> LogInSession([NotNull] AuthenticationSessionRequest request)
         {
             var command = new AuthenticationSessionCommand
@@ -106,17 +106,17 @@ namespace Rental.Api.Controllers
         /// </summary>
         /// <param name=""></param>
         /// <returns></returns>
-        [HttpGet("SessionIdentifier/Details")]
-        public async Task<SessionDetailsRs> VerifySessionDetails()
+        [HttpGet("SessionId/Details")]
+        public async Task<SessionDetailsResponse> VerifySessionDetails()
         {
             Request.Headers.TryGetValue("SessionId", out var headerValue);
 
-            var request = new SessionDetailsRq
+            var request = new SessionDetailsRequest
             {
-                SessionIdentifier = headerValue
+                SessionId = headerValue
             };
 
-            return await _queryDispatcher.DispatchAsync<SessionDetailsRq, SessionDetailsRs>(request); 
+            return await _queryDispatcher.DispatchAsync<SessionDetailsRequest, SessionDetailsResponse>(request); 
         }
 
         /// <summary>

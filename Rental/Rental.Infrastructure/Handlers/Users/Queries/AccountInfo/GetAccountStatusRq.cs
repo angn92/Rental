@@ -8,7 +8,7 @@ namespace Rental.Infrastructure.Handlers.Users.Queries.AccountInfo
         [JsonProperty("Username")]
         public string Username { get; set; }
 
-        [JsonProperty("SessionIdentifier")]
+        [JsonProperty("SessionId")]
         public string SessionId { get; set; }
     }
 }

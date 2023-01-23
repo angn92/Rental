@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Rental.Infrastructure.Handlers.Account.Query.SessionDetails
 {
-    public class SessionDetailsHandler : IQueryHandler<SessionDetailsRq, SessionDetailsRs>
+    public class SessionDetailsHandler : IQueryHandler<SessionDetailsRequest, SessionDetailsResponse>
     {
         private readonly ApplicationDbContext _context;
         private readonly ISessionHelper _sessionHelper;
@@ -19,23 +19,23 @@ namespace Rental.Infrastructure.Handlers.Account.Query.SessionDetails
             _sessionHelper = sessionHelper;
         }
 
-        public async ValueTask<SessionDetailsRs> HandleAsync(SessionDetailsRq query, CancellationToken cancellationToken = default)
+        public async ValueTask<SessionDetailsResponse> HandleAsync(SessionDetailsRequest query, CancellationToken cancellationToken = default)
         {
-            ValidationParameter.FailIfNullOrEmpty(query.SessionIdentifier.ToString());
+            ValidationParameter.FailIfNullOrEmpty(query.SessionId.ToString());
 
-            var session = await _sessionHelper.GetSessionByIdAsync(_context, query.SessionIdentifier);
+            var session = await _sessionHelper.GetSessionByIdAsync(_context, query.SessionId);
 
             if (session == null)
-                throw new CoreException(ErrorCode.SessionDoesNotExist, "SessionIdentifier does not exist.");
+                throw new CoreException(ErrorCode.SessionDoesNotExist, "SessionId does not exist.");
 
             if (_sessionHelper.SessionExpired(session))
-                throw new CoreException(ErrorCode.SessionExpired, $"SessionIdentifier {query.SessionIdentifier} expired.");
+                throw new CoreException(ErrorCode.SessionExpired, $"SessionId {query.SessionId} expired.");
 
             var statusSession = _sessionHelper.CheckSessionStatus(session);
 
             session.UpdateLastAccessDate();
 
-            return new SessionDetailsRs
+            return new SessionDetailsResponse
             {
                 SessionId = session.SessionIdentifier,
                 SessionStatus = statusSession.ToString(),

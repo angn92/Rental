@@ -3,12 +3,12 @@ using System;
 
 namespace Rental.Infrastructure.Handlers.Account.Query.SessionDetails
 {
-    public class SessionDetailsRs
+    public class SessionDetailsResponse
     {
         [JsonProperty("SessionStatus")]
         public string SessionStatus { get; set; }
 
-        [JsonProperty("SessionIdentifier")]
+        [JsonProperty("SessionId")]
         public string SessionId { get; set; }
 
         [JsonProperty("ValidTo")]

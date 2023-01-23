@@ -25,15 +25,15 @@ namespace Rental.Api.Controllers
         /// <param name="sessionId"></param>
         /// <returns></returns>
         [HttpGet("detail/{id}")]
-        public async Task<OrderDetailsRs> DisplayOrderDetails([FromRoute][NotNull] string id, [FromBody] string sessionId)
+        public async Task<OrderDetailsResponse> DisplayOrderDetails([FromRoute][NotNull] string id, [FromBody] string sessionId)
         {
-            var query = new OrderDetailsRq
+            var query = new OrderDetailsRequest
             {
                 OrderId = id,
                 SessionId = sessionId
             };
 
-            return await queryDispatcher.DispatchAsync<OrderDetailsRq, OrderDetailsRs>(query);
+            return await queryDispatcher.DispatchAsync<OrderDetailsRequest, OrderDetailsResponse>(query);
         }
 
         /// <summary>
@@ -43,15 +43,15 @@ namespace Rental.Api.Controllers
         /// <param name="sessionId"></param>
         /// <returns></returns>
         [HttpGet("activeOrders")]
-        public async Task<ActiveOrdersRs> GetAllActiveOrders([FromBody][NotNull] string username, [NotNull] string sessionId)
+        public async Task<ActiveOrdersResponse> GetAllActiveOrders([FromBody][NotNull] string username, [NotNull] string sessionId)
         {
-            var query = new ActiveOrdersRq
+            var query = new ActiveOrdersRequest
             {
                 Username = username,
                 SessionId = sessionId
             };
 
-            return await queryDispatcher.DispatchAsync<ActiveOrdersRq, ActiveOrdersRs>(query);
+            return await queryDispatcher.DispatchAsync<ActiveOrdersRequest, ActiveOrdersResponse>(query);
         }
     }
 }

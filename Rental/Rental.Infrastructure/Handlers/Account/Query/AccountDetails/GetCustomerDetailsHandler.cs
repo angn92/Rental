@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Rental.Infrastructure.Handlers.Account.Query.AccountDetails
 {
-    public class GetCustomerDetailsHandler : IQueryHandler<GetCustomerDetailsRq, GetCustomerDetailsRs>
+    public class GetCustomerDetailsHandler : IQueryHandler<GetCustomerDetailsRequest, GetCustomerDetailsResponse>
     {
         private readonly ILogger<GetCustomerDetailsHandler> logger;
         private readonly ApplicationDbContext _context;
@@ -28,7 +28,7 @@ namespace Rental.Infrastructure.Handlers.Account.Query.AccountDetails
             _httpContextWrapper = httpContextWrapper;
         }
 
-        public async ValueTask<GetCustomerDetailsRs> HandleAsync([NotNull] GetCustomerDetailsRq command, CancellationToken cancellationToken = default)
+        public async ValueTask<GetCustomerDetailsResponse> HandleAsync([NotNull] GetCustomerDetailsRequest command, CancellationToken cancellationToken = default)
         {
             ValidationParameter.FailIfNull(command);
 
@@ -44,7 +44,7 @@ namespace Rental.Infrastructure.Handlers.Account.Query.AccountDetails
                 throw;
             }
 
-            return new GetCustomerDetailsRs
+            return new GetCustomerDetailsResponse
             {
                 Fullname = customerAccount.FirstName + " " + customerAccount.LastName,
                 Username = customerAccount.Username,

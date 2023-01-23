@@ -233,9 +233,9 @@ namespace Rental.Infrastructure.Migrations
                     b.ToTable("Products");
                 });
 
-            modelBuilder.Entity("Rental.Core.Domain.SessionIdentifier", b =>
+            modelBuilder.Entity("Rental.Core.Domain.SessionId", b =>
                 {
-                    b.Property<string>("SessionIdentifier")
+                    b.Property<string>("SessionId")
                         .HasColumnType("text");
 
                     b.Property<DateTime>("CreatedAt")
@@ -256,7 +256,7 @@ namespace Rental.Infrastructure.Migrations
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.HasKey("SessionIdentifier");
+                    b.HasKey("SessionId");
 
                     b.HasIndex("IdCustomer")
                         .IsUnique();
@@ -288,11 +288,11 @@ namespace Rental.Infrastructure.Migrations
                     b.Navigation("Customer");
                 });
 
-            modelBuilder.Entity("Rental.Core.Domain.SessionIdentifier", b =>
+            modelBuilder.Entity("Rental.Core.Domain.SessionId", b =>
                 {
                     b.HasOne("Rental.Core.Domain.Customer", "Customer")
-                        .WithOne("SessionIdentifier")
-                        .HasForeignKey("Rental.Core.Domain.SessionIdentifier", "IdCustomer")
+                        .WithOne("SessionId")
+                        .HasForeignKey("Rental.Core.Domain.SessionId", "IdCustomer")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -310,7 +310,7 @@ namespace Rental.Infrastructure.Migrations
 
                     b.Navigation("Products");
 
-                    b.Navigation("SessionIdentifier");
+                    b.Navigation("SessionId");
                 });
 #pragma warning restore 612, 618
         }

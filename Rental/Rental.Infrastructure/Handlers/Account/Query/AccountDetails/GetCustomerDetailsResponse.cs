@@ -3,7 +3,7 @@ using Rental.Core.Enum;
 
 namespace Rental.Infrastructure.Handlers.Account.Query.AccountDetails
 {
-    public class GetCustomerDetailsRs
+    public class GetCustomerDetailsResponse
     {
         [JsonProperty("FullName")]
         public string Fullname { get; set; }
