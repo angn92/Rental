@@ -1,6 +1,6 @@
 ﻿using JetBrains.Annotations;
 using Microsoft.AspNetCore.Mvc;
-using Rental.Infrastructure.Handlers.Password.Query;
+using Rental.Infrastructure.Handlers.Utils.Query;
 using Rental.Infrastructure.Query;
 using System.Threading.Tasks;
 

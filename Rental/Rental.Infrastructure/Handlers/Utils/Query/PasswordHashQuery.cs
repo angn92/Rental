@@ -1,14 +1,14 @@
 ﻿using Newtonsoft.Json;
 using Rental.Infrastructure.Query;
 
-namespace Rental.Infrastructure.Handlers.Password.Query
+namespace Rental.Infrastructure.Handlers.Utils.Query
 {
     public class PasswordHashQuery : IQuery
     {
-        [JsonProperty("password")]
+        [JsonProperty("Password")]
         public string Password { get; set; }
 
-        [JsonProperty("salt")]
+        [JsonProperty("Salt")]
         public string Salt { get; set; }
     }
 }

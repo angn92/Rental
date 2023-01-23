@@ -1,11 +1,10 @@
 ﻿using Newtonsoft.Json;
 
-
-namespace Rental.Infrastructure.Handlers.Password.Query
+namespace Rental.Infrastructure.Handlers.Utils.Query
 {
     public class PasswordHashResponse
     {
-        [JsonProperty("hash")]
+        [JsonProperty("Hash")]
         public string Hash { get; set; }
     }
 }

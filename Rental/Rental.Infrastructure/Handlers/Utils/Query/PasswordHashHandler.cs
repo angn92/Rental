@@ -4,7 +4,7 @@ using Rental.Infrastructure.Services.EncryptService;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Rental.Infrastructure.Handlers.Password.Query
+namespace Rental.Infrastructure.Handlers.Utils.Query
 {
     public class PasswordHashHandler : IQueryHandler<PasswordHashQuery, PasswordHashResponse>
     {
