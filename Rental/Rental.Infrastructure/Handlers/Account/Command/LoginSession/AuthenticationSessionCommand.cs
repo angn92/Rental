@@ -7,9 +7,6 @@ namespace Rental.Infrastructure.Handlers.Account.Command.LoginSession
     public class AuthenticationSessionCommand : ICommand
     {
         public AuthenticationSessionRequest Request { get; set; }
-
-        [JsonProperty("SessionIdentifier")]
-        public string SessionId { get; set; }
     }
 
     public class AuthenticationSessionRequest

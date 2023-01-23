@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Rental.Core.Base;
 
 namespace RentalCommon.Middleware
 {
@@ -12,8 +13,8 @@ namespace RentalCommon.Middleware
         {
             if (!httpContext.Request.Headers.ContainsKey("SessionId"))
                 httpContext.Response.StatusCode = 400;
-            else
-                await _next(httpContext);
+            
+            await _next(httpContext);
         }
     }
 }

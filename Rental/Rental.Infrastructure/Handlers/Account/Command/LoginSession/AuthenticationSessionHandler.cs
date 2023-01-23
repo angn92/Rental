@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
+using Rental.Core.Base;
 using Rental.Core.Enum;
 using Rental.Core.Validation;
 using Rental.Infrastructure.Command;
@@ -38,7 +39,7 @@ namespace Rental.Infrastructure.Handlers.Account.Command.LoginSession
             {
                 _logger.LogInformation("Starting login process...");
 
-                var session = await _sessionHelper.GetSessionByIdAsync(_context, command.SessionId);
+                var session = await _sessionHelper.GetSessionByIdAsync(_context, "");
 
                 var customer = await _customerHelper.GetCustomerAsync(command.Request.Username);
 

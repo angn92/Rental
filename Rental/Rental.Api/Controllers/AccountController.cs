@@ -12,9 +12,6 @@ using Rental.Infrastructure.Handlers.Password;
 using Rental.Infrastructure.Handlers.Account.Command.Sessions;
 using Rental.Infrastructure.Query;
 using System.Threading.Tasks;
-using RentalCommon.Headers;
-using Rental.Core.Domain;
-using MailKit;
 
 namespace Rental.Api.Controllers
 {
@@ -77,7 +74,7 @@ namespace Rental.Api.Controllers
         /// <param name="username">Username parameter for who sessione will be create.</param>
         /// <returns></returns>
         [HttpPost("SessionIdentifier/{username}")]
-        public async Task<CreateSessionResponse> CreateSeesion([FromRoute] [NotNull] string username)
+        public async Task<CreateSessionResponse> CreateSession([FromRoute] [NotNull] string username)
         {
             var command = new CreateSessionCommand
             {
@@ -93,13 +90,12 @@ namespace Rental.Api.Controllers
         /// <param name="sessionId"></param>
         /// <param name="request"></param>
         /// <returns></returns>
-        [HttpPut("SessionIdentifier/Authentication/{sessionId}")]
-        public async Task<AuthenticationSessionResponse> LogInSession([FromRoute] string sessionId, [NotNull] AuthenticationSessionRequest request)
+        [HttpPut("SessionIdentifier/Authentication")]
+        public async Task<AuthenticationSessionResponse> LogInSession([NotNull] AuthenticationSessionRequest request)
         {
             var command = new AuthenticationSessionCommand
             {
-                Request = request,
-                SessionId = sessionId
+                Request = request
             };
 
             return await _commandDispatcher.DispatchAsync<AuthenticationSessionCommand, AuthenticationSessionResponse>(command);
@@ -110,7 +106,7 @@ namespace Rental.Api.Controllers
         /// </summary>
         /// <param name=""></param>
         /// <returns></returns>
-        [HttpGet("Session/Details")]
+        [HttpGet("SessionIdentifier/Details")]
         public async Task<SessionDetailsRs> VerifySessionDetails()
         {
             Request.Headers.TryGetValue("SessionId", out var headerValue);

@@ -1,10 +1,13 @@
 ﻿using Autofac;
+using Microsoft.AspNetCore.Http;
+using Rental.Core.Base;
 using Rental.Infrastructure.Command;
 using Rental.Infrastructure.EF;
 using Rental.Infrastructure.Helpers;
 using Rental.Infrastructure.Query;
 using Rental.Infrastructure.Services;
 using Rental.Infrastructure.Services.EncryptService;
+using Rental.Infrastructure.Wrapper;
 
 namespace Rental.Infrastructure.IoC
 {
@@ -71,6 +74,14 @@ namespace Rental.Infrastructure.IoC
             builder.RegisterType<SessionHelper>()
                 .As<ISessionHelper>()
                 .InstancePerLifetimeScope();
+
+            builder.RegisterType<HttpContextWrapper>()
+                .As<IHttpContextWrapper>()
+                .InstancePerLifetimeScope();
+
+            builder.RegisterType<HttpContextAccessor>()
+                .As<IHttpContextAccessor>()
+                .SingleInstance();
         }
-        }
+    }
 }

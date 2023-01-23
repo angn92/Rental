@@ -74,6 +74,11 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseMiddleware<HeaderMiddleware>();
 app.UseMiddleware<CheckHeaderMiddleware>();
+
+//app.Run(async context => {
+//    var sessionId = context.Request.Headers.TryGetValue("")
+//})
+
 app.UseRouting();
 app.UseAuthorization();
 app.UseEndpoints(endpoints => endpoints.MapControllers());

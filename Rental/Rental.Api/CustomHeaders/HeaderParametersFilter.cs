@@ -8,8 +8,10 @@ namespace Rental.Api.CustomHeaders
     {
         public void Apply(OpenApiOperation operation, OperationFilterContext context)
         {
-            if (operation.Parameters == null)
-                operation.Parameters = new List<OpenApiParameter>();
+            operation.Parameters ??= new List<OpenApiParameter>();
+
+            if (context.MethodInfo.Name == "RegisterAccount" || context.MethodInfo.Name == "CreateSession")
+                return;
 
             operation.Parameters.Add(new OpenApiParameter
             {
@@ -20,7 +22,6 @@ namespace Rental.Api.CustomHeaders
                 {
                     Type = string.Empty
                 }
-                
             });
         }
     }
