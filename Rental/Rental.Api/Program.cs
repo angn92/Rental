@@ -13,19 +13,38 @@ using Rental.Infrastructure.EF;
 using Rental.Infrastructure.IoC;
 using RentalCommon.Headers;
 using RentalCommon.Middleware;
+using Serilog;
+using Serilog.Events;
 using System;
 using System.IO;
 using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddLogging((x) => x.SetMinimumLevel(LogLevel.Information).AddConsole());
+var configuration = new ConfigurationBuilder()
+    .AddJsonFile("appsettings.json")
+    .Build();
+
+// Configuration for Serilog
+var logger = new LoggerConfiguration()
+        .ReadFrom.Configuration(builder.Configuration)
+        .Enrich.FromLogContext()
+        .WriteTo.Console(restrictedToMinimumLevel: LogEventLevel.Information)
+        .CreateLogger();
+
+builder.Logging.ClearProviders();
+
+builder.Logging.AddSerilog(logger);
+
+logger.Information("Start Web Application");
+
+//builder.Services.AddLogging((x) => x.SetMinimumLevel(LogLevel.Information).AddConsole());
 
 //Default middleware logging in .NET 6
 builder.Services.AddHttpLogging(logging =>
 {
-    logging.LoggingFields = HttpLoggingFields.RequestBody | HttpLoggingFields.RequestPropertiesAndHeaders |
-                            HttpLoggingFields.ResponseBody | HttpLoggingFields.ResponsePropertiesAndHeaders;
+    logging.LoggingFields = HttpLoggingFields.RequestBody | HttpLoggingFields.ResponseBody;
+    //| HttpLoggingFields.RequestPropertiesAndHeaders |HttpLoggingFields.ResponsePropertiesAndHeaders;
 });
 
 //Autofac 
