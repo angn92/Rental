@@ -37,6 +37,7 @@ namespace Rental.Infrastructure.Handlers.Account.Query.AccountDetails
             {
                 var sessionId = _httpContextWrapper.GetValueFromRequestHeader("SessionId");
                 customerAccount = await _customerHelper.GetCustomerAsync(command.Username);
+                logger.LogInformation("Test");
             }
             catch (Exception ex)
             {
