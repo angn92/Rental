@@ -43,8 +43,8 @@ logger.Information("Start Web Application");
 //Default middleware logging in .NET 6
 builder.Services.AddHttpLogging(logging =>
 {
-    logging.LoggingFields = HttpLoggingFields.RequestBody | HttpLoggingFields.ResponseBody;
-    //| HttpLoggingFields.RequestPropertiesAndHeaders |HttpLoggingFields.ResponsePropertiesAndHeaders;
+    logging.LoggingFields = HttpLoggingFields.RequestBody | HttpLoggingFields.ResponseBody 
+                            | HttpLoggingFields.RequestPropertiesAndHeaders |HttpLoggingFields.ResponsePropertiesAndHeaders;
 });
 
 //Autofac 

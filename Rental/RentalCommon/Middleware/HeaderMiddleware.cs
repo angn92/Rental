@@ -11,10 +11,12 @@ namespace RentalCommon.Headers
         public Task InvokeAsync(HttpContext httpContext)
         {
             httpContext.Response.Headers.Add("X-AppName", "Rental");
-            httpContext.Response.Headers.Add("X-Content-Type", "application/json");
+            httpContext.Response.Headers.Add("X-Content-Type", httpContext.Request.ContentType);
             httpContext.Response.Headers.Add("X-AppVersion", "1.0.0");
             httpContext.Response.Headers.Add("X-AcceptLanguage", "en-US");
-            httpContext.Response.Headers.Add("X-TraceId", GetTraceId(httpContext));
+
+            httpContext.Request.Headers.TryGetValue("X-Trace-Id", out var traceValue);
+            httpContext.Response.Headers.Add("X-Trace-Id", traceValue.ToString() ?? GetTraceId(httpContext));
             
             return _next(httpContext);
         }
