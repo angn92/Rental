@@ -11,9 +11,14 @@ namespace RentalCommon.Middleware
 
         public async Task InvokeAsync(HttpContext httpContext)
         {
-            if (!httpContext.Request.Headers.ContainsKey("SessionId"))
-                httpContext.Response.StatusCode = 400;
             
+            if (!httpContext.Request.Headers.ContainsKey("SessionId") && !(httpContext.Request.Path.Value.Contains("Session/Create") ||
+                httpContext.Request.Path.Value.Contains("Register/Customer")))
+            {
+                httpContext.Response.StatusCode = StatusCodes.Status400BadRequest;
+                return;
+            }
+
             await _next(httpContext);
         }
     }

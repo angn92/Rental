@@ -73,7 +73,7 @@ namespace Rental.Api.Controllers
         /// </summary>
         /// <param name="username">Username parameter for who sessione will be create.</param>
         /// <returns></returns>
-        [HttpPost("SessionId/{username}")]
+        [HttpPost("Session/Create/{username}")]
         public async Task<CreateSessionResponse> CreateSession([FromRoute] [NotNull] string username)
         {
             var command = new CreateSessionCommand
@@ -90,7 +90,7 @@ namespace Rental.Api.Controllers
         /// <param name="sessionId"></param>
         /// <param name="request"></param>
         /// <returns></returns>
-        [HttpPut("SessionId/Authentication")]
+        [HttpPut("Session/Authentication")]
         public async Task<AuthenticationSessionResponse> LogInSession([NotNull] AuthenticationSessionRequest request)
         {
             var command = new AuthenticationSessionCommand
@@ -106,7 +106,7 @@ namespace Rental.Api.Controllers
         /// </summary>
         /// <param name=""></param>
         /// <returns></returns>
-        [HttpGet("SessionId/Details")]
+        [HttpGet("Session/Details")]
         public async Task<SessionDetailsResponse> VerifySessionDetails()
         {
             Request.Headers.TryGetValue("SessionId", out var headerValue);
