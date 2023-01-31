@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Rental.Core.Domain;
+using System;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -6,33 +7,34 @@ namespace Rental.Infrastructure.Services.EncryptService
 {
     public class EncryptService : IEncrypt
     {
-        private static readonly int Size = 16;
+        const int keySize = 128;
+        const int iterations = 350000;
+        HashAlgorithmName hashAlgorithm = HashAlgorithmName.SHA512;
 
-        public string GenerateSalt()
+        public string HashCode(string code, byte[] salt)
         {
-            var salt = new byte[Size];
-            var rng = RandomNumberGenerator.Create();
-            rng.GetBytes(salt);
+            var hashCode = Rfc2898DeriveBytes.Pbkdf2(
+                Encoding.UTF8.GetBytes(code),
+                salt,
+                iterations,
+                hashAlgorithm,
+                keySize);
 
-            return Convert.ToBase64String(salt);
+            return Convert.ToHexString(hashCode);
         }
 
-        public string GenerateHash(string password, string salt)
+        public string HashPasword(string password, out byte[] salt)
         {
-            if (String.IsNullOrWhiteSpace(password))
-                throw new ArgumentException("Can not generate hash from empty argument", nameof(password));
+            salt = RandomNumberGenerator.GetBytes(keySize);
 
-            if (String.IsNullOrWhiteSpace(salt))
-                throw new ArgumentException("Can not generate hash from empty argument", nameof(salt));
+            var hash = Rfc2898DeriveBytes.Pbkdf2(
+                Encoding.UTF8.GetBytes(password),
+                salt,
+                iterations,
+                hashAlgorithm,
+                keySize);
 
-            var hash = BCrypt.Net.BCrypt.HashPassword(password + salt);
-
-            return hash;
-        }
-
-        private byte[] GetBytes(string value)
-        {
-            return Encoding.ASCII.GetBytes(value);
+            return Convert.ToHexString(hash);
         }
     }
 }

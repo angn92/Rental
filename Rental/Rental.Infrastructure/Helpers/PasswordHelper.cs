@@ -5,6 +5,7 @@ using Rental.Core.Enum;
 using Rental.Infrastructure.EF;
 using Rental.Infrastructure.Exceptions;
 using Rental.Infrastructure.Services.EncryptService;
+using System;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Threading.Tasks;
@@ -74,11 +75,11 @@ namespace Rental.Infrastructure.Helpers
 
         public async Task SetPassword([NotNull] string password, [NotNull] Customer customer, string code)
         {
-            var salt = _encrypt.GenerateSalt();
-            var passwordHash = _encrypt.GenerateHash(password, salt);
-            var codeHash = _encrypt.GenerateHash(code, salt);
+            var hashPass = _encrypt.HashPasword(password, out var salt);
+            var codeHash = _encrypt.HashCode(code, salt);
+            var saltValue = Convert.ToBase64String(salt);
 
-            var newPassword = new Password(passwordHash, salt, customer, codeHash);
+            var newPassword = new Password(hashPass, saltValue, customer, codeHash);
 
             await _context.AddAsync(newPassword);
             await _context.SaveChangesAsync();

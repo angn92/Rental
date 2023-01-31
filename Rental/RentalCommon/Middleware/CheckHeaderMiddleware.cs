@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Http;
-using Rental.Core.Base;
 
 namespace RentalCommon.Middleware
 {

@@ -133,16 +133,14 @@ namespace Rental.Api.Controllers
         /// <summary>
         /// Method to authorize password for new created account. This method also authorize session which was created during the first step - create account
         /// </summary>
-        /// <param name="sessionId"></param>
         /// <param name="request"></param>
         /// <returns></returns>
-        [HttpPut("Register/Authorize/Password/{sessionId}")]
-        public async Task AuthorizePassword([FromRoute] int sessionId, [NotNull] AuthorizePasswordRequest request)
+        [HttpPut("Register/Authorize/Password")]
+        public async Task AuthorizePassword([NotNull] AuthorizePasswordRequest request)
         {
             var command = new AuthorizePasswordCommand
             {
-                Request = request,
-                SessionId = sessionId
+                Request = request
             };
 
             await _commandDispatcher.DispatchAsync(command);

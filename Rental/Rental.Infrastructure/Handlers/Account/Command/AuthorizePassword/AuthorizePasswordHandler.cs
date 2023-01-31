@@ -5,6 +5,7 @@ using Rental.Infrastructure.Command;
 using Rental.Infrastructure.EF;
 using Rental.Infrastructure.Exceptions;
 using Rental.Infrastructure.Helpers;
+using Rental.Infrastructure.Wrapper;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -18,27 +19,31 @@ namespace Rental.Infrastructure.Handlers.Account.Command.AuthorizePassword
         private readonly ISessionHelper _sessionHelper;
         private readonly IPasswordHelper _passwordHelper;
         private readonly ICustomerHelper _customerHelper;
+        private readonly IHttpContextWrapper _httpContextWrapper;
 
         public AuthorizePasswordHandler(ILogger<AuthorizePasswordHandler> logger, ApplicationDbContext context, ISessionHelper sessionHelper, 
-             IPasswordHelper passwordHelper, ICustomerHelper customerHelper)
+             IPasswordHelper passwordHelper, ICustomerHelper customerHelper, IHttpContextWrapper httpContextWrapper)
         {
             _logger = logger;
             _context = context;
             _sessionHelper = sessionHelper;
             _passwordHelper = passwordHelper;
             _customerHelper = customerHelper;
+            _httpContextWrapper = httpContextWrapper;
         }
 
         public async ValueTask HandleAsync(AuthorizePasswordCommand command, CancellationToken cancellationToken = default)
         {
             ValidationParameter.FailIfNull(command.Request);
-            ValidationParameter.FailIfNullOrEmpty(command.SessionId.ToString());
 
+            var sessionId = _httpContextWrapper.GetValueFromRequestHeader("SessionId");
+
+            ValidationParameter.FailIfNull(sessionId);
             try
             {
                 var customer = await _customerHelper.GetCustomerAsync(command.Request.Username);
 
-                var session = await _sessionHelper.GetSessionAsync(_context, customer);
+                var session = await _sessionHelper.GetSessionByIdAsync(_context, sessionId);
 
                 if (_sessionHelper.CheckSessionStatus(session) != SessionState.NotAuthorized)
                     throw new CoreException(ErrorCode.WrongSessionState, $"SessionId {session.SessionIdentifier} has incorrect state for authorize password.");

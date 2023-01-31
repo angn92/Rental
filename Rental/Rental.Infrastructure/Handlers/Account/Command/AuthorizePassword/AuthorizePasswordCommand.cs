@@ -6,9 +6,6 @@ namespace Rental.Infrastructure.Handlers.Account.Command.AuthorizePassword
     public class AuthorizePasswordCommand : ICommand
     {
         public AuthorizePasswordRequest Request { get; set; }
-
-        [JsonProperty("SessionId")]
-        public int SessionId { get; set; }
     }
 
     public class AuthorizePasswordRequest
