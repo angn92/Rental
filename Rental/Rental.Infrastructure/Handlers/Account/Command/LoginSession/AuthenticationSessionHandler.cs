@@ -50,7 +50,7 @@ namespace Rental.Infrastructure.Handlers.Account.Command.LoginSession
 
                 var password = await _passwordHelper.GetActivePassword(customer);
 
-                _passwordHelper.ComaprePasswords(password, command.Request.Password);
+                _passwordHelper.ComaprePasswords(password.Hash, command.Request.Password);
 
                 if(password.NewPassword)
                     password.ChangePasswordMarker();
