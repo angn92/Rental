@@ -61,14 +61,14 @@ namespace Rental.Core.Domain
             Phone = phoneNumber;
         }
 
-        public void ActivateAccount(Customer customer)
+        public void ActivateAccount()
         {
-            customer.Status = AccountStatus.Active;
+            Status = AccountStatus.Active;
         }
 
-        public void BlockadeAccount(Customer customer)
+        public void BlockadeAccount()
         {
-            customer.Status = AccountStatus.Blocked;
+            Status = AccountStatus.Blocked;
         }
     }
 }
