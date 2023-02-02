@@ -16,10 +16,10 @@ namespace Rental.Infrastructure.Helpers
     {
         Task SetPassword([NotNull] string password, [NotNull] Customer customer, [NotNull] string code);
         Task<Password> GetActivePassword([NotNull] Customer customer);
-        void ComaprePasswords([NotNull] Password currentPassword, [NotNull] string hashNewPassword);
+        bool ComaprePasswords([NotNull] string currentPassword, [NotNull] string hashNewPassword);
         Task RemoveOldPassword([NotNull] string username);
         int GenerateActivationCode();
-        Task<Password> FindPasswordToAuthorize([NotNull] string username, [NotNull] string code);
+        Task<Password> FindPasswordToAuthorize([NotNull] string username);
     }
 
     public class PasswordHelper : IPasswordHelper
@@ -33,17 +33,16 @@ namespace Rental.Infrastructure.Helpers
             _encrypt = encrypt;
         }
 
-        public void ComaprePasswords([NotNull] Password currentPassword, [NotNull] string hashNewPassword)
+        public bool ComaprePasswords([NotNull] string currentPassword, [NotNull] string newPassword)
         {
-            if (!BCrypt.Net.BCrypt.Verify(hashNewPassword + currentPassword.Salt, currentPassword.Hash))
-                throw new CoreException(ErrorCode.PasswordIncorrect, "Given password is incorrect.");
+            return currentPassword.Equals(newPassword);
         }
 
-        public async Task<Password> FindPasswordToAuthorize([NotNull] string username, [NotNull] string code)
+        public async Task<Password> FindPasswordToAuthorize([NotNull] string username)
         {
-            return await _context.Passwords.Where(x => x.Customer.Username == username && x.Status == PasswordStatus.NotActive && x.ActivationCode == code)
-                                                   .OrderByDescending(x => x.CreatedAt)
-                                                   .FirstOrDefaultAsync();
+            return await _context.Passwords.Where(x => x.Customer.Username == username && x.Status == PasswordStatus.NotActive)
+                                           .OrderByDescending(x => x.CreatedAt)
+                                           .FirstOrDefaultAsync();
         }
 
         public int GenerateActivationCode()

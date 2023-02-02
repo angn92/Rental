@@ -52,9 +52,9 @@ namespace Rental.Infrastructure.Handlers.Account.Command.AuthorizePassword
                     throw new CoreException(ErrorCode.SessionExpired, "SessionId expired");
 
                 //Find password for given user to authorize
-                var password = await _passwordHelper.FindPasswordToAuthorize(customer.Username, command.Request.Code);
+                var password = await _passwordHelper.FindPasswordToAuthorize(customer.Username);
 
-                if (password != null)
+                if (password != null && _passwordHelper.ComaprePasswords(password.ActivationCode, command.Request.Code))
                 {
                     password.ActivatePassword();
                     session.SetSessionActive();
