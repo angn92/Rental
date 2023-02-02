@@ -57,6 +57,7 @@ namespace Rental.Infrastructure.Handlers.Account.Command.AuthorizePassword
                 if (password != null)
                 {
                     password.ActivatePassword();
+                    session.SetSessionActive();
                     await _context.SaveChangesAsync(cancellationToken);
                 }
             }
