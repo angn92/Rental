@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MimeKit;
 using Rental.Core.Domain;
+using Rental.Infrastructure.UpgradeDatabase;
 using System;
 using System.Linq;
 using System.Threading;
@@ -63,6 +64,8 @@ namespace Rental.Infrastructure.EF
             modelBuilder.Entity<Dictionary>()
                     .Property<string>("Value")
                     .HasMaxLength(255);
+
+            modelBuilder.ApplyConfiguration(new CategoryConfiguration());
         }
 
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)

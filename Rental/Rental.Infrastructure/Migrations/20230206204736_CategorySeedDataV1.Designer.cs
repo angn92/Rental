@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Rental.Infrastructure.EF;
@@ -11,9 +12,10 @@ using Rental.Infrastructure.EF;
 namespace Rental.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230206204736_CategorySeedDataV1")]
+    partial class CategorySeedDataV1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -43,30 +45,23 @@ namespace Rental.Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            CategoryId = "7281b68a-5357-45d7-8e00-f93298186098",
+                            CategoryId = "5f25a717-8daf-48eb-ae76-de6b529fb26d",
                             CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "Sprzęt budowlany",
                             UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
-                            CategoryId = "25b2e301-5e45-48f6-8a13-9b7ccb04a428",
+                            CategoryId = "ed976ad2-154f-4d59-9829-b1a7c3856231",
                             CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "Sprzęt elektroniczny",
                             UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
-                            CategoryId = "e570e177-56e0-4784-a540-ac465f6748ad",
+                            CategoryId = "8d0d5a28-db66-41c4-a55f-d919d8bca506",
                             CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "Sport i rekreacja",
-                            UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
-                        },
-                        new
-                        {
-                            CategoryId = "91c2c7ef-5c77-485b-8b48-9d7a661ea857",
-                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Sprzęt domowy",
                             UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         });
                 });

@@ -4,6 +4,7 @@ using Rental.Core.Domain;
 using Rental.Core.Enum;
 using Rental.Infrastructure.EF;
 using Rental.Infrastructure.Exceptions;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Rental.Infrastructure.Helpers
@@ -48,7 +49,12 @@ namespace Rental.Infrastructure.Helpers
 
         public async Task<Product> GetProductAsync([NotNull] ApplicationDbContext context, [NotNull] string productId)
         {
-            var product = await context.Products.SingleOrDefaultAsync(x => x.ProductId == productId);
+            var product = await context.Products
+                        .Include(z => z.Category)
+                        .Include(q => q.Customer)
+                        .SingleOrDefaultAsync(x => x.ProductId == productId);
+
+            
 
             if (product == null)
                 throw new CoreException(ErrorCode.ProductNotExist, $"Product with id {productId} does not exist.");
