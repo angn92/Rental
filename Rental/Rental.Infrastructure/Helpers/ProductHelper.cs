@@ -44,6 +44,7 @@ namespace Rental.Infrastructure.Helpers
         public void MakeReservationProduct([NotNull] Product product)
         {
             product.SetReservedStatus();
+            product.QuantityAvailable -= 1;
         }
 
 
@@ -53,8 +54,6 @@ namespace Rental.Infrastructure.Helpers
                         .Include(z => z.Category)
                         .Include(q => q.Customer)
                         .SingleOrDefaultAsync(x => x.ProductId == productId);
-
-            
 
             if (product == null)
                 throw new CoreException(ErrorCode.ProductNotExist, $"Product with id {productId} does not exist.");
