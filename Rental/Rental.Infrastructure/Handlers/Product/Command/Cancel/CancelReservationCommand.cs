@@ -10,7 +10,7 @@ namespace Rental.Infrastructure.Handlers.Product.Command.Cancel
         public string ProductId { get; set; }
 
         /// <summary>
-        /// User name who canceled reservation
+        /// Username who canceled reservation - client who's made reservation early
         /// </summary>
         [JsonProperty("Username", Required = Required.Always)]
         public string Username { get; set; }

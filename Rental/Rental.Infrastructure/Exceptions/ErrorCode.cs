@@ -44,6 +44,7 @@
 
         #region Order errors
         public static string OrderNotExist => "order_not_exist";
+        public static string OrderWasFinishedOrCancelled => "order_was_finished_or_cancelled";
         #endregion
     }
 }
