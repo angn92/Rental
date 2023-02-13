@@ -32,8 +32,7 @@ namespace Rental.Infrastructure.Helpers
             _emailValidator = emailValidator;
         }
 
-        public async Task<Customer> RegisterAsync([NotNull] string firstName, [NotNull] string lastName, [NotNull] string username, 
-            [NotNull] string email)
+        public async Task<Customer> RegisterAsync([NotNull] string firstName, [NotNull] string lastName, [NotNull] string username, [NotNull] string email)
         {
             Customer customer;
             try

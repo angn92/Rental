@@ -1,6 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using NUnit.Framework;
+using Rental.Core.Domain;
 using Rental.Infrastructure.EF;
+using Rental.Infrastructure.Helpers;
 using System;
 
 namespace Rental.Test
@@ -9,9 +11,8 @@ namespace Rental.Test
     {
         public DbContextOptions<ApplicationDbContext> _options;
         public ApplicationDbContext _context;
+        public CustomerHelper _customerHelper;
         
-
-
         public string firstName, lastName, username, email, phone;
 
         [SetUp]

@@ -1,159 +1,186 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using FluentAssertions;
+using Microsoft.EntityFrameworkCore;
 using Moq;
 using NUnit.Framework;
+using Rental.Core.Domain;
 using Rental.Core.Enum;
+using Rental.Infrastructure.EF;
 using Rental.Infrastructure.Exceptions;
 using Rental.Infrastructure.Helpers;
 using Rental.Test.Helpers;
 using System;
 using System.Threading.Tasks;
 
+
 namespace Rental.Test.UnitTest
 {
     [TestFixture]
-    public class CustomerTest : TestBase
+    public class CustomerTest
     {
-        [Test]
-        public void ShouldBeAbleCheckThatGivenUsernameExist()
+        private string firstName, lastName, email, username;
+        private CustomerHelper _customerHelper;
+        private DbContextOptions<ApplicationDbContext> _options;
+        private ApplicationDbContext _context;
+
+        private Mock<IEmailHelper> _emailHelperMock;
+
+        [SetUp]
+        public void SetUp()
         {
-            // Arrange
-            var emailMock = new Mock<IEmailHelper>();
+            _options = new DbContextOptionsBuilder<ApplicationDbContext>()
+                .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
+                .Options;
 
-            CustomerTestHelper.CreateCustomer(_context, firstName, lastName, username, email, null);
-            var customerHelper = new CustomerHelper(_context, emailMock.Object);
+            _context = new ApplicationDbContext(_options);
 
-            // Act
-            var exist = customerHelper.CheckIfExist(username);
+            firstName = "Jan";
+            lastName = "Kowalski";
+            email = "jankowalski@email.com";
+            username = "jan_kowalski";
 
-            // Assert
-            Assert.IsTrue(exist);
+            _emailHelperMock = new Mock<IEmailHelper>();
+            _customerHelper = new CustomerHelper(_context, _emailHelperMock.Object);
         }
 
         [Test]
-        public void ShouldBReturnFalseWhenGivenCustomerNotExist()
+        public void RegisterCustomer_ShouldReturnNewCreatedCustomer()
         {
-            // Arrange
-            var emailMock = new Mock<IEmailHelper>();
+            CustomerTestHelper.CreateCustomer(_context, firstName, lastName, username, email);
 
-            CustomerTestHelper.CreateCustomer(_context, firstName, lastName, username, email, null);
-            var customerHelper = new CustomerHelper(_context, emailMock.Object);
+            var customerResult = _customerHelper.RegisterAsync(firstName, lastName, username, email).Result;
 
-            // Act
-            var exist = customerHelper.CheckIfExist(username);
+            customerResult.Should().NotBeNull();
+        }
 
-            // Assert
-            Assert.IsFalse(exist);
+        [Test]
+        public void CheckAccountStatusMethod_ReturnCustomerStatus_NotActive()
+        {
+            var customer = CustomerTestHelper.CreateCustomer(_context, firstName, lastName, username, email);
+            var result = _customerHelper.CheckAccountStatus(customer);
+
+            result.Should().NotBeNull();
+            result.Should().Be(AccountStatus.NotActive.ToString());
+        }
+
+        [Test]
+        public void CheckAccountStatusMethod_ReturnCustomerStatus_Active()
+        {
+            var customer = CustomerTestHelper.CreateCustomer(_context, firstName, lastName, username, email, x =>
+            {
+                x.Status = AccountStatus.Active;
+            });
+
+            var result = _customerHelper.CheckAccountStatus(customer);
+
+            result.Should().NotBeNull();
+            result.Should().Be(AccountStatus.Active.ToString());
+        }
+
+        [Test]
+        public void CheckAccountStatusMethod_ReturnCustomerStatus_Blocked()
+        {
+            var customer = CustomerTestHelper.CreateCustomer(_context, firstName, lastName, username, email, x =>
+            {
+                x.Status = AccountStatus.Blocked;
+            });
+
+            var result = _customerHelper.CheckAccountStatus(customer);
+
+            result.Should().NotBeNull();
+            result.Should().Be(AccountStatus.Blocked.ToString());
+        }
+
+        [Test]
+        public void CheckIfExist_Method_ShouldReturn_True()
+        {
+            var customer = CustomerTestHelper.CreateCustomer(_context, firstName, lastName, username, email);
+            var customerExist = _customerHelper.CheckIfExist(customer.Username);
+
+            customerExist.Should().BeTrue();
+        }
+
+        [Test]
+        public void CheckIfExist_Method_ShouldReturn_False()
+        {
+            var customer = CustomerTestHelper.CreateCustomer(_context, firstName, lastName, username, email);
+
+            var customerExist = _customerHelper.CheckIfExist("wrong_username");
+
+            customerExist.Should().BeFalse();
         }
 
         [Test]
         public async Task ShouldBeAbleGetCustomer()
         {
-            // Arrange
-            var emailMock = new Mock<IEmailHelper>();
+            CustomerTestHelper.CreateCustomer(_context, firstName, lastName, username, email);
 
-            CustomerTestHelper.CreateCustomer(_context, firstName, lastName, username, email, null);
-            var customerHelper = new CustomerHelper(_context, emailMock.Object);
+            var customer = await _customerHelper.GetCustomerAsync(username);
 
-            // Act
-            var user = await customerHelper.GetCustomerAsync(username);
-
-            // Assert
-            Assert.IsNotNull(user);
-            Assert.AreEqual(username, user.Username);
-            Assert.AreEqual(AccountStatus.Active.ToString(), user.Status.ToString());
-            Assert.IsNull(user.Phone);
+            customer.Should().NotBeNull();
+            customer.Username.Should().Be(username);
         }
 
         [Test]
         public async Task ShouldReturnErrorMessageWhenUserDoesNotExist()
         {
-            // Arrange
-            var emailMock = new Mock<IEmailHelper>();
+            CustomerTestHelper.CreateCustomer(_context, firstName, lastName, username, email);
+ 
+            var exception = Assert.ThrowsAsync<CoreException>(() => _customerHelper.GetCustomerAsync("wrong_username"));
 
-            CustomerTestHelper.CreateCustomer(_context, firstName, lastName, username, email, null);
-            var customerHelper = new CustomerHelper(_context, emailMock.Object);
-
-            // Act
-            var exception = Assert.ThrowsAsync<CoreException>(() => customerHelper.GetCustomerAsync("wrong_username"));
-
-            // Assert
-            Assert.AreEqual(ErrorCode.UserNotExist, exception.Code);
-        }
-
-        [Test]
-        public async Task ShouldBeAbleRegisterUser()
-        {
-            // Arrange
-            var emailMock = new Mock<IEmailHelper>();
-            var customerHelper = new CustomerHelper(_context, emailMock.Object);
-
-            // Act
-            await customerHelper.RegisterAsync("Jan", "Kowalski", "kowal123", "kowal@email.com");
-
-            var registeredUser = await _context.Customers.FirstOrDefaultAsync(x => x.Username == "kowal123");
-
-            // Assert 
-            Assert.NotNull(registeredUser);
-            Assert.AreEqual("kowal123", registeredUser.Username);
+            exception.Code.Should().Be(ErrorCode.UserNotExist);
         }
 
         [Test]
         public async Task ShouldNotBeAbleRegisterCustomer_InvalidInputData()
         {
-            // Arrange
-            var emailMock = new Mock<IEmailHelper>();
-           
-            var customerHelper = new CustomerHelper(_context, emailMock.Object);
             string FirstName = null;
+            var exception = Assert.ThrowsAsync<Exception>(() => _customerHelper.RegisterAsync(FirstName, "Kowalski", "kowal123", "kowal@email.com"));
 
-            // Act
-            var exception = Assert.ThrowsAsync<Exception>(() => customerHelper.RegisterAsync(FirstName, "Kowalski", "kowal123", 
-                                                                    "kowal@email.com"));
-
-            // Assert
-            Assert.AreEqual($"Registration is failed. Value cannot be null. (Parameter '{nameof(FirstName)}')", exception.Message);
+            exception.Message.Should().Be($"Registration is failed. Value cannot be null. (Parameter '{nameof(FirstName)}')");
+            
         }
 
         [Test]
         public void ShouldBeAbleValidateCustomerAccount_AndThrowException_AccountIsBlocked()
         {
-            // Arrange
-            var emailMock = new Mock<IEmailHelper>();
-
-            var customer = CustomerTestHelper.CreateCustomer(_context, "Jan", "Kowalski", "janek00", "jan@email.com", x =>
+            var customer = CustomerTestHelper.CreateCustomer(_context, firstName, lastName, username, email, x =>
             {
                 x.Status = AccountStatus.Blocked;
             });
 
-            var customerHelper = new CustomerHelper(_context, emailMock.Object);
+            var exception = Assert.Throws<CoreException>(() => _customerHelper.ValidateCustomerAccount(customer));
 
-            // Act
-            var result = Assert.Throws<CoreException>(() => customerHelper.ValidateCustomerAccount(customer));
-
-            // Assert
-            Assert.AreEqual(ErrorCode.AccountBlocked, result.Code);
-            Assert.AreEqual("Account is blocked.", result.Message);
+            exception.Code.Should().Be(ErrorCode.AccountBlocked);
+            exception.Message.Should().Be($"Account for customer {customer.Username} is blocked.");
         }
 
         [Test]
         public void ShouldBeAbleValidateCustomerAccount_AndThrowException_AccountIsNotActive()
         {
-            // Arrange
-            var emailMock = new Mock<IEmailHelper>();
-
-            var customer = CustomerTestHelper.CreateCustomer(_context, "Jan", "Kowalski", "janek00", "jan@email.com", x =>
+            var customer = CustomerTestHelper.CreateCustomer(_context, firstName, lastName, username, email, x =>
             {
                 x.Status = AccountStatus.NotActive;
             });
 
-            var customerHelper = new CustomerHelper(_context, emailMock.Object);
+            var exception = Assert.Throws<CoreException>(() => _customerHelper.ValidateCustomerAccount(customer));
 
-            // Act
-            var result = Assert.Throws<CoreException>(() => customerHelper.ValidateCustomerAccount(customer));
+            exception.Code.Should().Be(ErrorCode.AccountNotActive);
+            exception.Message.Should().Be($"Account for customer {customer.Username} is not active.");
+        }
 
-            // Assert
-            Assert.AreEqual(ErrorCode.AccountNotActive, result.Code);
-            Assert.AreEqual("Account is not active.", result.Message);
+        [Test]
+        public void ShouldBeAbleChangeCustomerStatus()
+        {
+            var customer = CustomerTestHelper.CreateCustomer(_context, firstName, lastName, username, email, x =>
+            {
+                x.Status = AccountStatus.NotActive;
+            });
+
+            _customerHelper.ChangeAccountStatus(customer, AccountStatus.Active);
+
+            customer = CustomerTestHelper.FindCustomer(_context, customer.Username);
+
+            customer.Status.Should().Be(AccountStatus.Active);
         }
     }
 }

@@ -2,6 +2,7 @@
 using Rental.Core.Domain;
 using Rental.Infrastructure.EF;
 using System;
+using System.Linq;
 
 namespace Rental.Test.Helpers
 {
@@ -18,6 +19,11 @@ namespace Rental.Test.Helpers
             context.SaveChanges();
 
             return customer;
+        }
+
+        public static Customer FindCustomer([NotNull] ApplicationDbContext context, [NotNull] string username)
+        {
+            return context.Customers.FirstOrDefault(x => x.Username == username);
         }
     }
 }
