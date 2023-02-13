@@ -17,11 +17,16 @@ namespace Rental.Test.UnitTest
         public Mock<IOptions<ConfigurationOptions>> optionsMock;
         public EmailHelper emailHelper;
 
+        IOptions<ConfigurationOptions> someOptions = Options.Create<ConfigurationOptions>(new ConfigurationOptions()
+        {
+            EmailAddress = "andrzej@gmail.com"
+        });
+
         [SetUp]
         public void SetUp()
         {
             optionsMock = new Mock<IOptions<ConfigurationOptions>>();
-            emailHelper = new EmailHelper(_context, optionsMock.Object);
+            emailHelper = new EmailHelper(_context, someOptions);
         }
 
         [Test]
@@ -51,6 +56,14 @@ namespace Rental.Test.UnitTest
             var exception = Assert.Throws<CoreException>(() => emailHelper.ValidateEmail(email));
 
             exception.Code.Should().Be(ErrorCode.EmailInUse);
+        }
+
+        [Test]
+        public void ShouldBeAblePrepareEmail()
+        {
+            var emailConfig = emailHelper.PrepareEmail(email, SubjectMessage.RegistrationAccount, "Registration new customer account");
+
+            emailConfig.Should().NotBeNull();
         }
     }
 }

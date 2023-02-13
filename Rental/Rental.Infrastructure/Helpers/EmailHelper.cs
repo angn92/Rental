@@ -66,8 +66,7 @@ namespace Rental.Infrastructure.Helpers
                 throw new CoreException(ErrorCode.EmailInUse, $"Given address email {email} is in use.");
         }
 
-        public EmailConfiguration PrepareEmail([NotNull] string customerEmail, [NotNull] SubjectMessage subjectMessage,
-            [CanBeNull] string message = null)
+        public EmailConfiguration PrepareEmail([NotNull] string customerEmail, [NotNull] SubjectMessage subjectMessage, [CanBeNull] string message = null)
         {
             var emailConfiguration = new EmailConfiguration
             {
