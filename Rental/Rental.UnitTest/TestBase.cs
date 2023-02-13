@@ -11,7 +11,6 @@ namespace Rental.Test
     {
         public DbContextOptions<ApplicationDbContext> _options;
         public ApplicationDbContext _context;
-        public CustomerHelper _customerHelper;
         
         public string firstName, lastName, username, email, phone;
 
@@ -26,9 +25,8 @@ namespace Rental.Test
 
             firstName = "Jan";
             lastName = "Kowalski";
-            email = "email@email.com";
-            username = "jan_kowal";
-            phone = "123456789";
+            email = "jankowalski@email.com";
+            username = "jan_kowalski";
         }
     }
 }

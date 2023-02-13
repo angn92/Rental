@@ -1,10 +1,7 @@
 ﻿using FluentAssertions;
-using Microsoft.EntityFrameworkCore;
 using Moq;
 using NUnit.Framework;
-using Rental.Core.Domain;
 using Rental.Core.Enum;
-using Rental.Infrastructure.EF;
 using Rental.Infrastructure.Exceptions;
 using Rental.Infrastructure.Helpers;
 using Rental.Test.Helpers;
@@ -15,29 +12,14 @@ using System.Threading.Tasks;
 namespace Rental.Test.UnitTest
 {
     [TestFixture]
-    public class CustomerTest
+    public class CustomerTest : TestBase
     {
-        private string firstName, lastName, email, username;
         private CustomerHelper _customerHelper;
-        private DbContextOptions<ApplicationDbContext> _options;
-        private ApplicationDbContext _context;
-
         private Mock<IEmailHelper> _emailHelperMock;
 
         [SetUp]
         public void SetUp()
         {
-            _options = new DbContextOptionsBuilder<ApplicationDbContext>()
-                .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
-                .Options;
-
-            _context = new ApplicationDbContext(_options);
-
-            firstName = "Jan";
-            lastName = "Kowalski";
-            email = "jankowalski@email.com";
-            username = "jan_kowalski";
-
             _emailHelperMock = new Mock<IEmailHelper>();
             _customerHelper = new CustomerHelper(_context, _emailHelperMock.Object);
         }

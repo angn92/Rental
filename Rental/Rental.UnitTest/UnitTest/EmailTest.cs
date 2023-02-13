@@ -1,10 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using FluentAssertions;
 using Microsoft.Extensions.Options;
 using Moq;
 using NUnit.Framework;
 using Rental.Core.Enum;
 using Rental.Infrastructure.Configuration;
-using Rental.Infrastructure.EF;
 using Rental.Infrastructure.Exceptions;
 using Rental.Infrastructure.Helpers;
 using Rental.Test.Helpers;
@@ -15,53 +14,43 @@ namespace Rental.Test.UnitTest
     [TestFixture]
     public class EmailTest : TestBase
     {
+        public Mock<IOptions<ConfigurationOptions>> optionsMock;
+        public EmailHelper emailHelper;
+
+        [SetUp]
+        public void SetUp()
+        {
+            optionsMock = new Mock<IOptions<ConfigurationOptions>>();
+            emailHelper = new EmailHelper(_context, optionsMock.Object);
+        }
+
         [Test]
         public void ShouldBeThrowException_EmailParameterIsNull()
         {
-            //Arrange
-            var optionsMock = new Mock<IOptions<ConfigurationOptions>>();
+            var exception = Assert.Throws<ArgumentNullException>(() => emailHelper.ValidateEmail(null));
 
-            var email = new EmailHelper(_context, optionsMock.Object);
-
-            // Act
-            var exception = Assert.Throws<ArgumentNullException>(() => email.ValidateEmail(null));
-
-            // Assert
-            Assert.AreEqual("Value cannot be null. (Parameter 'email')", exception.Message);
+            exception.Message.Should().Be("Value cannot be null. (Parameter 'email')");
         }
 
         [Test]
         public void ShouldThrowInvalidEmail()
         {
-            //Arrange
-            var optionsMock = new Mock<IOptions<ConfigurationOptions>>();
+            var exception = Assert.Throws<CoreException>(() => emailHelper.ValidateEmail("wrongEmail"));
 
-            var email = new EmailHelper(_context, optionsMock.Object);
-
-            // Act
-            var exception = Assert.Throws<CoreException>(() => email.ValidateEmail("wrongEmail"));
-
-            // Assert
-            Assert.AreEqual(ErrorCode.InvalidEmail, exception.Code);
+            exception.Code.Should().Be(ErrorCode.InvalidEmail);
         }
 
         [Test]
         public void ShouldThrowErrorEmailInUse()
         {
-            //Arrange
-            var optionsMock = new Mock<IOptions<ConfigurationOptions>>();
-            var email = new EmailHelper(_context, optionsMock.Object);
-
-            var customer = CustomerTestHelper.CreateCustomer(_context, "Jan", "Kowalski", "janek00", "jan@email.com", x =>
+            var customer = CustomerTestHelper.CreateCustomer(_context, firstName, lastName, username, email, x =>
             {
                 x.Status = AccountStatus.NotActive;
             });
 
-            // Act
-            var exception = Assert.Throws<CoreException>(() => email.ValidateEmail("jan@email.com"));
+            var exception = Assert.Throws<CoreException>(() => emailHelper.ValidateEmail(email));
 
-            // Assert
-            Assert.AreEqual(ErrorCode.EmailInUse, exception.Code);
+            exception.Code.Should().Be(ErrorCode.EmailInUse);
         }
     }
 }
