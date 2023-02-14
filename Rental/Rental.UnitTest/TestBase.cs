@@ -1,8 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using NUnit.Framework;
-using Rental.Core.Domain;
 using Rental.Infrastructure.EF;
-using Rental.Infrastructure.Helpers;
 using System;
 
 namespace Rental.Test
@@ -23,10 +21,10 @@ namespace Rental.Test
 
             _context = new ApplicationDbContext(_options);
 
-            firstName = "Jan";
-            lastName = "Kowalski";
-            email = "jankowalski@email.com";
-            username = "jan_kowalski";
+            firstName = "Shane";
+            lastName = "Andersen";
+            email = "shane_andersen@email.com";
+            username = "shane_andersen";
         }
     }
 }
