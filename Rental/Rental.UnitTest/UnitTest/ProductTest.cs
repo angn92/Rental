@@ -1,15 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Moq;
+﻿using FluentAssertions;
 using NUnit.Framework;
 using Rental.Core.Enum;
 using Rental.Infrastructure.Exceptions;
 using Rental.Infrastructure.Helpers;
 using Rental.Test.Helpers;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http.Headers;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Rental.Test.UnitTest
@@ -17,77 +11,80 @@ namespace Rental.Test.UnitTest
     [TestFixture]
     public class ProductTest : TestBase
     {
+        private ProductHelper _productHelper;
+
+        [SetUp]
+        public void SetUp()
+        {
+            _productHelper = new ProductHelper();
+        }
+
         [Test]
         public async Task ShouldBeAbleAddNewProduct()
         {
-            // Arrange
-            var productHelperMock = new Mock<ProductHelper>();
+            //ARRANGE
             var customer = CustomerTestHelper.CreateCustomer(_context, firstName, lastName, username, email);
             var category = CategoryTestHelper.CreateNewCategory(_context, "Electronics");
 
-            var productHelper = new ProductHelper();
+            //ACT
+            await _productHelper.AddProductAsync(_context, "Iphone 14", 1, customer, category, "New Iphone model");
 
-            // Act
-            await productHelper.AddProductAsync(_context, "Iphone", 1, customer, category, "New phone");
-
-            // Assert
-            var product = await _context.Products.FirstOrDefaultAsync(x => x.Name == "Iphone" && x.Customer.Username == customer.Username);
-            Assert.IsNotNull(product);
+            //ASSERT
+            var product = ProductTestHelper.GetCustomerProduct(_context, customer);
+            product.Should().NotBeNull();
+            product.Status.Should().Be(ProductStatus.Available);
+            product.Customer.Should().Be(customer);
         }
 
         [Test]
-        public async Task VerifyThatGivenProductExist()
+        public void ShouldBeAbleSetProductStatus_Reserved()
         {
-            // Arrange
-            var productHelperMock = new Mock<ProductHelper>();
+            //ARRANGE
             var customer = CustomerTestHelper.CreateCustomer(_context, firstName, lastName, username, email);
             var category = CategoryTestHelper.CreateNewCategory(_context, "Electronics");
-            var existingProduct = ProductTestHelper.AddProduct(_context, "Iphone", 1, category, customer);
+            var product = ProductTestHelper.AddProduct(_context, "Iphone", 2, category, customer);
 
-            var productHelper = new ProductHelper();
+            //ACT
+            _productHelper.MakeReservationProduct(product);
 
-            // Act
-            var exception = Assert.ThrowsAsync<CoreException>(() => productHelper.CheckIfGivenProductExistAsync(_context, "Iphone", customer));
-
-            // Assert
-            Assert.AreEqual(ErrorCode.ProductExist, exception.Code);
-        }
-
-        [Test]
-        public void ShouldBeAbleChangeProductStatusAfterMadeReservation()
-        {
-            // Arrange
-            var productHelperMock = new Mock<ProductHelper>();
-            var customer = CustomerTestHelper.CreateCustomer(_context, firstName, lastName, username, email);
-            var category = CategoryTestHelper.CreateNewCategory(_context, "Electronics");
-            var existingProduct = ProductTestHelper.AddProduct(_context, "Iphone", 1, category, customer);
-
-            var productHelper = new ProductHelper();
-            
-            // Act
-            productHelper.MakeReservationProduct(existingProduct);
-
-            // Assert
-            Assert.AreEqual(ProductStatus.Reserved, existingProduct.Status);
+            //ASSERT
+            product.Status.Should().Be(ProductStatus.Reserved);
+            product.QuantityAvailable.Should().Be(1);
         }
 
         [Test]
         public async Task ShouldBeAbleGetProduct()
         {
-            // Arrange
-            var productHelperMock = new Mock<ProductHelper>();
+            //ARRANGE
             var customer = CustomerTestHelper.CreateCustomer(_context, firstName, lastName, username, email);
-            var category = CategoryTestHelper.CreateNewCategory(_context, "Electronics");
-            var existingProduct = ProductTestHelper.AddProduct(_context, "Iphone", 1, category, customer);
 
-            var productHelper = new ProductHelper();
+            var category = CategoryTestHelper.CreateNewCategory(_context, "Sport");
 
-            // Act
-            var product = await productHelper.GetProductAsync(_context, existingProduct.ProductId);
+            var existingProduct = ProductTestHelper.AddProduct(_context, "Bike", 1, category, customer);
 
-            // Assert
-            Assert.IsNotNull(product);
-            Assert.AreEqual(product.Name, existingProduct.Name);
+            //ACT
+            var product = await _productHelper.GetProductAsync(_context, existingProduct.ProductId);
+
+            //ASSERT
+            product.Should().NotBeNull();
+            product.Status.Should().Be(ProductStatus.Available);
+        }
+
+        [Test]
+        public async Task ShouldNotBeAbleGetProduct_ProductNotExist()
+        {
+            //ARRANGE
+            var customer = CustomerTestHelper.CreateCustomer(_context, firstName, lastName, username, email);
+
+            var category = CategoryTestHelper.CreateNewCategory(_context, "Sport");
+
+            var existingProduct = ProductTestHelper.AddProduct(_context, "Bike", 1, category, customer);
+
+            //ACT
+            var exception = Assert.ThrowsAsync<CoreException>(() => _productHelper.GetProductAsync(_context, "wrongProductId"));
+
+            //ASSERT
+            exception.Code.Should().Be(ErrorCode.ProductNotExist);
         }
     }
 }

@@ -23,5 +23,10 @@ namespace Rental.Test.Helpers
 
             return product;
         }
+
+        public static Product GetCustomerProduct(ApplicationDbContext context, Customer customer)
+        {
+            return context.Products.FirstOrDefault(x => x.Customer.CustomerId == customer.CustomerId);
+        }
     }
 }
