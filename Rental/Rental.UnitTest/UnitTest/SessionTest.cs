@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using FluentAssertions;
+using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
 using Rental.Core.Enum;
@@ -13,29 +14,38 @@ namespace Rental.Test.UnitTest
     [TestFixture]
     public class SessionTest : TestBase
     {
+        private Mock<ILogger<SessionHelper>> loggeMock;
+        private SessionHelper sessionHelper;
+
+        [SetUp]
+        public void SetUp()
+        {
+            loggeMock = new Mock<ILogger<SessionHelper>>();
+            sessionHelper = new SessionHelper(loggeMock.Object, _context);
+        }
+
         [Test]
         [TestCase(SessionState.Active)]
         [TestCase(SessionState.NotAuthorized)]
         [TestCase(SessionState.Expired)]
         public void ShouldVerifySessionStatus(SessionState sessionState)
         {
-            // Arrange
+            //ARANGE
             var sessioId = "123456";
             var customer = CustomerTestHelper.CreateCustomer(_context, firstName, lastName, username, email);
             var session = CreateSessionTestHelper.CreateSession(_context, sessioId, customer, sessionState);
-            var sessionHelper = new SessionHelper(new Mock<ILogger<SessionHelper>>().Object, _context);
 
-            // Act
+            //ACT
             var sessionStatusResult = sessionHelper.CheckSessionStatus(session);
 
-            // Assert
-            Assert.AreEqual(sessionState, sessionStatusResult);
+            //ASSERT
+            sessionStatusResult.Should().Be(sessionState);
         }
 
         [Test]
-        public void ShouldBeAbleVerifySessionIsExpired()
+        public void ShouldBeAbleVerifySessionIsExpired_true()
         {
-            // Arrange
+            //ARRANGE
             var sessioId = "123456";
             var customer = CustomerTestHelper.CreateCustomer(_context, firstName, lastName, username, email);
             var session = CreateSessionTestHelper.CreateSession(_context, sessioId, customer, SessionState.Active, x =>
@@ -44,99 +54,102 @@ namespace Rental.Test.UnitTest
                 x.LastAccessDate = DateTime.UtcNow.AddMinutes(-10);
             });
 
-            var sessionHelper = new SessionHelper(new Mock<ILogger<SessionHelper>>().Object, _context);
-
-            // Act
+            //ACT
             var sessionStatusResult = sessionHelper.SessionExpired(session);
 
-            // Assert
-            Assert.That(sessionStatusResult, Is.True);
+            //ASSERT
+            sessionStatusResult.Should().Be(true);
+        }
+
+        [Test]
+        public void ShouldBeAbleVerifySessionIsExpired_False()
+        {
+            //ARRANGE
+            var sessioId = "123456";
+            var customer = CustomerTestHelper.CreateCustomer(_context, firstName, lastName, username, email);
+            var session = CreateSessionTestHelper.CreateSession(_context, sessioId, customer, SessionState.Active);
+
+            //ACT
+            var sessionStatusResult = sessionHelper.SessionExpired(session);
+
+            //ASSERT
+            sessionStatusResult.Should().Be(false);
         }
 
         [Test]
         public void ShouldBeAbleValidateGivenSession_WhenSessionNotExist()
         {
-            // Arrange
+            //ARRANGE
             var sessioId = "123456";
             var customer = CustomerTestHelper.CreateCustomer(_context, firstName, lastName, username, email);
             var session = CreateSessionTestHelper.CreateSession(_context, sessioId, customer, SessionState.Active);
 
-            var sessionHelper = new SessionHelper(new Mock<ILogger<SessionHelper>>().Object, _context);
-
-            // Act
+            //ACT
             var exception = Assert.Throws<CoreException>(() => sessionHelper.ValidateSession(null));
 
-            // Assert
+            //ASSERT
             Assert.AreEqual(ErrorCode.SessionDoesNotExist, exception.Code);
         }
 
         [Test]
         public void ShouldReturnSessionNotAuthorized()
         {
-            // Arrange
+            //ARRANGE
             var sessioId = "123456";
             var customer = CustomerTestHelper.CreateCustomer(_context, firstName, lastName, username, email);
             var session = CreateSessionTestHelper.CreateSession(_context, sessioId, customer, SessionState.NotAuthorized);
 
-            var sessionHelper = new SessionHelper(new Mock<ILogger<SessionHelper>>().Object, _context);
-
-            // Act
+            //ACT
             var exception = Assert.Throws<CoreException>(() => sessionHelper.ValidateSession(session));
 
-            // Assert
-            Assert.AreEqual(ErrorCode.SessionNotAuthorized, exception.Code);
+            //ASSERT
+            exception.Code.Should().Be(ErrorCode.SessionNotAuthorized);
         }
 
         [Test]
         public void ShouldReturnSessionExpired()
         {
-            // Arrange
+            //ARRANGE
             var sessioId = "123456";
             var customer = CustomerTestHelper.CreateCustomer(_context, firstName, lastName, username, email);
             var session = CreateSessionTestHelper.CreateSession(_context, sessioId, customer, SessionState.Expired);
 
-            var sessionHelper = new SessionHelper(new Mock<ILogger<SessionHelper>>().Object, _context);
-
-            // Act
+            //ACT
             var exception = Assert.Throws<CoreException>(() => sessionHelper.ValidateSession(session));
 
-            // Assert
-            Assert.AreEqual(ErrorCode.SessionExpired, exception.Code);
+            //ASSERT
+            exception.Code.Should().Be(ErrorCode.SessionExpired);
         }
 
         [Test]
         public async Task ShouldBeAbleGetOnlyOneSession_WithGivenId()
         {
-            // Arrange
+            //ARRANGE
             var sessioId = "123456";
             var customer = CustomerTestHelper.CreateCustomer(_context, firstName, lastName, username, email);
             CreateSessionTestHelper.CreateSession(_context, sessioId, customer, SessionState.Active);
 
-            var sessionHelper = new SessionHelper(new Mock<ILogger<SessionHelper>>().Object, _context);
-
-            // Act
+            //ACT
             var currentSession = await sessionHelper.GetSessionByIdAsync(_context, sessioId);
 
-            // Assert
-            Assert.That(currentSession, Is.Not.Null);
+            //ASSERT
+            currentSession.Should().NotBeNull();
         }
 
         [Test]
         public async Task ShouldNotBeAbleGetSession_WrongGivenId()
         {
-            // Arrange
+            //ARRANGE
             var sessioId = "123456";
             var wrongSessionId = "654321";
             var customer = CustomerTestHelper.CreateCustomer(_context, firstName, lastName, username, email);
             CreateSessionTestHelper.CreateSession(_context, sessioId, customer, SessionState.Active);
 
-            var sessionHelper = new SessionHelper(new Mock<ILogger<SessionHelper>>().Object, _context);
-
-            // Act
+            //ACT
             var currentSession = await sessionHelper.GetSessionByIdAsync(_context, wrongSessionId);
 
-            // Assert
-            Assert.That(currentSession, Is.Null);
+            //ASSERT
+            currentSession.Should().BeNull();
         }
     }
 }
