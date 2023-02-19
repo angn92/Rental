@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
+using Rental.Core.Domain;
 using Rental.Core.Enum;
 using Rental.Infrastructure.Exceptions;
 using Rental.Infrastructure.Helpers;
@@ -150,6 +151,94 @@ namespace Rental.Test.UnitTest
 
             //ASSERT
             currentSession.Should().BeNull();
+        }
+
+        [Test]
+        public async Task ShouldBeAbleCreateSession()
+        {
+            //ARRANGE
+            var customer = CustomerTestHelper.CreateCustomer(_context, firstName, lastName, username, email);
+            
+            //ACT
+            var session = await sessionHelper.CreateSession(customer);
+
+            //ASSERT
+            session.Should().NotBeNull();
+            session.State.Should().Be(SessionState.NotAuthorized);
+            session.IdCustomer.Should().Be(customer.CustomerId);
+        }
+
+        [Test]
+        public async Task ShouldBeAbleRemoveSession()
+        {
+            //ARRANGE
+            var customer = CustomerTestHelper.CreateCustomer(_context, firstName, lastName, username, email);
+            var session = SessionTestHelper.CreateSession(_context, GetRandomSessionId(), customer, SessionState.Active);
+
+            //ACT
+            await sessionHelper.RemoveSession(session.SessionIdentifier);
+
+            //ASSERT
+            var findOldSession = SessionTestHelper.FindSession(_context, session.SessionIdentifier);
+            findOldSession.Should().BeNull();
+        }
+
+        [Test]
+        public void ShouldNotBeAbleRemoveSession_SessionNotExist()
+        {
+            //ARRANGE
+            var customer = CustomerTestHelper.CreateCustomer(_context, firstName, lastName, username, email);
+            var session = SessionTestHelper.CreateSession(_context, GetRandomSessionId(), customer, SessionState.Active);
+
+            //ACT
+            var exception = Assert.ThrowsAsync<CoreException>(() => sessionHelper.RemoveSession(GetRandomSessionId()));
+
+            //ASSERT
+            var createdSession = SessionTestHelper.FindSession(_context, session.SessionIdentifier);
+            createdSession.Should().NotBeNull();
+
+            exception.Code.Should().Be(ErrorCode.SessionDoesNotExist);
+        }
+
+        [Test]
+        public void ShouldBeAbleRemoveAllSessions_BelongToGivenCustomer()
+        {
+            //ARRANGE
+            var customer = CustomerTestHelper.CreateCustomer(_context, firstName, lastName, username, email);
+            var sessionAuthorized = SessionTestHelper.CreateSession(_context, GetRandomSessionId(), customer, SessionState.Active);
+            var sessionNotAuthorized = SessionTestHelper.CreateSession(_context, GetRandomSessionId(), customer, SessionState.NotAuthorized);
+
+            //ACT
+            sessionHelper.RemoveAllSession(customer.Username);
+
+            //ASSERT
+            var findSessionAuthorized = SessionTestHelper.FindAllCustomerSession(_context, customer.Username);
+            findSessionAuthorized.Should().BeEmpty();
+        }
+
+        [Test]
+        public void ShouldNotBeAbleRemoveAllSessions_WrongCustomer()
+        {
+            //ARRANGE
+            var customer = CustomerTestHelper.CreateCustomer(_context, firstName, lastName, username, email);
+            var sessionAuthorized = SessionTestHelper.CreateSession(_context, GetRandomSessionId(), customer, SessionState.Active);
+            var sessionNotAuthorized = SessionTestHelper.CreateSession(_context, GetRandomSessionId(), customer, SessionState.NotAuthorized);
+
+            //ACT
+            sessionHelper.RemoveAllSession("wrongCustomer");
+
+            //ASSERT
+            var findSessionAuthorized = SessionTestHelper.FindAllCustomerSession(_context, customer.Username);
+            findSessionAuthorized.Should().NotBeEmpty();
+        }
+
+        private string GetRandomSessionId()
+        {
+            var id = Guid.NewGuid().ToString();
+
+            id = id.Replace("-", "");
+
+            return id;
         }
     }
 }

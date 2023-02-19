@@ -25,7 +25,6 @@ namespace Rental.Infrastructure.Helpers
         Task<Session> GetSessionAsync([NotNull] ApplicationDbContext context, [NotNull] Customer customer);
         Task<Session> GetSessionByIdAsync([NotNull] ApplicationDbContext context, [NotNull] string sessionId);
         string GenerateSessionId();
-        Session CreateNotAuthorizeSession(Customer customer, SessionState notAuthorized);
         Task<List<Session>> FindOldSession([NotNull] ApplicationDbContext context, [NotNull] string username);
     }
 
@@ -157,14 +156,14 @@ namespace Rental.Infrastructure.Helpers
             return RandomNumberGenerator.GetInt32(100000000, 999999999);
         }
 
-        public Session CreateNotAuthorizeSession(Customer customer, SessionState sessionState)
-        {
-            return new Session(GenerateSessionId(), customer, sessionState);
-        }
-
         public async Task<List<Session>> FindOldSession(ApplicationDbContext context, string username)
         {
             return await context.Sessions.Where(x => x.Customer.Username == username).ToListAsync();
+        }
+
+        private Session CreateNotAuthorizeSession(Customer customer, SessionState sessionState)
+        {
+            return new Session(GenerateSessionId(), customer, sessionState);
         }
     }
 }
