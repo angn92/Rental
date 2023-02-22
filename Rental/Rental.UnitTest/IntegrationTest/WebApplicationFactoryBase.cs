@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
 using Rental.Infrastructure.EF;
@@ -10,6 +11,7 @@ namespace Rental.Test.IntegrationTest
     public class WebApplicationFactoryBase
     {
         public WebApplicationFactory<Program> _factory;
+        public ApplicationDbContext _context;
 
         [SetUp]
         public void SetUp()
@@ -28,6 +30,8 @@ namespace Rental.Test.IntegrationTest
                     services.AddDbContext<ApplicationDbContext>(options => options.UseInMemoryDatabase("MemoryTestDatabase"));
                 });
             });
+
+            _context = _factory.Services.GetService<ApplicationDbContext>();
         }
     }
 }

@@ -67,10 +67,10 @@ namespace Rental.Infrastructure.Handlers.Account.Command.CreateAccount
 
                 return response;
             }
-            catch (Exception ex)
+            catch (CoreException ex)
             {
                 _logger.LogError("Process registration new customer is failed.");
-                throw new Exception(ex.Message, ex);
+                throw new CoreException(ex.Code, ex.Message);
             }
         }
     }

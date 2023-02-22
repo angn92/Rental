@@ -16,8 +16,8 @@ namespace Rental.Core.Validation
 
         public static void FailIfNull(object arg)
         {
-            if (arg is null)
-                throw new Exception($"Object {nameof(arg)} can not be null.");
+            if (arg == null)
+                throw new ArgumentNullException($"Object {nameof(arg)} can not be null.");
         }
     }
 }
