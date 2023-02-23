@@ -1,8 +1,8 @@
 ﻿using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
+using Rental.Core.Enum;
 using Rental.Infrastructure.Command;
-using Rental.Infrastructure.Exceptions;
 using Rental.Infrastructure.Handlers.Account.Command.CreateAccount;
 using Rental.Test.Helpers;
 using System;
@@ -13,7 +13,7 @@ namespace Rental.Test.IntegrationTest.Account
     public class RegisterCustomerTest : WebApplicationFactoryBase
     {
         [Test]
-        public void ShouldBeAbleRegisterCustomer()
+        public void ShouldBeAbleRegisterCustomer_CreateNotAuthorizedSession_And_InitPassword()
         {
             //ARRANGE
             var command = new RegisterCustomer
@@ -32,6 +32,14 @@ namespace Rental.Test.IntegrationTest.Account
             result.SessionId.Should().NotBeNull();
             var customer = CustomerTestHelper.FindCustomer(_context, command.Username);
             customer.Should().NotBeNull();
+
+            var session = SessionTestHelper.FindSessionForCustomer(_context, command.Username);
+            session.Should().NotBeNull();
+            session.State.Should().Be(SessionState.NotAuthorized);
+
+            var password = PasswordTestHelper.FindPasswordByUsername(_context, command.Username);
+            password.Should().NotBeNull();
+            password.Status.Should().Be(PasswordStatus.NotActive);
         }
 
         [Test]
@@ -91,7 +99,7 @@ namespace Rental.Test.IntegrationTest.Account
         public void ShouldNotBeAbleRegisterCustomer_GivenEmailIsInUse()
         {
             //ARRANGE
-            var customer = CustomerTestHelper.CreateCustomer(_context, "Shane", "Andersen", "shane_andersen", "shane_andersen@email.com");
+            CustomerTestHelper.CreateCustomer(_context, "Shane", "Andersen", "shane_andersen", "shane_andersen@email.com");
 
             var command = new RegisterCustomer
             {

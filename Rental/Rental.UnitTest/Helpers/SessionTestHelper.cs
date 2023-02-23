@@ -20,6 +20,11 @@ namespace Rental.Test.Helpers
             return session;
         }
 
+        public static Session FindSessionForCustomer(ApplicationDbContext _context, string username)
+        {
+            return _context.Sessions.SingleOrDefault(x => x.Customer.Username == username);
+        }
+
         public static Session FindSession(ApplicationDbContext _context, string sessionIdentifier)
         {
             return _context.Sessions.SingleOrDefault(x => x.SessionIdentifier == sessionIdentifier);
