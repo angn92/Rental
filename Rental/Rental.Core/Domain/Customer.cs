@@ -2,7 +2,6 @@
 using Rental.Core.Base;
 using Rental.Core.Enum;
 using Rental.Core.Validation;
-using System;
 using System.Collections.Generic;
 
 namespace Rental.Core.Domain

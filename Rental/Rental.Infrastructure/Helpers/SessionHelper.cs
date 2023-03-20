@@ -22,10 +22,10 @@ namespace Rental.Infrastructure.Helpers
         SessionState CheckSessionStatus([NotNull] Session session);
         bool SessionExpired([NotNull] Session session);
         void ValidateSession([NotNull] Session session);
-        Task<Session> GetSessionAsync([NotNull] ApplicationDbContext context, [NotNull] Customer customer);
-        Task<Session> GetSessionByIdAsync([NotNull] ApplicationDbContext context, [NotNull] string sessionId);
+        Task<Session> GetSessionAsync([NotNull] Customer customer);
+        Task<Session> GetSessionByIdAsync([NotNull] string sessionId);
         string GenerateSessionId();
-        Task<List<Session>> FindOldSession([NotNull] ApplicationDbContext context, [NotNull] string username);
+        Task<List<Session>> FindOldSession([NotNull] string username);
     }
 
     public class SessionHelper : ISessionHelper
@@ -128,14 +128,14 @@ namespace Rental.Infrastructure.Helpers
                 throw new CoreException(ErrorCode.SessionExpired, $"SessionId {session.SessionIdentifier} is expired.");
         }
 
-        public async Task<Session> GetSessionAsync([NotNull] ApplicationDbContext context, [NotNull] Customer customer)
+        public async Task<Session> GetSessionAsync([NotNull] Customer customer)
         {
-            return await context.Sessions.SingleOrDefaultAsync(x => x.IdCustomer == customer.CustomerId);
+            return await _context.Sessions.SingleOrDefaultAsync(x => x.IdCustomer == customer.CustomerId);
         }
 
-        public async Task<Session> GetSessionByIdAsync([NotNull] ApplicationDbContext context, [NotNull] string sessionId)
+        public async Task<Session> GetSessionByIdAsync([NotNull] string sessionId)
         {
-            return await context.Sessions.SingleOrDefaultAsync(x => x.SessionIdentifier == sessionId);
+            return await _context.Sessions.SingleOrDefaultAsync(x => x.SessionIdentifier == sessionId);
         }
 
         /// <summary>
@@ -156,9 +156,9 @@ namespace Rental.Infrastructure.Helpers
             return RandomNumberGenerator.GetInt32(100000000, 999999999);
         }
 
-        public async Task<List<Session>> FindOldSession(ApplicationDbContext context, string username)
+        public async Task<List<Session>> FindOldSession(string username)
         {
-            return await context.Sessions.Where(x => x.Customer.Username == username).ToListAsync();
+            return await _context.Sessions.Where(x => x.Customer.Username == username).ToListAsync();
         }
 
         private Session CreateNotAuthorizeSession(Customer customer, SessionState sessionState)

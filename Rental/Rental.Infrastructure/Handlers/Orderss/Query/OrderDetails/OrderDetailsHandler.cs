@@ -31,7 +31,7 @@ namespace Rental.Infrastructure.Handlers.Orders.Query.OrderDetails
             ValidationParameter.FailIfNullOrEmpty(query.SessionId.ToString());
 
             //Get session by id
-            var session = await sessionHelper.GetSessionByIdAsync(context, query.SessionId);
+            var session = await sessionHelper.GetSessionByIdAsync(query.SessionId);
 
             var isExpired = sessionHelper.SessionExpired(session);
 

@@ -43,7 +43,7 @@ namespace Rental.Infrastructure.Handlers.Account.Command.AuthorizePassword
             {
                 var customer = await _customerHelper.GetCustomerAsync(command.Request.Username);
 
-                var session = await _sessionHelper.GetSessionByIdAsync(_context, sessionId);
+                var session = await _sessionHelper.GetSessionByIdAsync(sessionId);
 
                 if (_sessionHelper.CheckSessionStatus(session) != SessionState.NotAuthorized)
                     throw new CoreException(ErrorCode.WrongSessionState, $"SessionId {session.SessionIdentifier} has incorrect state for authorize password.");

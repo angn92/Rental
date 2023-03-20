@@ -39,7 +39,7 @@ namespace Rental.Infrastructure.Handlers.Account.Command.Sessions
 
                 _customerHelper.ValidateCustomerAccount(customer);
 
-                var oldSessionCustomer = await _sessionHelper.FindOldSession(_context, customer.Username);
+                var oldSessionCustomer = await _sessionHelper.FindOldSession(customer.Username);
 
                 if (oldSessionCustomer.Any())
                     _sessionHelper.RemoveAllSession(customer.Username);

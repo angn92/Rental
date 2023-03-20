@@ -23,7 +23,7 @@ namespace Rental.Infrastructure.Handlers.Account.Query.SessionDetails
         {
             ValidationParameter.FailIfNullOrEmpty(query.SessionId.ToString());
 
-            var session = await _sessionHelper.GetSessionByIdAsync(_context, query.SessionId);
+            var session = await _sessionHelper.GetSessionByIdAsync(query.SessionId);
 
             if (session == null)
                 throw new CoreException(ErrorCode.SessionDoesNotExist, "SessionId does not exist.");

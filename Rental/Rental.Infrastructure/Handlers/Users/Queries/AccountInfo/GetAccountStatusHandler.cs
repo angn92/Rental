@@ -23,7 +23,7 @@ namespace Rental.Infrastructure.Handlers.Users.Queries.AccountInfo
         public async ValueTask<GetAccountStatusRs> HandleAsync(GetAccountStatusRq query, CancellationToken cancellationToken = default)
         {
 
-            var session = await _sessionHelper.GetSessionByIdAsync(_context, query.SessionId);
+            var session = await _sessionHelper.GetSessionByIdAsync(query.SessionId);
             if (session is null)
             {
                 throw new CoreException(ErrorCode.SessionDoesNotExist, $"SessionId not created.");

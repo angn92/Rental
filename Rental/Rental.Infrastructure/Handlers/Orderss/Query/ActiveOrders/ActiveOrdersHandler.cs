@@ -34,7 +34,7 @@ namespace Rental.Infrastructure.Handlers.Orderss.Query.ActiveOrders
             var orderDetailDtoList = new List<OrderDetailDto>();
 
             //Get session by id
-            var session = await _sessionHelper.GetSessionByIdAsync(_context, query.SessionId);
+            var session = await _sessionHelper.GetSessionByIdAsync(query.SessionId);
 
             var isExpired = _sessionHelper.SessionExpired(session);
 

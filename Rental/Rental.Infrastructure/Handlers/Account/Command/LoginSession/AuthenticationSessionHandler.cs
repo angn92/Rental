@@ -42,7 +42,7 @@ namespace Rental.Infrastructure.Handlers.Account.Command.LoginSession
             {
                 _logger.LogInformation("Starting login process...");
 
-                var session = await _sessionHelper.GetSessionByIdAsync(_context, _httpContextWrapper.GetValueFromRequestHeader("SessionId"));
+                var session = await _sessionHelper.GetSessionByIdAsync(_httpContextWrapper.GetValueFromRequestHeader("SessionId"));
 
                 var customer = await _customerHelper.GetCustomerAsync(command.Request.Username);
 

@@ -2,10 +2,8 @@
 using Rental.Core.Enum;
 using Rental.Core.Validation;
 using Rental.Infrastructure.Command;
-using Rental.Infrastructure.EF;
 using Rental.Infrastructure.Exceptions;
 using Rental.Infrastructure.Helpers;
-using System;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -14,17 +12,15 @@ namespace Rental.Infrastructure.Handlers.Account.Command.CreateAccount
     public class RegisterCustomerHandler : ICommandHandler<RegisterCustomer, RegisterCustomerResponse>
     {
         private readonly ILogger _logger;
-        private readonly ApplicationDbContext _context;
         private readonly IEmailHelper _emailHelper;
         private readonly IPasswordHelper _passwordHelper;
         private readonly ISessionHelper _sessionHelper;
         private readonly ICustomerHelper _customerHelper;
 
-        public RegisterCustomerHandler(ILogger<RegisterCustomerHandler> logger, ApplicationDbContext context, IEmailHelper emailHelper, 
-            IPasswordHelper passwordHelper, ISessionHelper sessionHelper, ICustomerHelper customerHelper)
+        public RegisterCustomerHandler(ILogger<RegisterCustomerHandler> logger, IEmailHelper emailHelper, IPasswordHelper passwordHelper, ISessionHelper sessionHelper, 
+            ICustomerHelper customerHelper)
         {
             _logger = logger;
-            _context = context;
             _emailHelper = emailHelper;
             _passwordHelper = passwordHelper;
             _sessionHelper = sessionHelper;

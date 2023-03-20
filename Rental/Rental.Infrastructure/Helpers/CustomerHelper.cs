@@ -72,7 +72,7 @@ namespace Rental.Infrastructure.Helpers
 
         public async Task<Customer> GetCustomerAsync([NotNull] string username)
         {
-            var customer = await _context.Customers.SingleOrDefaultAsync(x => x.Username == username);
+            var customer = await _context.Customers.Include("Passwords").SingleOrDefaultAsync(x => x.Username == username);
 
             if (customer is null)
                 throw new CoreException(ErrorCode.UserNotExist, $"User {username} does not exist.");

@@ -35,7 +35,7 @@ namespace Rental.Infrastructure.Handlers.Product.Command.NewProduct
 
             var customer = await _customerHelper.GetCustomerAsync(command.Request.Username);
 
-            var session = await _sessionHelper.GetSessionAsync(_context, customer);
+            var session = await _sessionHelper.GetSessionAsync(customer);
 
             _sessionHelper.ValidateSession(session);
 
