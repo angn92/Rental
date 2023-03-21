@@ -63,9 +63,9 @@ namespace Rental.Api.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpPut("Status")]
-        public async Task ChangeAccountStatus([FromBody][NotNull] ChangeStatusCommand command)
+        public async Task ChangeAccountStatus([FromBody][NotNull] ChangeStatusRequest request)
         {
-            await _commandDispatcher.DispatchAsync<ChangeStatusCommand>(command);
+            await _commandDispatcher.DispatchAsync<ChangeStatusCommand>(new ChangeStatusCommand(request));
         }
 
         /// <summary>

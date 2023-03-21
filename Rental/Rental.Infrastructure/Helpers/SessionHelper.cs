@@ -135,7 +135,12 @@ namespace Rental.Infrastructure.Helpers
 
         public async Task<Session> GetSessionByIdAsync([NotNull] string sessionId)
         {
-            return await _context.Sessions.SingleOrDefaultAsync(x => x.SessionIdentifier == sessionId);
+            var session = await _context.Sessions.SingleOrDefaultAsync(x => x.SessionIdentifier == sessionId);
+
+            if (session == null)
+                throw new CoreException(ErrorCode.SessionDoesNotExist, $"Customer session with id {sessionId} does not exist.");
+
+            return session;
         }
 
         /// <summary>

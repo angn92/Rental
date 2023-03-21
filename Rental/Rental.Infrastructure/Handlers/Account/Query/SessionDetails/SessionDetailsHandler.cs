@@ -25,9 +25,6 @@ namespace Rental.Infrastructure.Handlers.Account.Query.SessionDetails
 
             var session = await _sessionHelper.GetSessionByIdAsync(query.SessionId);
 
-            if (session == null)
-                throw new CoreException(ErrorCode.SessionDoesNotExist, "SessionId does not exist.");
-
             if (_sessionHelper.SessionExpired(session))
                 throw new CoreException(ErrorCode.SessionExpired, $"SessionId {query.SessionId} expired.");
 

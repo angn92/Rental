@@ -6,7 +6,7 @@ namespace Rental.Infrastructure.Handlers.Account.Commmand.ChangeStatus
 {
     public class ChangeStatusCommand : ICommand
     {
-        public ChangeStatusRequest ChangeStatusRequest { get; }
+        public ChangeStatusRequest ChangeStatusRequest { get; set; }
 
         public ChangeStatusCommand(ChangeStatusRequest request)
         {

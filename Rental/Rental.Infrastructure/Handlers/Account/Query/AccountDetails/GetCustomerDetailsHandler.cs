@@ -42,9 +42,6 @@ namespace Rental.Infrastructure.Handlers.Account.Query.AccountDetails
                 var sessionId = _httpContextWrapper.GetValueFromRequestHeader("SessionId");
                 var clientSession = await _sessionHelper.GetSessionByIdAsync(sessionId);
 
-                if (clientSession == null)
-                    throw new CoreException(ErrorCode.SessionDoesNotExist, $"Session for client {command.Username} does not exist.");
-
                 if (_sessionHelper.CheckSessionStatus(clientSession) != SessionState.Active)
                     throw new CoreException(ErrorCode.SessioNotActive, $"Session is not active.");
 
