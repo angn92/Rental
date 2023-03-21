@@ -15,9 +15,9 @@ namespace Rental.Infrastructure.Handlers.Account.Query.AccountDetails
         public string Username { get; set; }
 
         [JsonProperty("Status")]
-        public AccountStatus Status { get; set; }
+        public string Status { get; set; }
 
         [JsonProperty("PasswordStatus")]
-        public PasswordStatus PasswordStatus { get; set; }
+        public string PasswordStatus { get; set; }
     }
 }

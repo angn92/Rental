@@ -1,10 +1,8 @@
 ﻿using JetBrains.Annotations;
 using Microsoft.Extensions.Logging;
-using Rental.Core.Domain;
 using Rental.Core.Enum;
 using Rental.Core.Validation;
 using Rental.Infrastructure.DTO;
-using Rental.Infrastructure.EF;
 using Rental.Infrastructure.Exceptions;
 using Rental.Infrastructure.Helpers;
 using Rental.Infrastructure.Query;
@@ -67,8 +65,8 @@ namespace Rental.Infrastructure.Handlers.Account.Query.AccountDetails
                 Fullname = customerAccountDto.Fullname,
                 Username = customerAccountDto.Username,
                 Email = customerAccountDto.Email,
-                Status = customerAccountDto.Status,
-                PasswordStatus = customerAccountDto.PasswordStatus
+                Status = customerAccountDto.Status.ToString(),
+                PasswordStatus = customerAccountDto.PasswordStatus.ToString()
             };
         }
     }
