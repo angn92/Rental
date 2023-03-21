@@ -43,14 +43,13 @@ namespace Rental.Infrastructure.Handlers.Account.Command.LoginSession
                 _logger.LogInformation("Starting login process...");
 
                 var session = await _sessionHelper.GetSessionByIdAsync(_httpContextWrapper.GetValueFromRequestHeader("SessionId"));
+                _sessionHelper.ValidateSessionStatus(session);
 
                 var customer = await _customerHelper.GetCustomerAsync(command.Request.Username);
-
                 _customerHelper.ValidateCustomerAccount(customer);
 
                 var password = await _passwordHelper.GetActivePassword(customer);
-
-                _passwordHelper.ComaprePasswords(password.Hash, command.Request.Password);
+                _passwordHelper.ComparePasswords(password.Hash, command.Request.Password);
 
                 if(password.NewPassword)
                     password.ChangePasswordMarker();

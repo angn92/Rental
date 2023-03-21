@@ -41,7 +41,7 @@ namespace Rental.Infrastructure.Handlers.Account.Command.ChangeStatus
                 var sessionId = _httpContextWrapper.GetValueFromRequestHeader("SessionId");
 
                 var customerSession = await _sessionHelper.GetSessionByIdAsync(sessionId);
-                _sessionHelper.ValidateSession(customerSession);
+                _sessionHelper.ValidateSessionStatus(customerSession);
 
                 var customer = await _customerHelper.GetCustomerAsync(request.Username);
                 _customerHelper.ValidateCustomerAccount(customer);

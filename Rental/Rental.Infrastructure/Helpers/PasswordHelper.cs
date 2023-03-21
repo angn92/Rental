@@ -16,7 +16,7 @@ namespace Rental.Infrastructure.Helpers
     {
         Task SetPassword([NotNull] string password, [NotNull] Customer customer, [NotNull] string code);
         Task<Password> GetActivePassword([NotNull] Customer customer);
-        bool ComaprePasswords([NotNull] string currentPassword, [NotNull] string hashNewPassword);
+        bool ComparePasswords([NotNull] string currentPassword, [NotNull] string hashNewPassword);
         Task RemoveOldPassword([NotNull] string username);
         int GenerateActivationCode();
         Task<Password> FindPasswordToAuthorize([NotNull] string username);
@@ -33,7 +33,7 @@ namespace Rental.Infrastructure.Helpers
             _encrypt = encrypt;
         }
 
-        public bool ComaprePasswords([NotNull] string currentPassword, [NotNull] string newPassword)
+        public bool ComparePasswords([NotNull] string currentPassword, [NotNull] string newPassword)
         {
             return currentPassword.Equals(newPassword);
         }

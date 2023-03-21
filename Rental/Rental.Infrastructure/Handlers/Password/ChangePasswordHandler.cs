@@ -41,7 +41,7 @@ namespace Rental.Infrastructure.Handlers.Password
                 var activeUserPassword = await _passwordHelper.GetActivePassword(customer);
 
                 //compare old password and new password. New password can not be exactly same like old password
-                _passwordHelper.ComaprePasswords(activeUserPassword.Hash, command.NewPassword);
+                _passwordHelper.ComparePasswords(activeUserPassword.Hash, command.NewPassword);
 
                 await _passwordHelper.RemoveOldPassword(command.Username);
 

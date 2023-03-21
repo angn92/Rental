@@ -21,7 +21,7 @@ namespace Rental.Infrastructure.Helpers
         Task ChangeSessionStatus([NotNull] string sessionId, [NotNull] SessionState sessionState);
         SessionState CheckSessionStatus([NotNull] Session session);
         bool SessionExpired([NotNull] Session session);
-        void ValidateSession([NotNull] Session session);
+        void ValidateSessionStatus([NotNull] Session session);
         Task<Session> GetSessionAsync([NotNull] Customer customer);
         Task<Session> GetSessionByIdAsync([NotNull] string sessionId);
         string GenerateSessionId();
@@ -116,16 +116,13 @@ namespace Rental.Infrastructure.Helpers
             return session.LastAccessDate.AddMinutes(5) < DateTime.UtcNow;
         }
 
-        public void ValidateSession([NotNull] Session session)
+        public void ValidateSessionStatus([NotNull] Session session)
         {
-            if (session == null)
-                throw new CoreException(ErrorCode.SessionDoesNotExist, "SessionId does not exist.");
-
             if (session.State == SessionState.NotAuthorized)
-                throw new CoreException(ErrorCode.SessionNotAuthorized, $"SessionId {session.SessionIdentifier} is not authorized.");
+                throw new CoreException(ErrorCode.SessionNotAuthorized, $"Session {session.SessionIdentifier} is not authorized.");
 
             if (session.State == SessionState.Expired)
-                throw new CoreException(ErrorCode.SessionExpired, $"SessionId {session.SessionIdentifier} is expired.");
+                throw new CoreException(ErrorCode.SessionExpired, $"Session {session.SessionIdentifier} is expired.");
         }
 
         public async Task<Session> GetSessionAsync([NotNull] Customer customer)

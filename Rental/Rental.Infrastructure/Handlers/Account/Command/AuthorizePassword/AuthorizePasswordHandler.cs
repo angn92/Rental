@@ -54,7 +54,7 @@ namespace Rental.Infrastructure.Handlers.Account.Command.AuthorizePassword
                 //Find password for given user to authorize
                 var password = await _passwordHelper.FindPasswordToAuthorize(customer.Username);
 
-                if (password != null && _passwordHelper.ComaprePasswords(password.ActivationCode, command.Request.Code))
+                if (password != null && _passwordHelper.ComparePasswords(password.ActivationCode, command.Request.Code))
                 {
                     password.ActivatePassword();
                     session.SetSessionActive();

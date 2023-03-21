@@ -39,7 +39,7 @@ namespace Rental.Infrastructure.Handlers.Orders.Query.OrderDetails
                 throw new CoreException(ErrorCode.SessionExpired, $"Given session {session.SessionIdentifier} expired.");
 
             //Check session status, we can get order only when session is active
-            sessionHelper.ValidateSession(session);
+            sessionHelper.ValidateSessionStatus(session);
 
             var order = await orderHelper.GetOrderByIdAsync(context, query.OrderId);
 

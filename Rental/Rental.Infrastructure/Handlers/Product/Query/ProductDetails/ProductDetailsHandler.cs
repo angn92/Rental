@@ -3,7 +3,6 @@ using Rental.Core.Validation;
 using Rental.Infrastructure.EF;
 using Rental.Infrastructure.Helpers;
 using Rental.Infrastructure.Query;
-using System;
 using System.Threading;
 using System.Threading.Tasks;
 

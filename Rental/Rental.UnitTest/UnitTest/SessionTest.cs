@@ -86,7 +86,7 @@ namespace Rental.Test.UnitTest
             var session = CreateSessionTestHelper.CreateSession(_context, sessioId, customer, SessionState.Active);
 
             //ACT
-            var exception = Assert.Throws<CoreException>(() => sessionHelper.ValidateSession(null));
+            var exception = Assert.Throws<CoreException>(() => sessionHelper.ValidateSessionStatus(null));
 
             //ASSERT
             Assert.AreEqual(ErrorCode.SessionDoesNotExist, exception.Code);
@@ -101,7 +101,7 @@ namespace Rental.Test.UnitTest
             var session = CreateSessionTestHelper.CreateSession(_context, sessioId, customer, SessionState.NotAuthorized);
 
             //ACT
-            var exception = Assert.Throws<CoreException>(() => sessionHelper.ValidateSession(session));
+            var exception = Assert.Throws<CoreException>(() => sessionHelper.ValidateSessionStatus(session));
 
             //ASSERT
             exception.Code.Should().Be(ErrorCode.SessionNotAuthorized);
@@ -116,7 +116,7 @@ namespace Rental.Test.UnitTest
             var session = CreateSessionTestHelper.CreateSession(_context, sessioId, customer, SessionState.Expired);
 
             //ACT
-            var exception = Assert.Throws<CoreException>(() => sessionHelper.ValidateSession(session));
+            var exception = Assert.Throws<CoreException>(() => sessionHelper.ValidateSessionStatus(session));
 
             //ASSERT
             exception.Code.Should().Be(ErrorCode.SessionExpired);
