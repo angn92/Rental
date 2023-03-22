@@ -37,7 +37,7 @@ namespace Rental.Infrastructure.Handlers.Product.Command.Cancel
 
             try 
             {
-                var product = await _productHelper.GetProductAsync(_context, command.ProductId);
+                var product = await _productHelper.GetProductAsync(command.ProductId);
 
                 if (new[] { ProductStatus.Available, ProductStatus.Inaccessible }.Contains(product.Status))
                     throw new CoreException(ErrorCode.ProductIsNotReserved, $"You can not canceling reservation for {product.Name} because this item is not reserved.");

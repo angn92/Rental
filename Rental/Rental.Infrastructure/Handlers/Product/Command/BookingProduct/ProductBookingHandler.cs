@@ -32,7 +32,7 @@ namespace Rental.Infrastructure.Handlers.Product.Command.BookingProduct
 
             var customer = await _customerHelper.GetCustomerAsync(command.Request.Username);
 
-            var product = await _productHelper.GetProductAsync(_context, request.ProductId);
+            var product = await _productHelper.GetProductAsync(request.ProductId);
 
             if (product.Status != ProductStatus.Available)
                 throw new CoreException(ErrorCode.ProductNotAvailable, $"{product.Name} is not available now.");

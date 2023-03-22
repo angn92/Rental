@@ -46,7 +46,7 @@ namespace Rental.Infrastructure.Handlers.Orders.Query.OrderDetails
             if (order == null)
                 throw new CoreException(ErrorCode.OrderNotExist, "Order not exist.");
 
-            var product = await productHelper.GetProductAsync(context, order.ProductId);
+            var product = await productHelper.GetProductAsync(order.ProductId);
 
             var response = new OrderDetailsResponse
             {

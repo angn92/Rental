@@ -4,6 +4,7 @@ using Rental.Infrastructure.Command;
 using Rental.Infrastructure.EF;
 using Rental.Infrastructure.Exceptions;
 using Rental.Infrastructure.Helpers;
+using Rental.Infrastructure.Wrapper;
 using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 using System.Threading.Tasks;
@@ -15,35 +16,42 @@ namespace Rental.Infrastructure.Handlers.Product.Command.NewProduct
         private readonly IProductHelper _productHelper;
         private readonly ICustomerHelper _customerHelper;
         private readonly ISessionHelper _sessionHelper;
+        private readonly IHttpContextWrapper _httpContextWrapper;
+        private readonly ICategoryHelper _categoryHelper;
         private readonly ApplicationDbContext _context;
 
         public ProductCommandHandler([NotNull] ApplicationDbContext context, IProductHelper productHelper, ICustomerHelper customerService,
-                    ISessionHelper sessionHelper)
+                    ISessionHelper sessionHelper, IHttpContextWrapper httpContextWrapper, ICategoryHelper categoryHelper)
         {
             _context = context;
             _productHelper = productHelper;
             _customerHelper = customerService;
             _sessionHelper = sessionHelper;
+            _httpContextWrapper = httpContextWrapper;
+            _categoryHelper = categoryHelper;
         }
 
         public async ValueTask HandleAsync(ProductCommand command, CancellationToken cancellationToken = default)
         {
             ValidationParameter.FailIfNull(command);
 
+            var requestPart = command.Request;
+
             if (string.IsNullOrWhiteSpace(command.Request.Name))
-                throw new CoreException(ErrorCode.IncorrectArgument, $"Value of {nameof(command.Request.Name)} is invalid.");
+                throw new CoreException(ErrorCode.IncorrectArgument, $"Value of {nameof(requestPart.Name)} is invalid.");
 
-            var customer = await _customerHelper.GetCustomerAsync(command.Request.Username);
-
-            var session = await _sessionHelper.GetSessionAsync(customer);
-
+            var sessionId = _httpContextWrapper.GetValueFromRequestHeader("SessionId");
+            var session = await _sessionHelper.GetSessionByIdAsync(sessionId);
             _sessionHelper.ValidateSessionStatus(session);
 
-            await _productHelper.CheckIfGivenProductExistAsync(_context, command.Request.Name, customer);
+            var customer = await _customerHelper.GetCustomerAsync(requestPart.Username);
+            _customerHelper.ValidateCustomerAccount(customer);
 
-            var category = await _context.Categories.SingleOrDefaultAsync(x => x.Name == command.Request.CategoryName, cancellationToken);
+            await _productHelper.CheckIfGivenProductExistAsync(requestPart.Name, customer);
 
-            await _productHelper.AddProductAsync(_context, command.Request.Name, command.Request.Amount, customer, category, command.Request.Description);
+            var category = await _categoryHelper.GetCategory(requestPart.Name);
+
+            await _productHelper.AddProductAsync(requestPart.Name, requestPart.Amount, customer, category, requestPart.Description);
 
             await _context.SaveChangesAsync(cancellationToken);
         }

@@ -23,7 +23,7 @@ namespace Rental.Infrastructure.Handlers.Product.Query.ProductDetails
         {
             ValidationParameter.FailIfNull(query);
 
-            var product = await _productHelper.GetProductAsync(_context, query.ProductId);
+            var product = await _productHelper.GetProductAsync(query.ProductId);
 
             var productDetail = new ProductDetail
             {

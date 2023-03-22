@@ -1,5 +1,6 @@
 ﻿using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using Rental.Core.Domain;
 using Rental.Core.Enum;
 using Rental.Infrastructure.EF;
@@ -11,30 +12,39 @@ namespace Rental.Infrastructure.Helpers
 {
     public interface IProductHelper
     {
-        Task AddProductAsync([NotNull] ApplicationDbContext context, [NotNull] string name, [NotNull] int quantity, [NotNull] Customer customer,
+        Task AddProductAsync([NotNull] string name, [NotNull] int quantity, [NotNull] Customer customer,
             [NotNull] Category category, [CanBeNull] string description);
 
-        Task CheckIfGivenProductExistAsync([NotNull] ApplicationDbContext context, [NotNull] string name, [NotNull] Customer customer);
+        Task CheckIfGivenProductExistAsync([NotNull] string name, [NotNull] Customer customer);
 
         void MakeReservationProduct([NotNull] Product product);
 
-        Task<Product> GetProductAsync([NotNull] ApplicationDbContext context, [NotNull] string productId);
+        Task<Product> GetProductAsync([NotNull] string productId);
     }
 
     public class ProductHelper : IProductHelper
     {
-        public async Task AddProductAsync([NotNull] ApplicationDbContext context, [NotNull] string name, [NotNull] int quantity, [NotNull] Customer customer,
+        private readonly ILogger<ProductHelper> _logger;
+        private readonly ApplicationDbContext _context;
+
+        public ProductHelper(ILogger<ProductHelper> logger, ApplicationDbContext context)
+        {
+            _logger = logger;
+            _context = context;
+        }
+
+        public async Task AddProductAsync([NotNull] string name, [NotNull] int quantity, [NotNull] Customer customer,
             [NotNull] Category category, [CanBeNull] string description)
         {
             var product = new Product(name, quantity, category, customer, description);
 
-            await context.AddAsync(product);
-            await context.SaveChangesAsync();
+            await _context.AddAsync(product);
+            await _context.SaveChangesAsync();
         }
 
-        public async Task CheckIfGivenProductExistAsync([NotNull] ApplicationDbContext context, [NotNull] string name, [NotNull] Customer customer)
+        public async Task CheckIfGivenProductExistAsync([NotNull] string name, [NotNull] Customer customer)
         {
-            var productName = await context.Products.SingleOrDefaultAsync(x => x.Customer.Username == customer.Username &&
+            var productName = await _context.Products.SingleOrDefaultAsync(x => x.Customer.Username == customer.Username &&
                                        x.Status != ProductStatus.Inaccessible);
 
             if (productName != null)
@@ -48,9 +58,9 @@ namespace Rental.Infrastructure.Helpers
         }
 
 
-        public async Task<Product> GetProductAsync([NotNull] ApplicationDbContext context, [NotNull] string productId)
+        public async Task<Product> GetProductAsync([NotNull] string productId)
         {
-            var product = await context.Products
+            var product = await _context.Products
                         .Include(z => z.Category)
                         .Include(q => q.Customer)
                         .SingleOrDefaultAsync(x => x.ProductId == productId);

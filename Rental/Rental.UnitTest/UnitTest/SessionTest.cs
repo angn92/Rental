@@ -86,7 +86,7 @@ namespace Rental.Test.UnitTest
             var session = CreateSessionTestHelper.CreateSession(_context, sessioId, customer, SessionState.Active);
 
             //ACT
-            var exception = Assert.Throws<CoreException>(() => sessionHelper.ValidateSessionStatus(null));
+            var exception = Assert.Throws<CoreException>(() => sessionHelper.ValidateSessionStatus(session));
 
             //ASSERT
             Assert.AreEqual(ErrorCode.SessionDoesNotExist, exception.Code);
@@ -131,7 +131,7 @@ namespace Rental.Test.UnitTest
             CreateSessionTestHelper.CreateSession(_context, sessioId, customer, SessionState.Active);
 
             //ACT
-            var currentSession = await sessionHelper.GetSessionByIdAsync(_context, sessioId);
+            var currentSession = await sessionHelper.GetSessionByIdAsync(sessioId);
 
             //ASSERT
             currentSession.Should().NotBeNull();
@@ -147,7 +147,7 @@ namespace Rental.Test.UnitTest
             CreateSessionTestHelper.CreateSession(_context, sessioId, customer, SessionState.Active);
 
             //ACT
-            var currentSession = await sessionHelper.GetSessionByIdAsync(_context, wrongSessionId);
+            var currentSession = await sessionHelper.GetSessionByIdAsync(wrongSessionId);
 
             //ASSERT
             currentSession.Should().BeNull();
