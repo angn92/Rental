@@ -5,6 +5,7 @@ using Rental.Infrastructure.Command;
 using Rental.Infrastructure.EF;
 using Rental.Infrastructure.Exceptions;
 using Rental.Infrastructure.Helpers;
+using Rental.Infrastructure.Wrapper;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -14,14 +15,19 @@ namespace Rental.Infrastructure.Handlers.Product.Command.BookingProduct
     public class ProductBookingHandler : ICommandHandler<ProductBookingCommand, ProductBookingResponse>
     {
         private readonly ApplicationDbContext _context;
+        private readonly IHttpContextWrapper _httpContextWrapper;
         private readonly ICustomerHelper _customerHelper;
         private readonly IProductHelper _productHelper;
+        private readonly ISessionHelper _sessionHelper;
 
-        public ProductBookingHandler(ApplicationDbContext context, ICustomerHelper customerHelper, IProductHelper productHelper)
+        public ProductBookingHandler(ApplicationDbContext context, IHttpContextWrapper httpContextWrapper, ICustomerHelper customerHelper, IProductHelper productHelper,
+            ISessionHelper sessionHelper)
         {
             _context = context;
+            _httpContextWrapper = httpContextWrapper;
             _customerHelper = customerHelper;
             _productHelper = productHelper;
+            _sessionHelper = sessionHelper;
         }
 
         public async ValueTask<ProductBookingResponse> HandleAsync(ProductBookingCommand command, CancellationToken cancellationToken = default)
@@ -30,7 +36,12 @@ namespace Rental.Infrastructure.Handlers.Product.Command.BookingProduct
 
             var request = command.Request;
 
-            var customer = await _customerHelper.GetCustomerAsync(command.Request.Username);
+            var sessionId = _httpContextWrapper.GetValueFromRequestHeader("SessionId");
+            var session = await _sessionHelper.GetSessionByIdAsync(sessionId);
+            _sessionHelper.ValidateSessionStatus(session);
+
+            var customer = await _customerHelper.GetCustomerAsync(request.Username);
+            _customerHelper.ValidateCustomerAccount(customer);
 
             var product = await _productHelper.GetProductAsync(request.ProductId);
 
