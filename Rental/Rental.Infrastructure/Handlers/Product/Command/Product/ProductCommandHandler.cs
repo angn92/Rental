@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Rental.Core.Validation;
+﻿using Rental.Core.Validation;
 using Rental.Infrastructure.Command;
 using Rental.Infrastructure.EF;
 using Rental.Infrastructure.Exceptions;
