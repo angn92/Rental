@@ -5,16 +5,16 @@ namespace Rental.Infrastructure.DTO
 {
     public class OrderDetailDto
     {
-        [JsonProperty("orderId")]
+        [JsonProperty("OrderId")]
         public string OrderId { get; set; }
 
-        [JsonProperty("orderStatus")]
+        [JsonProperty("OrderStatus")]
         public string OrderStatus { get; set; }
 
-        [JsonProperty("orderProduct")]
+        [JsonProperty("OrderProduct")]
         public OrderProduct OrderProduct { get; set; }
 
-        [JsonProperty("validTo")]
+        [JsonProperty("ValidTo")]
         public DateTime? ValidTo { get; set; }
     }
 

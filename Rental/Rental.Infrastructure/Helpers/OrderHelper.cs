@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Rental.Core.Domain;
 using Rental.Core.Enum;
+using Rental.Infrastructure.DTO;
 using Rental.Infrastructure.EF;
 using Rental.Infrastructure.Exceptions;
 using System.Collections.Generic;
@@ -14,7 +15,7 @@ namespace Rental.Infrastructure.Helpers
     {
         Task<Order> GetAcceptedOrderForGivenProduct([NotNull] string productId, [NotNull] string borrower);
         Task<Order> GetOrderByIdAsync([NotNull] string orderId);
-        List<Order> GetActiveOrders([NotNull] string custmerId);
+        List<OrderDetailDto> GetActiveOrders([NotNull] string custmerId);
         List<Order> GetFinishedOrderForCustomer([NotNull] string customer);
     }
 
@@ -40,9 +41,39 @@ namespace Rental.Infrastructure.Helpers
             return order;
         }
 
-        public List<Order> GetActiveOrders([NotNull] string custmerId)
+        public List<OrderDetailDto> GetActiveOrders([NotNull] string custmerId)
         {
-            return _context.Orders.Where(x => x.CustomerId == custmerId && x.OrderStatus == OrderStatus.Accepted).ToList();
+            var activeOrders = from order in _context.Orders
+                               join product in _context.Products
+                               on order.ProductId equals product.ProductId
+                               where order.CustomerId == custmerId
+                               select new
+                               {
+                                   OrderId = order.OrderId,
+                                   OrderStatus = order.OrderStatus,
+                                   ValidTo = order.ValidTo,
+                                   Name = product.Name,
+                                   Owner = product.Customer.FirstName
+                               };
+
+            var orderDetailDtoList = new List<OrderDetailDto>(); 
+
+            foreach (var item in activeOrders)
+            {
+                orderDetailDtoList.Add(new OrderDetailDto
+                {
+                    OrderId = item.OrderId,
+                    OrderStatus = item.OrderStatus.ToString(),
+                    ValidTo = item.ValidTo,
+                    OrderProduct = new OrderProduct
+                    {
+                        Name = item.Name,
+                        Owner = item.Owner
+                    }
+                });
+            }
+
+            return orderDetailDtoList;
         }
 
         public List<Order> GetFinishedOrderForCustomer([NotNull] string username)

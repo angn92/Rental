@@ -6,8 +6,14 @@
 
   <ItemGroup>
     <Compile Remove="Handlers\Account\Queries\**" />
+    <Compile Remove="Handlers\Users\Command\**" />
+    <Compile Remove="Handlers\Users\Queries\CustomerDetails\**" />
     <EmbeddedResource Remove="Handlers\Account\Queries\**" />
+    <EmbeddedResource Remove="Handlers\Users\Command\**" />
+    <EmbeddedResource Remove="Handlers\Users\Queries\CustomerDetails\**" />
     <None Remove="Handlers\Account\Queries\**" />
+    <None Remove="Handlers\Users\Command\**" />
+    <None Remove="Handlers\Users\Queries\CustomerDetails\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -30,11 +36,6 @@
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="6.0.3" />
     <PackageReference Include="Serilog.Sinks.Console" Version="4.1.0" />
     <PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Handlers\Users\Command\Register\" />
-    <Folder Include="Handlers\Users\Queries\CustomerDetails\" />
   </ItemGroup>
 
 </Project>

@@ -45,6 +45,7 @@
         #region Order errors
         public static string OrderNotExist => "order_not_exist";
         public static string OrderWasFinishedOrCancelled => "order_was_finished_or_cancelled";
+        public static string ClientHasNoActiveOrders => "client_has_no_active_orders";
         #endregion
 
         #region Category error
