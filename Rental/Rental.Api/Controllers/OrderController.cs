@@ -43,12 +43,11 @@ namespace Rental.Api.Controllers
         /// <param name="sessionId"></param>
         /// <returns></returns>
         [HttpGet("activeOrders")]
-        public async Task<ActiveOrdersResponse> GetAllActiveOrders([FromBody][NotNull] string username, [NotNull] string sessionId)
+        public async Task<ActiveOrdersResponse> GetAllActiveOrders([FromBody][NotNull] string username)
         {
             var query = new ActiveOrdersRequest
             {
-                Username = username,
-                SessionId = sessionId
+                Username = username
             };
 
             return await queryDispatcher.DispatchAsync<ActiveOrdersRequest, ActiveOrdersResponse>(query);

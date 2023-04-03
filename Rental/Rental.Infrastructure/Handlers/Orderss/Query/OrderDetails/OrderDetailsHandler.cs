@@ -41,7 +41,7 @@ namespace Rental.Infrastructure.Handlers.Orders.Query.OrderDetails
             //Check session status, we can get order only when session is active
             sessionHelper.ValidateSessionStatus(session);
 
-            var order = await orderHelper.GetOrderByIdAsync(context, query.OrderId);
+            var order = await orderHelper.GetOrderByIdAsync(query.OrderId);
 
             if (order == null)
                 throw new CoreException(ErrorCode.OrderNotExist, "Order not exist.");

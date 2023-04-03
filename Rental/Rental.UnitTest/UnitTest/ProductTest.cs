@@ -1,4 +1,6 @@
 ﻿using FluentAssertions;
+using Microsoft.Extensions.Logging;
+using Moq;
 using NUnit.Framework;
 using Rental.Core.Enum;
 using Rental.Infrastructure.Exceptions;
@@ -12,11 +14,13 @@ namespace Rental.Test.UnitTest
     public class ProductTest : TestBase
     {
         private ProductHelper _productHelper;
+        private Mock<ILogger<ProductHelper>> loggerMock;
 
         [SetUp]
         public void SetUp()
         {
-            _productHelper = new ProductHelper();
+            loggerMock = new Mock<ILogger<ProductHelper>>();
+            _productHelper = new ProductHelper(loggerMock.Object, _context);
         }
 
         [Test]
@@ -27,7 +31,7 @@ namespace Rental.Test.UnitTest
             var category = CategoryTestHelper.CreateNewCategory(_context, "Electronics");
 
             //ACT
-            await _productHelper.AddProductAsync(_context, "Iphone 14", 1, customer, category, "New Iphone model");
+            await _productHelper.AddProductAsync("Iphone 14", 1, customer, category, "New Iphone model");
 
             //ASSERT
             var product = ProductTestHelper.GetCustomerProduct(_context, customer);
@@ -63,7 +67,7 @@ namespace Rental.Test.UnitTest
             var existingProduct = ProductTestHelper.AddProduct(_context, "Bike", 1, category, customer);
 
             //ACT
-            var product = await _productHelper.GetProductAsync(_context, existingProduct.ProductId);
+            var product = await _productHelper.GetProductAsync(existingProduct.ProductId);
 
             //ASSERT
             product.Should().NotBeNull();
@@ -81,7 +85,7 @@ namespace Rental.Test.UnitTest
             var existingProduct = ProductTestHelper.AddProduct(_context, "Bike", 1, category, customer);
 
             //ACT
-            var exception = Assert.ThrowsAsync<CoreException>(() => _productHelper.GetProductAsync(_context, "wrongProductId"));
+            var exception = Assert.ThrowsAsync<CoreException>(() => _productHelper.GetProductAsync("wrongProductId"));
 
             //ASSERT
             exception.Code.Should().Be(ErrorCode.ProductNotExist);
