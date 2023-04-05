@@ -4,6 +4,7 @@ using Rental.Core.Enum;
 using Rental.Core.Validation;
 using Rental.Infrastructure.Command;
 using Rental.Infrastructure.EF;
+using Rental.Infrastructure.Exceptions;
 using Rental.Infrastructure.Helpers;
 using Rental.Infrastructure.Wrapper;
 using System;
@@ -43,7 +44,8 @@ namespace Rental.Infrastructure.Handlers.Account.Command.LoginSession
                 _logger.LogInformation("Starting login process...");
 
                 var session = await _sessionHelper.GetSessionByIdAsync(_httpContextWrapper.GetValueFromRequestHeader("SessionId"));
-                _sessionHelper.ValidateSessionStatus(session);
+                if (_sessionHelper.SessionExpired(session))
+                    throw new CoreException(ErrorCode.SessionExpired, $"Session {session.SessionIdentifier} expired.");
 
                 var customer = await _customerHelper.GetCustomerAsync(command.Request.Username);
                 _customerHelper.ValidateCustomerAccount(customer);
