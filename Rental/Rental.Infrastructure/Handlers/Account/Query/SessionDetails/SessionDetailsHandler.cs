@@ -36,7 +36,7 @@ namespace Rental.Infrastructure.Handlers.Account.Query.SessionDetails
             {
                 SessionId = session.SessionIdentifier,
                 SessionStatus = statusSession.ToString(),
-                ValidTo = session.LastAccessDate.AddMinutes(5) // add parameter to dictionary and replace 
+                ValidTo = session.LastAccessDate.AddMinutes(25) // add parameter to dictionary and replace 
             };
         }
     }

@@ -85,7 +85,7 @@ namespace Rental.Infrastructure.Helpers
 
             _logger.LogInformation($"Was remove {sessionList.Count} old session for customer {username}.");
 
-            _context.SaveChangesAsync();
+            _context.SaveChanges();
         }
 
         public async Task ChangeSessionStatus([NotNull] string sessionId, [NotNull] SessionState sessionState)
@@ -113,7 +113,7 @@ namespace Rental.Infrastructure.Helpers
 
         public bool SessionExpired([NotNull] Session session)
         {
-            return session.LastAccessDate.AddMinutes(5) < DateTime.UtcNow;
+            return session.LastAccessDate.AddMinutes(25) < DateTime.UtcNow;
         }
 
         public void ValidateSessionStatus([NotNull] Session session)
