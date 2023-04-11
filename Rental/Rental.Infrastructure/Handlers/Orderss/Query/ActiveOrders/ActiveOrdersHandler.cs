@@ -15,6 +15,7 @@ namespace Rental.Infrastructure.Handlers.Orderss.Query.ActiveOrders
         private readonly ILogger<ActiveOrdersHandler> _logger;
         private readonly IHttpContextWrapper _httpContextWrapper;
         private readonly ISessionHelper _sessionHelper;
+        private readonly ICustomerHelper _customerHelper;
         private readonly IOrderHelper _orderHelper;
 
         public ActiveOrdersHandler(ILogger<ActiveOrdersHandler> logger, IHttpContextWrapper httpContextWrapper, ISessionHelper sessionHelper, 
@@ -23,6 +24,7 @@ namespace Rental.Infrastructure.Handlers.Orderss.Query.ActiveOrders
             _logger = logger;
             _httpContextWrapper = httpContextWrapper;
             _sessionHelper = sessionHelper;
+            _customerHelper = customerHelper;
             _orderHelper = orderHelper;
         }
 
@@ -34,8 +36,11 @@ namespace Rental.Infrastructure.Handlers.Orderss.Query.ActiveOrders
             var session = await _sessionHelper.GetSessionByIdAsync(sessionId);
 
             _sessionHelper.ValidateSessionStatus(session);
+            var customer = await _customerHelper.GetCustomerAsync(query.Username);
 
-            var orders = _orderHelper.GetActiveOrders(query.Username);
+            var orders = _orderHelper.GetActiveOrders(customer.CustomerId.ToString());
+
+            _logger.LogInformation($"Was found {orders.Count} active orders.");
 
             if (orders.Count == 0)
                 throw new CoreException(ErrorCode.ClientHasNoActiveOrders, "No active orders");

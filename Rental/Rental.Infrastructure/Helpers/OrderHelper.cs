@@ -46,7 +46,7 @@ namespace Rental.Infrastructure.Helpers
             var activeOrders = from order in _context.Orders
                                join product in _context.Products
                                on order.ProductId equals product.ProductId
-                               where order.CustomerId == custmerId
+                               where order.CustomerId == custmerId && order.OrderStatus == OrderStatus.Accepted
                                select new
                                {
                                    OrderId = order.OrderId,

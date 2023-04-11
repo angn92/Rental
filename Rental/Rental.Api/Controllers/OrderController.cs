@@ -40,10 +40,9 @@ namespace Rental.Api.Controllers
         /// Return all current active orders for given user
         /// </summary>
         /// <param name="username"></param>
-        /// <param name="sessionId"></param>
         /// <returns></returns>
-        [HttpGet("activeOrders")]
-        public async Task<ActiveOrdersResponse> GetAllActiveOrders([FromBody][NotNull] string username)
+        [HttpGet("activeOrders/{username}")]
+        public async Task<ActiveOrdersResponse> GetAllActiveOrders([FromRoute][NotNull] string username)
         {
             var query = new ActiveOrdersRequest
             {
