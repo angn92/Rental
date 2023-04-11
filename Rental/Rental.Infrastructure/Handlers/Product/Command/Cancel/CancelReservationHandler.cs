@@ -43,7 +43,8 @@ namespace Rental.Infrastructure.Handlers.Product.Command.Cancel
             try 
             {
                 var sessionId = _httpContextWrapper.GetValueFromRequestHeader("SessionId");
-                var session = _sessionHelper.GetSessionByIdAsync(sessionId);
+                var session = await _sessionHelper.GetSessionByIdAsync(sessionId);
+                _sessionHelper.CheckSessionStatus(session);
 
                 var product = await _productHelper.GetProductAsync(command.ProductId);
 
@@ -58,6 +59,8 @@ namespace Rental.Infrastructure.Handlers.Product.Command.Cancel
                 order.ChangeOrderStatus(OrderStatus.Cancelled);
 
                 _logger.LogInformation($"Order {order.OrderId} was cancelled.");
+
+                _productHelper.CanceReservationProduct(product);
 
                 await _context.SaveChangesAsync(cancellationToken);
             }

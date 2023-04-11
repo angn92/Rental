@@ -48,7 +48,7 @@ namespace Rental.Infrastructure.Handlers.Product.Command.NewProduct
 
             await _productHelper.CheckIfGivenProductExistAsync(requestPart.Name, customer);
 
-            var category = await _categoryHelper.GetCategory(requestPart.Name);
+            var category = await _categoryHelper.GetCategory(requestPart.CategoryName);
 
             await _productHelper.AddProductAsync(requestPart.Name, requestPart.Amount, customer, category, requestPart.Description);
 

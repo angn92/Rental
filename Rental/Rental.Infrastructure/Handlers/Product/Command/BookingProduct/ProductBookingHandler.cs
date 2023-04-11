@@ -59,7 +59,8 @@ namespace Rental.Infrastructure.Handlers.Product.Command.BookingProduct
                 Amount = request.Amount,
                 ValidFrom = request.From,
                 ValidTo = request.To,
-                OrderHash = Guid.NewGuid().ToString()
+                OrderHash = Guid.NewGuid().ToString(),
+                OrderStatus = OrderStatus.Accepted
             };
 
             await _context.AddAsync(order, cancellationToken);

@@ -82,6 +82,10 @@ namespace Rental.Infrastructure.IoC
             builder.RegisterType<HttpContextAccessor>()
                 .As<IHttpContextAccessor>()
                 .SingleInstance();
+
+            builder.RegisterType<OrderHelper>()
+                .As<IOrderHelper>()
+                .InstancePerLifetimeScope();
         }
     }
 }

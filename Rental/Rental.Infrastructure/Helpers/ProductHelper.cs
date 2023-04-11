@@ -12,14 +12,11 @@ namespace Rental.Infrastructure.Helpers
 {
     public interface IProductHelper
     {
-        Task AddProductAsync([NotNull] string name, [NotNull] int quantity, [NotNull] Customer customer,
-            [NotNull] Category category, [CanBeNull] string description);
-
+        Task AddProductAsync([NotNull] string name, [NotNull] int quantity, [NotNull] Customer customer, [NotNull] Category category, [CanBeNull] string description);
         Task CheckIfGivenProductExistAsync([NotNull] string name, [NotNull] Customer customer);
-
         void MakeReservationProduct([NotNull] Product product);
-
         Task<Product> GetProductAsync([NotNull] string productId);
+        void CanceReservationProduct([NotNull] Product product);
     }
 
     public class ProductHelper : IProductHelper
@@ -44,7 +41,7 @@ namespace Rental.Infrastructure.Helpers
 
         public async Task CheckIfGivenProductExistAsync([NotNull] string name, [NotNull] Customer customer)
         {
-            var productName = await _context.Products.SingleOrDefaultAsync(x => x.Customer.Username == customer.Username &&
+            var productName = await _context.Products.SingleOrDefaultAsync(x => x.Name == name && x.Customer.Username == customer.Username &&
                                        x.Status != ProductStatus.Inaccessible);
 
             if (productName != null)
@@ -69,6 +66,12 @@ namespace Rental.Infrastructure.Helpers
                 throw new CoreException(ErrorCode.ProductNotExist, $"Product with id {productId} does not exist.");
 
             return product;
+        }
+
+        public void CanceReservationProduct([NotNull] Product product)
+        {
+            product.SetAvailableStatus();
+            product.QuantityAvailable += 1;
         }
     }
 }

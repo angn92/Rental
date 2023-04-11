@@ -30,7 +30,7 @@ namespace Rental.Infrastructure.Helpers
 
         public async Task<Order> GetAcceptedOrderForGivenProduct([NotNull] string productId, [NotNull] string borrower)
         {
-            var order = await _context.Orders.SingleOrDefaultAsync(x => x.ProductId == productId && x.CustomerId == borrower);
+            var order = await _context.Orders.SingleOrDefaultAsync(x => x.ProductId == productId && x.CustomerId == borrower && x.OrderStatus == OrderStatus.Accepted);
 
             if (order is null)
                 throw new CoreException(ErrorCode.OrderNotExist, $"Order with number {order.OrderId} does not exist.");
