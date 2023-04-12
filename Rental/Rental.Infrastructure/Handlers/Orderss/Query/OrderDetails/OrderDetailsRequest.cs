@@ -5,10 +5,7 @@ namespace Rental.Infrastructure.Handlers.Orders.Query.OrderDetails
 {
     public class OrderDetailsRequest : IQuery
     {
-        [JsonProperty("orderId", Required = Required.Always)]
+        [JsonProperty("OrderId", Required = Required.Always)]
         public string OrderId { get; set; }
-
-        [JsonProperty("sessionId", Required = Required.Always)]
-        public string SessionId { get; set; }
     }
 }

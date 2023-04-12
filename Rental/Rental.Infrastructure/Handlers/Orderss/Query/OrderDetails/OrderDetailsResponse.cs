@@ -5,7 +5,7 @@ namespace Rental.Infrastructure.Handlers.Orders.Query.OrderDetails
 {
     public class OrderDetailsResponse
     {
-        [JsonProperty("orderDetailDto")]
+        [JsonProperty("OrderDetails")]
         public OrderDetailDto OrderDetailDto { get; set; }
     }
 }

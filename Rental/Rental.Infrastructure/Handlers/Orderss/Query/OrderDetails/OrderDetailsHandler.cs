@@ -1,9 +1,8 @@
 ﻿using Rental.Core.Validation;
 using Rental.Infrastructure.DTO;
-using Rental.Infrastructure.EF;
-using Rental.Infrastructure.Exceptions;
 using Rental.Infrastructure.Helpers;
 using Rental.Infrastructure.Query;
+using Rental.Infrastructure.Wrapper;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -11,42 +10,31 @@ namespace Rental.Infrastructure.Handlers.Orders.Query.OrderDetails
 {
     public class OrderDetailsHandler : IQueryHandler<OrderDetailsRequest, OrderDetailsResponse>
     {
-        private readonly ApplicationDbContext context;
-        private readonly ISessionHelper sessionHelper;
-        private readonly IOrderHelper orderHelper;
-        private readonly ProductHelper productHelper;
+        private readonly IHttpContextWrapper _httpContextWrapper;
+        private readonly ISessionHelper _sessionHelper;
+        private readonly IOrderHelper _orderHelper;
+        private readonly IProductHelper _productHelper;
 
-        public OrderDetailsHandler(ApplicationDbContext context, ISessionHelper sessionHelper, IOrderHelper orderHelper,
-                                    ProductHelper productHelper)
+        public OrderDetailsHandler(IHttpContextWrapper httpContextWrapper, ISessionHelper sessionHelper, IOrderHelper orderHelper, IProductHelper productHelper)
         {
-            this.context = context;
-            this.sessionHelper = sessionHelper;
-            this.orderHelper = orderHelper;
-            this.productHelper = productHelper;
+            _httpContextWrapper = httpContextWrapper;
+            _sessionHelper = sessionHelper;
+            _orderHelper = orderHelper;
+            _productHelper = productHelper;
         }
 
         public async ValueTask<OrderDetailsResponse> HandleAsync(OrderDetailsRequest query, CancellationToken cancellationToken = default)
         {
             ValidationParameter.FailIfNullOrEmpty(query.OrderId);
-            ValidationParameter.FailIfNullOrEmpty(query.SessionId.ToString());
 
-            //Get session by id
-            var session = await sessionHelper.GetSessionByIdAsync(query.SessionId);
+            var sessionId = _httpContextWrapper.GetValueFromRequestHeader("SessionId");
 
-            var isExpired = sessionHelper.SessionExpired(session);
+            var session = await _sessionHelper.GetSessionByIdAsync(sessionId);
+            _sessionHelper.ValidateSessionStatus(session);
+            
+            var order = await _orderHelper.GetOrderAsync(query.OrderId);
 
-            if (isExpired)
-                throw new CoreException(ErrorCode.SessionExpired, $"Given session {session.SessionIdentifier} expired.");
-
-            //Check session status, we can get order only when session is active
-            sessionHelper.ValidateSessionStatus(session);
-
-            var order = await orderHelper.GetOrderByIdAsync(query.OrderId);
-
-            if (order == null)
-                throw new CoreException(ErrorCode.OrderNotExist, "Order not exist.");
-
-            var product = await productHelper.GetProductAsync(order.ProductId);
+            var product = await _productHelper.GetProductAsync(order.ProductId);
 
             var response = new OrderDetailsResponse
             {

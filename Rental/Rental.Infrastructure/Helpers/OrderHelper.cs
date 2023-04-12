@@ -14,7 +14,7 @@ namespace Rental.Infrastructure.Helpers
     public interface IOrderHelper
     {
         Task<Order> GetAcceptedOrderForGivenProduct([NotNull] string productId, [NotNull] string borrower);
-        Task<Order> GetOrderByIdAsync([NotNull] string orderId);
+        Task<Order> GetOrderAsync([NotNull] string orderId);
         List<OrderDetailDto> GetActiveOrders([NotNull] string custmerId);
         List<Order> GetFinishedOrderForCustomer([NotNull] string customer);
     }
@@ -81,11 +81,14 @@ namespace Rental.Infrastructure.Helpers
             return _context.Orders.Where(x => x.CustomerId == username && x.OrderStatus == OrderStatus.Finished).ToList();
         }
 
-        public async Task<Order> GetOrderByIdAsync([NotNull] string orderId)
+        public async Task<Order> GetOrderAsync([NotNull] string orderId)
         {
-            return await _context.Orders.SingleOrDefaultAsync(x => x.OrderId == orderId);
+            var order = await _context.Orders.SingleOrDefaultAsync(x => x.OrderId == orderId);
+
+            if (order == null)
+                throw new CoreException(ErrorCode.OrderNotExist, "Order not exist.");
+
+            return order;
         }
-
-
     }
 }

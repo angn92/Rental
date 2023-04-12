@@ -22,15 +22,13 @@ namespace Rental.Api.Controllers
         /// Get full information about order 
         /// </summary>
         /// <param name="id"></param>
-        /// <param name="sessionId"></param>
         /// <returns></returns>
         [HttpGet("detail/{id}")]
-        public async Task<OrderDetailsResponse> DisplayOrderDetails([FromRoute][NotNull] string id, [FromBody] string sessionId)
+        public async Task<OrderDetailsResponse> DisplayOrderDetails([FromRoute][NotNull] string id)
         {
             var query = new OrderDetailsRequest
             {
-                OrderId = id,
-                SessionId = sessionId
+                OrderId = id
             };
 
             return await queryDispatcher.DispatchAsync<OrderDetailsRequest, OrderDetailsResponse>(query);
