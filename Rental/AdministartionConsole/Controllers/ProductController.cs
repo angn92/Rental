@@ -16,11 +16,6 @@ namespace AdministartionConsole.Controllers
             return View();
         }
 
-        public IActionResult Create()
-        {
-            return View();
-        }
-
         public IActionResult Get()
         {
             return View();
