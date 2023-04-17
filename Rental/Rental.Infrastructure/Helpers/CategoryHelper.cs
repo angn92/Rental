@@ -4,6 +4,8 @@ using Rental.Core.Domain;
 using Rental.Infrastructure.EF;
 using Rental.Infrastructure.Exceptions;
 using Rental.Infrastructure.Services;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Rental.Infrastructure.Helpers
@@ -11,6 +13,7 @@ namespace Rental.Infrastructure.Helpers
     public interface ICategoryHelper : IService
     {
         Task<Category> GetCategory([NotNull] string name);
+        Task<List<Category>> GetAllCategories();
     }
 
     public class CategoryHelper : ICategoryHelper
@@ -20,6 +23,16 @@ namespace Rental.Infrastructure.Helpers
         public CategoryHelper(ApplicationDbContext context)
         {
             _context = context;
+        }
+
+        public async Task<List<Category>> GetAllCategories()
+        {
+            var categories = await _context.Categories.ToListAsync();
+
+            //if (!categories.Any())
+            //    throw new CoreException(ErrorCode.ListOfCategoriesIsEmpty, "There is no any categories in system.");
+
+            return categories;
         }
 
         public async Task<Category> GetCategory([NotNull] string name)

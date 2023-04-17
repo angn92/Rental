@@ -50,6 +50,7 @@
 
         #region Category error
         public static string CategoryNotExist => "category_not_exist";
+        public static string ListOfCategoriesIsEmpty => "list_of_categories_is_empty";
         #endregion
     }
 }
