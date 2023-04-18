@@ -1,4 +1,4 @@
-﻿@model AdministartionConsole.Models.Dto.CategoryDto
+﻿@model IEnumerable<AdministartionConsole.Models.Dto.CategoryDto>
 @{
     ViewData["Title"] = "Category lists";
 }
@@ -8,11 +8,22 @@
 <div>
     <hr />
     <dl class="row">
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Name)
-        </dd>
+        <table class="table">
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Name)
+                </th>
+            </tr>
+
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </td>
+                </tr>
+            }
+
+        </table>
     </dl>
 </div>

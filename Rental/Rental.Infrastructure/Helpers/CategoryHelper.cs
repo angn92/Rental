@@ -29,8 +29,8 @@ namespace Rental.Infrastructure.Helpers
         {
             var categories = await _context.Categories.ToListAsync();
 
-            //if (!categories.Any())
-            //    throw new CoreException(ErrorCode.ListOfCategoriesIsEmpty, "There is no any categories in system.");
+            if (!categories.Any())
+                throw new CoreException(ErrorCode.ListOfCategoriesIsEmpty, "There is no any categories in system.");
 
             return categories;
         }
