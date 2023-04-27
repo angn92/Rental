@@ -14,6 +14,7 @@ namespace Rental.Infrastructure.Helpers
     {
         Task<Category> GetCategory([NotNull] string name);
         Task<List<Category>> GetAllCategories();
+
     }
 
     public class CategoryHelper : ICategoryHelper
@@ -38,9 +39,6 @@ namespace Rental.Infrastructure.Helpers
         public async Task<Category> GetCategory([NotNull] string name)
         {
             var category = await _context.Categories.SingleOrDefaultAsync(x => x.Name == name);
-
-            if (category == null)
-                throw new CoreException(ErrorCode.CategoryNotExist, $"Category {name} does not exist.");
 
             return category;
         }

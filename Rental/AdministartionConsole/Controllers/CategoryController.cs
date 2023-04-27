@@ -1,5 +1,7 @@
 ﻿using AdministartionConsole.Helpers;
+using JetBrains.Annotations;
 using Microsoft.AspNetCore.Mvc;
+using Rental.Infrastructure.Exceptions;
 using Rental.Infrastructure.Helpers;
 
 namespace AdministartionConsole.Controllers
@@ -36,9 +38,30 @@ namespace AdministartionConsole.Controllers
             }
         }
 
+        [HttpGet]
         public IActionResult Create()
         {
             return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create(string name)
+        {
+            try
+            {
+                var category = _categoryHelper.GetCategory(name);
+
+                if (category != null)
+                    throw new CoreException(ErrorCode.CategoryExist, $"You can not create category {name}, because exist in system.");
+
+                return View();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return View("ErrorCreate");
+            }
         }
 
         public IActionResult Get()

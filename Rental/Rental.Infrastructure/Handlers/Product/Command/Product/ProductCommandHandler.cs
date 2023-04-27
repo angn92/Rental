@@ -7,6 +7,7 @@ using Rental.Infrastructure.Wrapper;
 using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace Rental.Infrastructure.Handlers.Product.Command.NewProduct
 {
@@ -49,6 +50,9 @@ namespace Rental.Infrastructure.Handlers.Product.Command.NewProduct
             await _productHelper.CheckIfGivenProductExistAsync(requestPart.Name, customer);
 
             var category = await _categoryHelper.GetCategory(requestPart.CategoryName);
+
+            if (category == null)
+                throw new CoreException(ErrorCode.CategoryNotExist, $"Category {requestPart.CategoryName} does not exist.");
 
             await _productHelper.AddProductAsync(requestPart.Name, requestPart.Amount, customer, category, requestPart.Description);
 
