@@ -50,12 +50,14 @@ namespace AdministartionConsole.Controllers
         {
             try
             {
-                var category = _categoryHelper.GetCategory(name);
+                var category = await _categoryHelper.GetCategory(name);
 
                 if (category != null)
                     throw new CoreException(ErrorCode.CategoryExist, $"You can not create category {name}, because exist in system.");
 
-                return View();
+                await _categoryHelper.Create(name);
+
+                return View("CreatedCategory");
             }
             catch (Exception ex)
             {

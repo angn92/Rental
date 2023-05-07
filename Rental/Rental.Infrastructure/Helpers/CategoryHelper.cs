@@ -14,7 +14,7 @@ namespace Rental.Infrastructure.Helpers
     {
         Task<Category> GetCategory([NotNull] string name);
         Task<List<Category>> GetAllCategories();
-
+        Task<Category> Create([NotNull] string name);
     }
 
     public class CategoryHelper : ICategoryHelper
@@ -24,6 +24,15 @@ namespace Rental.Infrastructure.Helpers
         public CategoryHelper(ApplicationDbContext context)
         {
             _context = context;
+        }
+
+        public async Task<Category> Create([NotNull] string name)
+        {
+            var category = new Category(name);
+            _context.Categories.Add(category);
+            await _context.SaveChangesAsync();
+
+            return category;
         }
 
         public async Task<List<Category>> GetAllCategories()
