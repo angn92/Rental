@@ -9,6 +9,7 @@ namespace AdministartionConsole.IoC
         {
             services.AddScoped<ICategoryHelper, CategoryHelper>();
             services.AddScoped<ICategoryDtoHelper, CategoryDtoHelper>();
+            services.AddScoped<IDictionaryDtoHelper, DictionaryDtoHelper>();
 
             return services;
         }
