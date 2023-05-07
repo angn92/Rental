@@ -1,4 +1,5 @@
 ﻿using AdministartionConsole.Helpers;
+using AdministartionConsole.Models.Dto;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AdministartionConsole.Controllers
@@ -20,10 +21,17 @@ namespace AdministartionConsole.Controllers
             return View(dictionary);
         }
 
-        // POST /Dictionary/Create
-        public string Create()
+        [HttpGet]
+        public IActionResult Create()
         {
-            return "test";
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult Create(DictionaryDto dictionaryDto)
+        {
+            _dictionaryDtoHelper.CreateDictionary(dictionaryDto);
+            return View();
         }
     }
 }

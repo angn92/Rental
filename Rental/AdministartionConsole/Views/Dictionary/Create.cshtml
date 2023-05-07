@@ -1,0 +1,16 @@
+﻿@model AdministartionConsole.Models.Dto.DictionaryDto;
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h2>Enter name and value for new dictionary</h2>
+
+@using (Html.BeginForm("Create", "Dictionary", FormMethod.Post)){
+    @Html.Label("Name:") <br />
+    @Html.TextBoxFor(x => x.Name) <br />
+    @Html.Label("Value:")<br />
+    @Html.TextBoxFor(x => x.Value)<br />
+
+    <input type="submit" value="Add" />
+}

@@ -8,6 +8,7 @@
         public static string EmailInUse => "email_in_use";
         public static string InvalidEmail => "invalid_email";
         public static string InvalidPhoneNumber => "invalid_phone_number";
+        public static string InvlaidInputParameters => "invalid_input_parameters";
         #endregion
 
 
@@ -53,5 +54,7 @@
         public static string ListOfCategoriesIsEmpty => "list_of_categories_is_empty";
         public static string CategoryExist => "category_exist";
         #endregion
+
+      
     }
 }

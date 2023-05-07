@@ -1,4 +1,5 @@
-﻿using Rental.Core.Base;
+﻿using JetBrains.Annotations;
+using Rental.Core.Base;
 
 namespace Rental.Core.Domain
 {
@@ -18,5 +19,15 @@ namespace Rental.Core.Domain
         /// Dictioanry value
         /// </summary>
         public virtual string Value { get; set; }
+
+        public Dictionary()
+        {
+        }
+
+        public Dictionary([NotNull] string name, [NotNull] string value)
+        {
+            Name = name;
+            Value = value;
+        }
     }
 }
