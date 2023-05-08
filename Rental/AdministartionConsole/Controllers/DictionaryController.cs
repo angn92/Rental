@@ -30,8 +30,16 @@ namespace AdministartionConsole.Controllers
         [HttpPost]
         public IActionResult Create(DictionaryDto dictionaryDto)
         {
-            _dictionaryDtoHelper.CreateDictionary(dictionaryDto);
-            return View();
+            try
+            {
+                _dictionaryDtoHelper.CreateDictionary(dictionaryDto);
+
+                return View("Ok", dictionaryDto);
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
         }
     }
 }
