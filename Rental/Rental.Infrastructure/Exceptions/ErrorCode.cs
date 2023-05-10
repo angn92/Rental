@@ -1,4 +1,6 @@
-﻿namespace Rental.Infrastructure.Exceptions
+﻿using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+
+namespace Rental.Infrastructure.Exceptions
 {
     public  class ErrorCode
     {
@@ -55,6 +57,8 @@
         public static string CategoryExist => "category_exist";
         #endregion
 
-      
+        #region Dictionary error
+        public static string DictionaryNotFound => "dictionary_not_found";
+        #endregion
     }
 }

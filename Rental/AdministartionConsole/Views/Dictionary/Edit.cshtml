@@ -1,0 +1,32 @@
+﻿@model AdministartionConsole.Models.Dto.DictionaryDto
+
+@{
+    ViewData["Title"] = "Editing dictionary";
+}
+
+<style>
+    label{
+        color: blue;
+    }
+    texBox{
+        width: 50%;
+        margin: 8px;
+        padding: 10px;
+        border: solid;
+    }
+</style>
+
+<h2>Edit: @Model.Name</h2>
+
+<div class="">
+    @using (Html.BeginForm("Edit", "Dictionary", FormMethod.Post))
+    {
+        @Html.LabelFor(x => x.Name, new {@class="label"})
+        @Html.TextBoxFor(x => x.Name, new {@class="textBox"})
+
+        @Html.LabelFor(x => x.Value, new {@class="label"})
+        @Html.TextBoxFor(x => x.Value, new {@class="textBox"})
+
+        <input type="submit" value="Change" />
+    }
+</div>

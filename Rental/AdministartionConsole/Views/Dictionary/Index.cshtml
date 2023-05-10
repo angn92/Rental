@@ -62,6 +62,7 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Value)
             </td>
+            <td>@Html.ActionLink("Edit", "Edit", "Dictionary", new { dictionaryName = item.Name })</td>
         </tr>
     }
 </table>

@@ -11,6 +11,7 @@ namespace AdministartionConsole.Helpers
     {
         Task<List<DictionaryDto>> GetAll();
         void CreateDictionary([NotNull] DictionaryDto dictionary);
+        Task<DictionaryDto> FindByName([NotNull] string name);
     }
 
     public class DictionaryDtoHelper : IDictionaryDtoHelper
@@ -35,6 +36,22 @@ namespace AdministartionConsole.Helpers
 
             _context.Add(dictionary);
             _context.SaveChanges();
+        }
+
+        public async Task<DictionaryDto> FindByName([NotNull] string name)
+        {
+            var dictionary = await _context.Dictionaries.FirstOrDefaultAsync(x => x.Name == name);
+
+            if (dictionary == null)
+                throw new CoreException(ErrorCode.DictionaryNotFound, $"Dictionary {name} was not found.");
+
+            var dictionaryDto = new DictionaryDto
+            {
+                Name = dictionary.Name,
+                Value = dictionary.Value
+            };
+
+            return dictionaryDto;
         }
 
         public async Task<List<DictionaryDto>> GetAll()
