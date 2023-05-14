@@ -84,5 +84,22 @@ namespace Rental.Infrastructure.EF
 
             return base.SaveChangesAsync(cancellationToken);
         }
+
+        public override int SaveChanges()
+        {
+            var entries = ChangeTracker.Entries().Where(x => x.State == EntityState.Added || x.State == EntityState.Modified);
+
+            foreach (var item in entries)
+            {
+                item.Property("UpdatedAt").CurrentValue = DateTime.UtcNow;
+
+                if (item.State == EntityState.Added)
+                {
+                    item.Property("CreatedAt").CurrentValue = DateTime.UtcNow;
+                }
+            }
+
+            return base.SaveChanges();
+        }
     }
 }

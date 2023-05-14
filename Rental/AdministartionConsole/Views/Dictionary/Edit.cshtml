@@ -5,20 +5,35 @@
 }
 
 <style>
-    label{
-        color: blue;
+    input[type=submit] {
+        background-color: #04AA6D;
+        color: white;
+        padding: 12px 20px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        float: left;
     }
-    texBox{
-        width: 50%;
-        margin: 8px;
-        padding: 10px;
-        border: solid;
+
+    label {
+        padding: 12px 12px 12px 0;
+        display: inline-block;
+    }
+
+    textBox{
+        width: 100%;
+        padding: 12px 20px;
+        margin: 8px 0;
+        display: inline-block;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
     }
 </style>
 
 <h2>Edit: @Model.Name</h2>
-
-<div class="">
+    
+<div class="container">
     @using (Html.BeginForm("Edit", "Dictionary", FormMethod.Post))
     {
         @Html.LabelFor(x => x.Name, new {@class="label"})
@@ -26,7 +41,7 @@
 
         @Html.LabelFor(x => x.Value, new {@class="label"})
         @Html.TextBoxFor(x => x.Value, new {@class="textBox"})
-
+        
         <input type="submit" value="Change" />
     }
 </div>

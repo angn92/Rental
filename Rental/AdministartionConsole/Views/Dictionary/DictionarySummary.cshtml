@@ -1,0 +1,13 @@
+﻿@model Rental.Core.Domain.Dictionary;
+
+@{
+    ViewData["Title"] = "Summary";
+}
+
+<h1>Summary new added dictioanry</h1>
+<details>
+    <summary>@Model.Name</summary>
+    <p>@Model.Value</p>
+</details>
+
+<input type="button" value="Back" onclick="location.href='@Url.Action("Index", "Dictionary")'" />

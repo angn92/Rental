@@ -1,5 +1,6 @@
 ﻿using AdministartionConsole.Helpers;
 using AdministartionConsole.Models.Dto;
+using JetBrains.Annotations;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AdministartionConsole.Controllers
@@ -15,7 +16,10 @@ namespace AdministartionConsole.Controllers
             _logger = logger;
         }
 
-        // Get
+        /// <summary>
+        /// https://localhost:port/Dictionary/Index
+        /// </summary>
+        /// <returns></returns>
         public async Task<IActionResult> Index()
         {
             var dictionary = await _dictionaryDtoHelper.GetAll();
@@ -40,12 +44,18 @@ namespace AdministartionConsole.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex.Message);
                 throw;
             }
         }
 
+        /// <summary>
+        /// https://localhost:port/Dictionary/Edit?dictionaryName=paramName
+        /// </summary>
+        /// <param name="dictionaryName"></param>
+        /// <returns></returns>
         [HttpGet]
-        public async Task<IActionResult> Edit(string dictionaryName)
+        public async Task<IActionResult> Edit([NotNull] string dictionaryName)
         {
             try
             {
@@ -59,6 +69,26 @@ namespace AdministartionConsole.Controllers
             catch (Exception ex)
             {
                 _logger.LogError("Searching dictionary not found", ex.Message);
+                throw;
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit([NotNull] DictionaryDto dictionary)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    var dictionaryData = await _dictionaryDtoHelper.ChangeDictionary(dictionary);
+                    return View("DictionarySummary", dictionaryData);
+                }
+
+                return View();
+            }
+            catch (Exception)
+            {
+
                 throw;
             }
         }
