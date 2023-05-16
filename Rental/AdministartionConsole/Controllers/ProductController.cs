@@ -11,8 +11,10 @@ namespace AdministartionConsole.Controllers
             _logger = logger;
         }
 
-        public IActionResult Index()
+        [HttpGet]
+        public async Task<IActionResult> Product()
         {
+
             return View();
         }
 
