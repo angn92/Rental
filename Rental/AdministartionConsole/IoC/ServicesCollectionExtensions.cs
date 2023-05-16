@@ -10,8 +10,8 @@ namespace AdministartionConsole.IoC
             services.AddScoped<ICategoryHelper, CategoryHelper>();
             services.AddScoped<ICategoryDtoHelper, CategoryDtoHelper>();
             services.AddScoped<IDictionaryDtoHelper, DictionaryDtoHelper>();
-            services.AddScoped<ICustomerHelper, CustomerHelper>();
-            services.AddScoped<IEmailHelper, EmailHelper>();
+            services.AddScoped<ICustomerDtoHelper, CustomerDtoHelper>();
+           
 
             return services;
         }

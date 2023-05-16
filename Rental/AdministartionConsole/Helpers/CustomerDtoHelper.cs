@@ -30,7 +30,7 @@ namespace AdministartionConsole.Helpers
                     LastName = c.LastName,
                     AccountStatus = c.Status.ToString(),
                     PasswordStatus = p.Status.ToString(),
-                    CreatedDate = c.CreatedAt.ToString()
+                    CreatedDate = c.CreatedAt.ToString("G")
                 }).ToListAsync();
         }
     }

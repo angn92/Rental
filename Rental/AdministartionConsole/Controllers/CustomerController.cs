@@ -11,7 +11,7 @@ namespace AdministartionConsole.Controllers
         {
             _customerDtoHelper = customerDtoHelper;
         }
-        [HttpGet]
+
         public async Task<IActionResult> Index()
         {
             var customerModel = await _customerDtoHelper.GetCustomerViews();
