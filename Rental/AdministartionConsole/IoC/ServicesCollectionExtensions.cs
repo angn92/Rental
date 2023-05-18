@@ -11,6 +11,7 @@ namespace AdministartionConsole.IoC
             services.AddScoped<ICategoryDtoHelper, CategoryDtoHelper>();
             services.AddScoped<IDictionaryDtoHelper, DictionaryDtoHelper>();
             services.AddScoped<ICustomerDtoHelper, CustomerDtoHelper>();
+            services.AddScoped<IProductDtoHelper, ProductDtoHelper>();
            
 
             return services;

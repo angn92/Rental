@@ -1,5 +1,39 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model IEnumerable<AdministartionConsole.Models.ViewModel.ProductViewModel>
 @{
+    ViewData["Title"] = "Product";
 }
+
+<div>
+    @using (@Html.BeginForm("Index", "Product", FormMethod.Get))
+    {
+        <p>
+            Find by name: @Html.TextBox("searching")
+            <input type="submit" value="Search" />
+        </p>
+    }
+</div>
+<h2>Current Product List:</h2>
+
+<div>
+    <table>
+        <tr>
+            <th>@Html.DisplayNameFor(x => x.Name)</th>
+            <th>@Html.DisplayNameFor(x => x.Amount)</th>
+            <th>@Html.DisplayNameFor(x => x.AvailableAmount)</th>
+            <th>@Html.DisplayNameFor(x => x.Status)</th>
+            <th>@Html.DisplayNameFor(x => x.Customer)</th>
+            <th>@Html.DisplayNameFor(x => x.Category)</th>
+        </tr>
+
+        @foreach(var item in Model){
+            <tr>
+                <td>@Html.DisplayFor(modelItem => item.Name)</td>
+                <td>@Html.DisplayFor(modelItem => item.Amount)</td>
+                <td>@Html.DisplayFor(modelItem => item.AvailableAmount)</td>
+                <td>@Html.DisplayFor(modelItem => item.Status)</td>
+                <td>@Html.DisplayFor(modelItem => item.Customer)</td>
+                <td>@Html.DisplayFor(modelItem => item.Category)</td>
+            </tr>
+        }
+    </table>
+</div>

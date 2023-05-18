@@ -42,6 +42,7 @@ namespace Rental.Infrastructure.Exceptions
         public static string ProductNotExist => "product_not_exist";
         public static string ProductNotAvailable => "product_not_available";
         public static string ProductIsNotReserved => "product_is_not_reserved";
+        public static string NoProducts => "no_any_products";
         #endregion
 
 
