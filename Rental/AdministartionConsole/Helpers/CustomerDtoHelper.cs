@@ -28,6 +28,7 @@ namespace AdministartionConsole.Helpers
                 {
                     FirstName = c.FirstName,
                     LastName = c.LastName,
+                    Username = c.Username,
                     AccountStatus = c.Status.ToString(),
                     PasswordStatus = p.Status.ToString(),
                     CreatedDate = c.CreatedAt.ToString("G")

@@ -25,7 +25,8 @@
             <th>@Html.DisplayNameFor(x => x.Category)</th>
         </tr>
 
-        @foreach(var item in Model){
+        @foreach(var item in Model)
+        {
             <tr>
                 <td>@Html.DisplayFor(modelItem => item.Name)</td>
                 <td>@Html.DisplayFor(modelItem => item.Amount)</td>
