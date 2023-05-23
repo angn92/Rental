@@ -13,7 +13,6 @@ namespace AdministartionConsole.IoC
             services.AddScoped<ICustomerDtoHelper, CustomerDtoHelper>();
             services.AddScoped<IProductDtoHelper, ProductDtoHelper>();
            
-
             return services;
         }
     }

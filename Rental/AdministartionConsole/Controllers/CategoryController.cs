@@ -1,5 +1,4 @@
 ﻿using AdministartionConsole.Helpers;
-using JetBrains.Annotations;
 using Microsoft.AspNetCore.Mvc;
 using Rental.Infrastructure.Exceptions;
 using Rental.Infrastructure.Helpers;
@@ -19,6 +18,7 @@ namespace AdministartionConsole.Controllers
             _categoryDtoHelper = categoryDtoHelper;
         }
 
+        [HttpGet]
         public async Task<IActionResult> Index()
         {
             try

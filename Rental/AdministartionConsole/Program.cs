@@ -1,19 +1,18 @@
 using AdministartionConsole.IoC;
-using Autofac;
-using Autofac.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
 using Rental.Infrastructure.EF;
-using Rental.Infrastructure.Helpers;
-using Rental.Infrastructure.IoC;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
-//Get connection string
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseNpgsql(connectionString));
+//Connection string
+
+if(builder.Configuration.GetSection("InMemoryDatabase").Value.Equals("True"))
+    builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseInMemoryDatabase("TestDb"));
+else
+    builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 //Register all services
 ServicesCollectionExtensions.DependencyServices(builder.Services);
