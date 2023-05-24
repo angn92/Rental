@@ -4,20 +4,28 @@ using Rental.Infrastructure.EF;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Host.ConfigureLogging(logging =>
+{
+    logging.ClearProviders();
+    logging.AddConsole();
+});
+
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
 //Connection string
-
-if(builder.Configuration.GetSection("InMemoryDatabase").Value.Equals("True"))
-    builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseInMemoryDatabase("TestDb"));
-else
-    builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseNpgsql(connectionString));
 
 //Register all services
 ServicesCollectionExtensions.DependencyServices(builder.Services);
 
 var app = builder.Build();
+
+app.UseHttpLogging();
+
+app.Logger.LogInformation("Starting Administartor Console");
+app.Logger.LogInformation("Connected database: " + connectionString);
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
