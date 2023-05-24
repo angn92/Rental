@@ -23,6 +23,11 @@ namespace AdministartionConsole.Controllers
         {
             try
             {
+                var routeInfo = ControllerContext.RouteData;
+
+                //_logger.Log(LogLevel.Information, routeInfo);
+                _logger.LogInformation(routeInfo.ToString());
+
                 var category = await _categoryHelper.GetAllCategories();
 
                 _logger.LogInformation($"Was found {category.Count} categories.");
