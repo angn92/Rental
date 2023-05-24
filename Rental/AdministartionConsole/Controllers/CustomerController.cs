@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace AdministartionConsole.Controllers
 {
+    [Route("controller")]
     public class CustomerController : Controller
     {
         private readonly ICustomerDtoHelper _customerDtoHelper;
@@ -12,7 +13,8 @@ namespace AdministartionConsole.Controllers
             _customerDtoHelper = customerDtoHelper;
         }
 
-        public async Task<IActionResult> Index()
+        [HttpGet("customers/list")]
+        public async Task<IActionResult> GetCustomer()
         {
             var customerModel = await _customerDtoHelper.GetCustomerViews();
 

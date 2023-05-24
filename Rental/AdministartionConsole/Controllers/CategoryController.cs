@@ -5,6 +5,7 @@ using Rental.Infrastructure.Helpers;
 
 namespace AdministartionConsole.Controllers
 {
+    [Route("[controller]")]
     public class CategoryController : Controller
     {
         private readonly ILogger<CategoryController> _logger;
@@ -18,16 +19,11 @@ namespace AdministartionConsole.Controllers
             _categoryDtoHelper = categoryDtoHelper;
         }
 
-        [HttpGet]
-        public async Task<IActionResult> Index()
+        [HttpGet("startPage")]
+        public async Task<IActionResult> StartPage()
         {
             try
             {
-                var routeInfo = ControllerContext.RouteData;
-
-                //_logger.Log(LogLevel.Information, routeInfo);
-                _logger.LogInformation(routeInfo.ToString());
-
                 var category = await _categoryHelper.GetAllCategories();
 
                 _logger.LogInformation($"Was found {category.Count} categories.");
@@ -43,13 +39,13 @@ namespace AdministartionConsole.Controllers
             }
         }
 
-        [HttpGet]
+        [HttpGet("create/new")]
         public IActionResult Create()
         {
             return View();
         }
 
-        [HttpPost]
+        [HttpPost("create")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(string name)
         {
@@ -69,11 +65,6 @@ namespace AdministartionConsole.Controllers
                 _logger.LogError(ex.Message);
                 return View("ErrorCreate");
             }
-        }
-
-        public IActionResult Get()
-        {
-            return View();
         }
     }
 }

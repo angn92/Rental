@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace AdministartionConsole.Controllers
 {
+    [Route("[controller]")]
     public class ProductController : Controller
     {
         private readonly ILogger<ProductController> _logger;
@@ -14,8 +15,8 @@ namespace AdministartionConsole.Controllers
             _productDtoHelper = productDtoHelper;
         }
 
-        [HttpGet]
-        public async Task<IActionResult> Index(string searching)
+        [HttpGet("startPage")]
+        public async Task<IActionResult> StartPage(string searching)
         {
             try
             {

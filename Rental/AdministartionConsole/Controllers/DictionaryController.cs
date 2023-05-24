@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace AdministartionConsole.Controllers
 {
+    [Route("[controller]")]
     public class DictionaryController : Controller
     {
         private readonly IDictionaryDtoHelper _dictionaryDtoHelper;
@@ -16,24 +17,21 @@ namespace AdministartionConsole.Controllers
             _logger = logger;
         }
 
-        /// <summary>
-        /// https://localhost:port/Dictionary/Index
-        /// </summary>
-        /// <returns></returns>
-        public async Task<IActionResult> Index()
+        [HttpGet("dictionary/list")]
+        public async Task<IActionResult> StartPage()
         {
             var dictionary = await _dictionaryDtoHelper.GetAll();
 
             return View(dictionary);
         }
 
-        [HttpGet]
+        [HttpGet("create/new")]
         public IActionResult Create()
         {
             return View();
         }
 
-        [HttpPost]
+        [HttpPost("create")]
         public IActionResult Create(DictionaryDto dictionaryDto)
         {
             try
@@ -49,12 +47,7 @@ namespace AdministartionConsole.Controllers
             }
         }
 
-        /// <summary>
-        /// https://localhost:port/Dictionary/Edit?dictionaryName=paramName
-        /// </summary>
-        /// <param name="dictionaryName"></param>
-        /// <returns></returns>
-        [HttpGet]
+        [HttpGet("edit/{name}")]
         public async Task<IActionResult> Edit([NotNull] string dictionaryName)
         {
             try
@@ -73,7 +66,7 @@ namespace AdministartionConsole.Controllers
             }
         }
 
-        [HttpPost]
+        [HttpPost("edit")]
         public async Task<IActionResult> Edit([NotNull] DictionaryDto dictionary)
         {
             try

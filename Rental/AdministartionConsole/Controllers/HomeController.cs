@@ -13,7 +13,7 @@ namespace AdministartionConsole.Controllers
             _logger = logger;
         }
 
-        public IActionResult Index()
+        public IActionResult StartPage()
         {
             return View();
         }
