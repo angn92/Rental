@@ -22,12 +22,17 @@ namespace AdministartionConsole.Controllers
             {
                 var productList = await _productDtoHelper.GetAll();
 
-                if (!String.IsNullOrWhiteSpace(searching) || productList is null)
+                if (!String.IsNullOrWhiteSpace(searching))
                 {
-                    return View("NotFound", ViewBag.SearchingParameer = searching);
+                    productList = productList.Where(x => x.Name == searching).ToList();
+                }
+                
+                if (productList.Count == 0)
+                {
+                    ViewBag.SearchingParameter = searching;
+                    return View("NotFound");
                 }
 
-                productList = productList.Where(x => x.Name == searching).ToList();
                 return View(productList);
             }
             catch (Exception ex)
