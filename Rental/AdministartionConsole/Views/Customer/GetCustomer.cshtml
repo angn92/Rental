@@ -31,7 +31,7 @@
 
         @foreach(var item in Model)
         {
-            <tr>
+            <tr style="background:@(item.AccountStatus == "NotActive" ? "IndianRed" : "White")">
                 <td>
                     @Html.DisplayFor(modelItem => item.FirstName)
                 </td>
