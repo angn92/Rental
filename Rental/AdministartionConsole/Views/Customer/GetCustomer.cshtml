@@ -19,7 +19,7 @@
                 @Html.DisplayNameFor(model => model.Username)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.AccountStatus)
+                @Html.ActionLink("AccountStatus", "GetCustomer", "Customer", new { sortBy = ViewBag.SortStatus})
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.PasswordStatus)

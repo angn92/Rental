@@ -16,12 +16,21 @@ namespace AdministartionConsole.Controllers
         }
 
         [HttpGet("customers/list")]
-        public async Task<IActionResult> GetCustomer()
+        public async Task<IActionResult> GetCustomer(string sortBy)
         {
             try
             {
+                ViewBag.SortStatus = String.IsNullOrEmpty(sortBy) ? "Available" : "";
+
                 var customerModel = await _customerDtoHelper.GetCustomerViews();
-                
+
+                switch (sortBy)
+                {
+                    case "Available":
+                        customerModel.OrderByDescending(x => x.AccountStatus);
+                        break;
+                    
+                }
                 
 
                 return View(customerModel);
