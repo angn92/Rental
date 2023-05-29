@@ -6,6 +6,20 @@
 <div>
     <h2>Customer current data:</h2>
 </div>
+
+<div>
+    @using(Html.BeginForm("GetCustomer", "Customer", FormMethod.Get))
+    {
+        <b>Find Customer: </b> <br/>
+        <span>Active: </span> @Html.RadioButton("AccountStatus", "Active", false)
+        <span>NotActive: </span> @Html.RadioButton("AccountStatus", "NotActive", false)
+        <span>Blocked: </span> @Html.RadioButton("AccountStatus", "Blocked", false)
+        <span>All: </span> @Html.RadioButton("AccountStatus", "All", false)
+
+        <input type="submit" value="Search" />
+    }
+</div>
+
 <div>
     <table class="table">
         <tr>
@@ -19,7 +33,7 @@
                 @Html.DisplayNameFor(model => model.Username)
             </th>
             <th>
-                @Html.ActionLink("AccountStatus", "GetCustomer", "Customer", new { sortBy = ViewBag.SortStatus})
+                @Html.DisplayNameFor(model => model.AccountStatus)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.PasswordStatus)
